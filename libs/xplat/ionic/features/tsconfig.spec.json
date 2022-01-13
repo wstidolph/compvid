@@ -5,6 +5,9 @@
     "module": "commonjs",
     "types": ["jest", "node"]
   },
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  },
   "include": [
     "**/*.test.ts",
     "**/*.spec.ts",
