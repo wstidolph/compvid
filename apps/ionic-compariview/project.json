@@ -1,0 +1,166 @@
+{
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  },
+  "root": "apps/ionic-compariview/",
+  "sourceRoot": "apps/ionic-compariview/src",
+  "prefix": "compvid",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "options": {
+        "outputPath": "apps/ionic-compariview/www",
+        "index": "apps/ionic-compariview/src/index.html",
+        "main": "apps/ionic-compariview/src/main.ts",
+        "polyfills": "apps/ionic-compariview/src/polyfills.ts",
+        "tsConfig": "apps/ionic-compariview/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/ionic-compariview/src/assets",
+            "output": "assets"
+          },
+          {
+            "glob": "**/*.svg",
+            "input": "node_modules/ionicons/dist/ionicons/svg",
+            "output": "./svg"
+          }
+        ],
+        "styles": [
+          {
+            "input": "apps/ionic-compariview/src/theme/variables.scss"
+          },
+          {
+            "input": "apps/ionic-compariview/src/global.scss"
+          }
+        ],
+        "scripts": [],
+        "aot": false,
+        "vendorChunk": true,
+        "extractLicenses": false,
+        "buildOptimizer": false,
+        "sourceMap": true,
+        "optimization": false,
+        "namedChunks": true
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/ionic-compariview/src/environments/environment.ts",
+              "with": "apps/ionic-compariview/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "aot": true,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "2mb",
+              "maximumError": "5mb"
+            }
+          ]
+        },
+        "ci": {
+          "progress": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "browserTarget": "ionic-compariview:build"
+      },
+      "configurations": {
+        "production": {
+          "browserTarget": "ionic-compariview:build:production"
+        },
+        "ci": {
+          "progress": false
+        }
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "ionic-compariview:build"
+      }
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "apps/ionic-compariview/src/test.ts",
+        "polyfills": "apps/ionic-compariview/src/polyfills.ts",
+        "tsConfig": "apps/ionic-compariview/tsconfig.spec.json",
+        "karmaConfig": "apps/ionic-compariview/karma.conf.js",
+        "styles": [],
+        "scripts": [],
+        "assets": [
+          {
+            "glob": "favicon.ico",
+            "input": "apps/ionic-compariview/src/",
+            "output": "/"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/ionic-compariview/src/assets",
+            "output": "/assets"
+          }
+        ]
+      },
+      "configurations": {
+        "ci": {
+          "progress": false,
+          "watch": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@angular-eslint/builder:lint",
+      "options": {
+        "tsConfig": [
+          "apps/ionic-compariview/tsconfig.app.json",
+          "apps/ionic-compariview/tsconfig.spec.json",
+          "apps/ionic-compariview/e2e/tsconfig.json"
+        ],
+        "lintFilePatterns": [
+          "src/**/*.ts",
+          "src/**/*.html"
+        ]
+      }
+    },
+    "ionic-cordova-build": {
+      "executor": "@ionic/angular-toolkit:cordova-build",
+      "options": {
+        "browserTarget": "ionic-compariview:build"
+      },
+      "configurations": {
+        "production": {
+          "browserTarget": "ionic-compariview:build:production"
+        }
+      }
+    },
+    "ionic-cordova-serve": {
+      "executor": "@ionic/angular-toolkit:cordova-serve",
+      "options": {
+        "cordovaBuildTarget": "ionic-compariview:ionic-cordova-build",
+        "devServerTarget": "ionic-compariview:serve"
+      },
+      "configurations": {
+        "production": {
+          "cordovaBuildTarget": "ionic-compariview:ionic-cordova-build:production",
+          "devServerTarget": "ionic-compariview:serve:production"
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,16 @@
 {
   "version": 2,
-  "projects": {}
+  "projects": {
+    "ionic-compariview": "apps/ionic-compariview",
+    "xplat-core": "libs/xplat/core",
+    "xplat-features": "libs/xplat/features",
+    "xplat-ionic-core": "libs/xplat/ionic/core",
+    "xplat-ionic-features": "libs/xplat/ionic/features",
+    "xplat-ionic-scss": "libs/xplat/ionic/scss",
+    "xplat-scss": "libs/xplat/scss",
+    "xplat-utils": "libs/xplat/utils",
+    "xplat-web-core": "libs/xplat/web/core",
+    "xplat-web-features": "libs/xplat/web/features",
+    "xplat-web-scss": "libs/xplat/web/scss"
+  }
 }

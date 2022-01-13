@@ -1,0 +1,8 @@
+{
+  "name": "compariview",
+  "type": "angular",
+  "integrations": {
+    "capacitor": {}
+  },
+  "app_id": ""
+}

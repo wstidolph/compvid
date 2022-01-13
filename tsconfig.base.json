@@ -14,7 +14,20 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@compvid/xplat/core": ["libs/xplat/core/src/index.ts"],
+      "@compvid/xplat/environments": [
+        "libs/xplat/core/src/lib/environments/base/index.ts"
+      ],
+      "@compvid/xplat/features": ["libs/xplat/features/src/index.ts"],
+      "@compvid/xplat/ionic/core": ["libs/xplat/ionic/core/src/index.ts"],
+      "@compvid/xplat/ionic/features": [
+        "libs/xplat/ionic/features/src/index.ts"
+      ],
+      "@compvid/xplat/utils": ["libs/xplat/utils/src/index.ts"],
+      "@compvid/xplat/web/core": ["libs/xplat/web/core/src/index.ts"],
+      "@compvid/xplat/web/features": ["libs/xplat/web/features/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
