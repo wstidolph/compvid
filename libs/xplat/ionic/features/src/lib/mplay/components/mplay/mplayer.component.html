@@ -1,0 +1,45 @@
+<!-- IONIC -->
+<vg-player (onPlayerReady)="onPlayerReady($event)">
+  <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+
+  <ion-list>
+    <ion-item>
+      <video [vgMedia]="media1" #media1 id="media1" controls>
+        <source
+          src="http://static.videogular.com/assets/videos/videogular.mp4"
+          type="video/mp4"
+        />
+        <!-- track attr default so that 'mode' becomes 'showing' and cues load -->
+        <track
+          src="assets/data/initial.vtt"
+          kind="metadata"
+          label="CompariCues1"
+          id="CC1"
+          default
+          metacuepoints
+          (onEnterCuePoint)="onEnterCuePoint('media1',$event)"
+          (onExitCuePoint)="onExitCuePoint('media1',$event)"
+        />
+      </video>
+    </ion-item>
+    <ion-item>
+      <video [vgMedia]="media2" #media2 id="media2" controls>
+        <source
+          src="http://static.videogular.com/assets/videos/videogular.mp4"
+          type="video/mp4"
+        />
+        <!-- track attr 'default' so that 'mode' becomes 'showing' and cues load -->
+        <track
+          src="assets/data/initial.vtt"
+          kind="metadata"
+          label="CompariCues2"
+          id="CC2"
+          default
+          metacuepoints
+          (onEnterCuePoint)="onEnterCuePoint('media2',$event)"
+          (onExitCuePoint)="onExitCuePoint('media2',$event)"
+        />
+      </video>
+    </ion-item>
+  </ion-list>
+</vg-player>

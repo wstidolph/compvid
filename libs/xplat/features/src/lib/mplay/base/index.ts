@@ -1,1 +1,1 @@
-export * from './mplay.base-component';
+export * from './mplayer.base-component';

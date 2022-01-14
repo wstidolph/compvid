@@ -1,5 +1,5 @@
-import { MplayComponent } from './mplay/mplay.component';
+import { MplayerComponent } from './mplay/mplayer.component';
 
-export const MPLAY_COMPONENTS = [MplayComponent];
+export const MPLAY_COMPONENTS = [MplayerComponent];
 
-export * from './mplay/mplay.component';
+export * from './mplay/mplayer.component';
