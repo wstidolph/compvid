@@ -2,8 +2,6 @@
   "version": 2,
   "projects": {
     "ionic-compariview": "apps/ionic-compariview",
-    "testplay": "apps/testplay",
-    "testplay-e2e": "apps/testplay-e2e",
     "xplat-core": "libs/xplat/core",
     "xplat-features": "libs/xplat/features",
     "xplat-ionic-core": "libs/xplat/ionic/core",
