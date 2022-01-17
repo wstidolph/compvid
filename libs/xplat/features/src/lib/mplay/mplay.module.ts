@@ -15,6 +15,6 @@ import { MPLAY_DIRECTIVES } from './directives';
     VgControlsModule,
     ...MPLAY_DIRECTIVES,
   ],
-  declarations: [...MPLAY_DIRECTIVES],
+  declarations: [...MPLAY_DIRECTIVES]
 })
 export class MplayModule {}

@@ -98,13 +98,15 @@
         "browserTarget": "ionic-compariview:build"
       }
     },
+
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
+      "executor": "@nrwl/jest:jest",
       "options": {
         "main": "apps/ionic-compariview/src/test.ts",
         "polyfills": "apps/ionic-compariview/src/polyfills.ts",
         "tsConfig": "apps/ionic-compariview/tsconfig.spec.json",
-        "karmaConfig": "apps/ionic-compariview/karma.conf.js",
+        "jestConfig": "apps/testplay/jest.config.js",
+        "passWithNoTests": true,
         "styles": [],
         "scripts": [],
         "assets": [

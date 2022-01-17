@@ -8,7 +8,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { VgEvents } from '@videogular/ngx-videogular/core';
-import { Subscription, Observable, fromEvent } from 'rxjs';
+import { Subscription, Observable, fromEvent, BehaviorSubject } from 'rxjs';
 @Directive({
   selector: '[metacuepoints]',
 })
@@ -20,10 +20,11 @@ export class MetacuepointsDirective implements OnInit, OnDestroy, DoCheck {
 
   subscriptions: Subscription[] = [];
   cuesSubscriptions: Subscription[] = [];
-
-  onLoad$: Observable<any>;
-  onEnter$: Observable<any>;
-  onExit$: Observable<any>;
+// add dummy BehaviorSubjects just to get compiler/test happy
+// they're replaced in real code
+  onLoad$: Observable<any> = new BehaviorSubject<any>('dummy').asObservable();
+  onEnter$: Observable<any> = new BehaviorSubject<any>('dummy').asObservable();;
+  onExit$: Observable<any> =  new BehaviorSubject<any>('dummy').asObservable();;
 
   totalCues = 0;
 

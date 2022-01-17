@@ -21,7 +21,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
   public text = 'MplayerBase';
 
   userId='wayne'; // dummy
-  api: VgApiService;
+  api!: VgApiService;
   mediaIds: string[] = [];
   activeCuePoints: { [key: string]: ICuePoint[] } = {};
 
@@ -74,12 +74,12 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     console.log($evt.srcElement.activeCues)
   }
 
-  onEnterCuePoint(mediaId: string, $evt) {
+  onEnterCuePoint(mediaId: string, $evt: VTTCue) {
     console.log('MBC onEnterCuePoint', mediaId);
     this.mcsvc.enterCue(mediaId, $evt);
   }
 
-  onExitCuePoint(mediaId: string, $evt) {
+  onExitCuePoint(mediaId: string, $evt: VTTCue) {
     console.log('MBC onExitCuePoint', mediaId);
     this.mcsvc.exitCue(mediaId, $evt);
   }
