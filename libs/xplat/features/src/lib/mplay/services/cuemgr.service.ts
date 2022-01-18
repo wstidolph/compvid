@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
-
+import { CueIOService } from './cue-io/cue-io.service';
 @Injectable({
   providedIn: 'root',
 })
 export class CuemgrService {
 
+  constructor(private cueIoSvc: CueIOService) {}
+
   attachCuesForMedia(mid: string, track: TextTrack, userId: string) : number {
     let cuesAttached = 0;
     // read in the cues based on the userId and mediaId
 
+    this.cueIoSvc.getCueDocs('dummyMediaId','dummyUserId').subscribe((cuesDoc) =>{
+      console.log('firestore returned', cuesDoc)
+    })
     const jsonData = {
       id: 'cid1',
       title: mid + ' ' + userId,
