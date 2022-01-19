@@ -105,7 +105,7 @@
         "main": "apps/ionic-compariview/src/test.ts",
         "polyfills": "apps/ionic-compariview/src/polyfills.ts",
         "tsConfig": "apps/ionic-compariview/tsconfig.spec.json",
-        "jestConfig": "apps/testplay/jest.config.js",
+        "jestConfig": "apps/ionic-compariview/jest.config.js",
         "passWithNoTests": true,
         "styles": [],
         "scripts": [],
