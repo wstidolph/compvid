@@ -86,9 +86,12 @@
     "@ngx-translate/core": "~14.0.0",
     "@ngx-translate/http-loader": "~7.0.0",
     "@nstudio/ionic-angular": "^13.4.1",
+    "@simondotm/nx-firebase": "^0.3.3",
     "@videogular/ngx-videogular": "^5.0.1",
     "core-js": "^3.6.5",
     "firebase": "^9.6.3",
+    "firebase-admin": "latest",
+    "firebase-functions": "latest",
     "rxjs": "~7.5.2",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"

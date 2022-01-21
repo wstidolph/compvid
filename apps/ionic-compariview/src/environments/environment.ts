@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  useEmulators: true,
   firebaseConfig: {
     apiKey: "AIzaSyAzXDaEc2LvvGMPczA2fFxGwHlCGNR1jjA",
     authDomain: "compariview.firebaseapp.com",
