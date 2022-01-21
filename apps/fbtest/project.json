@@ -1,0 +1,66 @@
+{
+  "root": "apps/fbtest",
+  "sourceRoot": "apps/fbtest/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@simondotm/nx-firebase:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/fbtest",
+        "main": "apps/fbtest/src/index.ts",
+        "tsConfig": "apps/fbtest/tsconfig.app.json",
+        "packageJson": "apps/fbtest/package.json",
+        "assets": ["apps/fbtest/*.md", "apps/fbtest/.runtimeconfig.json"]
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "firebase deploy --config firebase.fbtest.json"
+      }
+    },
+    "getconfig": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "firebase functions:config:get --config firebase.fbtest.json > apps/fbtest/.runtimeconfig.json"
+      }
+    },
+    "emulate": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "firebase emulators:start --config firebase.fbtest.json"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run fbtest:build --with-deps && nx run fbtest:build --watch"
+          },
+          {
+            "command": "nx run fbtest:emulate"
+          }
+        ],
+        "parallel": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/fbtest/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/fbtest"],
+      "options": {
+        "jestConfig": "apps/fbtest/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

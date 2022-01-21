@@ -1,0 +1,43 @@
+{
+  "database": {
+    "rules": "apps/fbtest/database.rules.json"
+  },
+  "firestore": {
+    "rules": "apps/fbtest/firestore.rules",
+    "indexes": "apps/fbtest/firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "apps/fbtest/public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "storage": {
+    "rules": "apps/fbtest/storage.rules"
+  },
+  "functions": {
+    "predeploy": ["npx nx build fbtest --with-deps", "npx nx lint fbtest"],
+    "source": "dist/apps/fbtest"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "auth": {
+      "port": "9099"
+    },
+    "pubsub": {
+      "port": "8085"
+    }
+  }
+}

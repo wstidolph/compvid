@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "fbtest": "apps/fbtest",
     "ionic-compariview": "apps/ionic-compariview",
     "xplat-core": "libs/xplat/core",
     "xplat-features": "libs/xplat/features",
