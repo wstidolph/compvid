@@ -1,6 +1,7 @@
 module.exports = {
   displayName: 'xplat-features',
   preset: '../../../jest.preset.js',
+  testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['./test-setup.ts'],
   globals: {
     'ts-jest': {

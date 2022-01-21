@@ -38,7 +38,7 @@ export class CuemgrService {
   }
 
   /** make an array, orderd by cue start time */
-  makeCueArrayFromList(list: TextTrackCueList | null): TextTrackCue[] {
+  makeCueArrayFromList(list: TextTrackCueList | null | undefined): TextTrackCue[] {
     console.log('CMgrSvc makeCueArrayFromList', list)
     if(list ==null) return [];
 

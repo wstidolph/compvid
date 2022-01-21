@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, docData, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface CueDoc {
   startTime: number,
@@ -17,10 +17,13 @@ export interface CueDoc {
 })
 export class CueIOService {
 
-  constructor(private firestore: Firestore) { }
+  constructor(
+    //private firestore: Firestore
+    ) { }
 
   getCueDocs(mediaId: string, userId: string) : Observable<CueDoc[]>{
-    const cueDocRef = collection(this.firestore, 'cues');
-    return collectionData(cueDocRef, {idField: 'id'}) as Observable<CueDoc[]>;
+    //   const cueDocRef = collection(this.firestore, 'cues');
+    //   return collectionData(cueDocRef, {idField: 'id'}) as Observable<CueDoc[]>;
+    return new BehaviorSubject<CueDoc[]>([]).asObservable();
   }
 }
