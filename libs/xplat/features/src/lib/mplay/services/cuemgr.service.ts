@@ -1,19 +1,27 @@
 import { Injectable } from '@angular/core';
+import { ConnectableObservable, Observable, of } from 'rxjs';
+import { ICuePoint } from '../models';
 import { CueIOService } from './cue-io/cue-io.service';
+
+
 @Injectable({
   providedIn: 'root',
 })
 export class CuemgrService {
 
-  constructor(private cueIoSvc: CueIOService) {}
+  constructor(private cueIoSvc: CueIOService) {  }
 
-  attachCuesForMedia(mid: string, track: TextTrack, userId: string) : number {
+  attachCuesForMedia(mid: string, track: TextTrack | undefined, userId: string) : number {
     let cuesAttached = 0;
+    if(!track){
+      console.log('attachCuesForMedia got undefined TextTrack');
+      return 0;
+    }
     // read in the cues based on the userId and mediaId
 
-    this.cueIoSvc.getCueDocs('dummyMediaId','dummyUserId').subscribe((cuesDoc) =>{
-      console.log('firestore returned', cuesDoc)
-    })
+    // this.cueIoSvc.getCueDocs('dummyMediaId','dummyUserId').subscribe((cuesDoc) =>{
+    //   console.log('firestore returned', cuesDoc)
+    // })
     const jsonData = {
       id: 'cid1',
       title: mid + ' ' + userId,
@@ -34,15 +42,16 @@ export class CuemgrService {
     cue.id='cid2';
     track.addCue(cue);
     cuesAttached++;
+    console.log('cuesAttached count is ', cuesAttached);
     return cuesAttached;
   }
 
   /** make an array, orderd by cue start time */
   makeCueArrayFromList(list: TextTrackCueList | null | undefined): TextTrackCue[] {
     console.log('CMgrSvc makeCueArrayFromList', list)
-    if(list ==null) return [];
+    if(list == null || list == undefined || list?.length == 0) return [];
 
-    const arr: TextTrackCue[] = [];
+    const arr = [];
 
     for (const cue in list) {
       const vttc = list[cue];

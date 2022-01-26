@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, doc, docData, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { ICuePoint } from '../../models';
 
 export interface CueDoc {
   startTime: number,
@@ -9,6 +10,11 @@ export interface CueDoc {
   description? : string,
   playrate? : number
 }
+
+type usermediacues = {
+  [uid: string] : { [mid:string] : ICuePoint[]}
+}
+
 /**
  * Transport CueDocs between the app and Firestore
  */
@@ -20,6 +26,19 @@ export class CueIOService {
   constructor(
     //private firestore: Firestore
     ) { }
+    getUsersCuesForMedia(uid: string, mid: string): Observable<CueDoc[]> {
+      // if(!(uid in this.umc){
+      //   console.log('CuemgrService #getUsersCuesForMedia got unknown UID', uid);
+      //   return of([]);
+      // }
+
+      // if(!(mid in usersMediaCues){
+      //   console.log('CuemgrService #getUsersCuesForMedia got unknown MID ' + mid + ' for UID ' + uid);
+      //   return of([]);
+      // }
+      // const cues =
+      return of([]);
+    }
 
   getCueDocs(mediaId: string, userId: string) : Observable<CueDoc[]>{
     //   const cueDocRef = collection(this.firestore, 'cues');

@@ -8,6 +8,13 @@ import { CuemgrService } from '../cuemgr.service';
 })
 export class TestcueComponent {
 
-  constructor(public cuemgrSvc: CuemgrService) { }
+  constructor(public cuemgrSvc: CuemgrService) {  }
+
+  attachCues(track: TextTrack) {
+    const attachedCueCount =
+      this.cuemgrSvc.attachCuesForMedia('test_media',track, 'dummy_user');
+    console.log('Testcue attached', attachedCueCount);
+    return attachedCueCount;
+  }
 
 }
