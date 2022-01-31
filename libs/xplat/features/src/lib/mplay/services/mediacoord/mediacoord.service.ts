@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IPlayable, VgApiService } from '@videogular/ngx-videogular/core';
-import { MplayerBaseComponent } from '../base/index';
-import { FollowerMode } from '../models/LeaderFollower';
+import { MplayerBaseComponent } from '../../base/index';
+import { FollowerMode } from '../../models/LeaderFollower';
 
 @Injectable({
   providedIn: 'root',
