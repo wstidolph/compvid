@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ConnectableObservable, Observable, of } from 'rxjs';
-import { ICuePoint } from '../models';
-import { CueIOService } from './cue-io/cue-io.service';
+import { ICue } from '../../models';
+import { CueIOService } from '../cue-io/cue-io.service';
 
 
 @Injectable({
@@ -46,21 +46,5 @@ export class CuemgrService {
     return cuesAttached;
   }
 
-  /** make an array, orderd by cue start time */
-  makeCueArrayFromList(list: TextTrackCueList | null | undefined): TextTrackCue[] {
-    console.log('CMgrSvc makeCueArrayFromList', list)
-    if(list == null || list == undefined || list?.length == 0) return [];
 
-    const arr = [];
-
-    for (const cue in list) {
-      const vttc = list[cue];
-      // console.log('CMgrSvc makeCueArrayFromList processing cue', list[cue]);
-      if(list.hasOwnProperty(cue)) arr.push(list[cue]);
-    }
-    // sort array by startTime
-    arr.sort((c1, c2) => (c1.startTime > c2.startTime)? 1 : -1);
-    // console.log('CMgrSvc makeCueArrayFromList returns', arr);
-    return arr;
-  }
 }
