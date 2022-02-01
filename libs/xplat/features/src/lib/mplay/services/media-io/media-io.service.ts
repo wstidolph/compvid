@@ -13,9 +13,7 @@ export class MediaIOService {
    * @param mediaID
    */
      getSrcListForMediaId(mediaID: string): IMediaSource[] {
-      if(mediaID == 'test'){
-        return ;
-      }
+
       return [];
     }
 
