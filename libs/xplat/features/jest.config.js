@@ -2,6 +2,7 @@ module.exports = {
   displayName: 'xplat-features',
   preset: '../../../jest.preset.js',
   testEnvironment: 'jsdom', // don't need this it's in the @nrwl jest-preset
+  testRunner: 'jest-jasmine2',
   setupFilesAfterEnv: ['./test-setup.ts'],
   globals: {
     'ts-jest': {

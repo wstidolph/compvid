@@ -59,6 +59,7 @@
     "jest-environment-jsdom": "^27.4.6",
     "jest-preset-angular": "11.0.0",
     "jsdom": "^19.0.0",
+    "ng-mocks": "^13.0.0",
     "prettier": "2.5.1",
     "ts-jest": "27.0.5",
     "typescript": "~4.4.3",
@@ -101,4 +102,3 @@
     "framework": "angular"
   }
 }
-
