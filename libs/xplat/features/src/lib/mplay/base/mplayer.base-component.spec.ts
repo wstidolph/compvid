@@ -1,6 +1,6 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { MplayerBaseComponent } from './mplayer.base-component';
-import { CuemgrService, MediacoordService } from '../services';
+import { CueIOService, CuemgrService, MediacoordService, MediaIOService } from '../services';
 import { Component, ElementRef } from '@angular/core';
 
 /**
@@ -13,11 +13,14 @@ import { Component, ElementRef } from '@angular/core';
 })
 class ChildComponent extends MplayerBaseComponent {
 
+
   constructor(
     public ref: ElementRef,
     public mcsvc: MediacoordService,
-    public cmgrsvc: CuemgrService) {
-    super(ref, mcsvc, cmgrsvc);
+    public cmgrsvc: CuemgrService,
+    public ciosvc: CueIOService,
+    public miosvc: MediaIOService) {
+    super(ref, mcsvc, cmgrsvc, ciosvc, miosvc);
   }
 }
 describe('MplayerBaseComponent', () => {
@@ -36,15 +39,41 @@ describe('MplayerBaseComponent', () => {
     fixture.detectChanges();
   });
 
+  describe('makeCueArrayFromList',() => {
+    it('should make an empty array if no param', () => {
+      const arr = component.makeCueArrayFromList(null);
+      expect(arr).toEqual([]);
+    })
+    it('should make an empty array if empty list', () => {
+      const arr = component.makeCueArrayFromList(null);
+      expect(arr).toEqual([]);
+    })
+  })
+  describe('getSrcListForMediaEd', () => {
+    it('should return an empty array if given a null or invalid mediaID', () =>{
+      const resultArr = component.getSrcListForMediaEd('');
+      expect(resultArr).toHaveLength(0);
+    });
 
-  it('should make an empty array if no param', () => {
-    const arr = component.makeCueArrayFromList(null);
-    expect(arr).toEqual([]);
+    const testSrcsArray = [
+      {
+          src: "http://static.videogular.com/assets/videos/videogular.mp4",
+          type: "video/mp4"
+      },
+      {
+          src: "http://static.videogular.com/assets/videos/videogular.ogg",
+          type: "video/ogg"
+      },
+      {
+          src: "http://static.videogular.com/assets/videos/videogular.webm",
+          type: "video/webm"
+      }
+    ];
+    it('should return an array of sources given a mediaID', () => {
+      component.getSrcListForMediaEd('test');
+    })
   })
-  it('should make an empty array if empty list', () => {
-    const arr = component.makeCueArrayFromList(null);
-    expect(arr).toEqual([]);
-  })
+
 
 
 })

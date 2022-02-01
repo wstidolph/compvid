@@ -13,7 +13,10 @@ export class MediaIOService {
    * @param mediaID
    */
      getSrcListForMediaId(mediaID: string): IMediaSource[] {
-      throw new Error('Method not implemented.');
+      if(mediaID == 'test'){
+        return ;
+      }
+      return [];
     }
 
 }
