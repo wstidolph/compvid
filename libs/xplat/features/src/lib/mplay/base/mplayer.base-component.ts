@@ -6,15 +6,17 @@ import {
   VgMediaDirective,
 } from '@videogular/ngx-videogular/core';
 import { fromEvent, Subscription, Observable } from 'rxjs';
-import { ICue, ICueTrack, Strings } from '../models';
-import { CuemgrService, MediacoordService } from '../services';
+import { ICue, ICueTrack, IMediaSource, Strings } from '../models';
+import { CueIOService, CuemgrService, MediacoordService, MediaIOService } from '../services';
 
 /**
- * Provide ngx-videogular data/event hookup with services.
+ * Provide ngx-videogular data/event hookup with services,
+ * and does some DOM-specific data manipulation (because
+ * it's easier to test in a COmponent than it is to figure
+ * out how to get a real DOM supported in Jest-based unit tests!)
  * Templates are provided by subclasses (so, for example,
- * 'ionic' can be different from 'web'
+ * 'ionic' can be different from 'web')
  *
- )
  */
 @Directive()
 export abstract class MplayerBaseComponent extends BaseComponent  {
@@ -27,13 +29,19 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
 
   totalCues = 0;
 
-  constructor(public ref: ElementRef, public mcsvc: MediacoordService, public cmgrsvc: CuemgrService) {
+  constructor(
+    public ref: ElementRef,
+    public mcsvc: MediacoordService,
+    public cmgrsvc: CuemgrService,
+    public ciosvc: CueIOService,
+    public miosvc: MediaIOService) {
     super();
   }
 
+  // -------- DOM event handlers ------- //
   onPlayerReady(api: VgApiService) {
     this.api = api;
-    console.log('MPlayerBase api', this.api);
+    console.log('MBC onPlayerReady gets api', this.api);
     this.mediaIds = this.mcsvc.registerPlayer(this);
     this.mcsvc.setLeader('media2');
     this.mediaIds.forEach(mid => {
@@ -42,7 +50,6 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     })
   }
 
-  /** load all the cues */
   onLoadedMetadata(evt: any) {
     console.log('MBC onLoadedMetadata gets', this, evt)
     const mid = evt.target.id;
@@ -51,17 +58,18 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
   }
 
   onCueChange($evt: any) {
-    console.log('MBC onCueChange got', $evt)
-    console.log($evt.srcElement.activeCues)
+    console.log('MBC onCueChange got', $evt, $evt.srcElement.activeCues)
   }
 
   onEnterCuePoint(mediaId: string, $evt: VTTCue) {
     console.log('MBC onEnterCuePoint', mediaId);
+    // tell MediaCoordination
     this.mcsvc.enterCue(mediaId, $evt);
   }
 
   onExitCuePoint(mediaId: string, $evt: VTTCue) {
     console.log('MBC onExitCuePoint', mediaId);
+        // tell MediaCoordination
     this.mcsvc.exitCue(mediaId, $evt);
   }
   // -------- DATA SETUP --------- //
@@ -75,6 +83,15 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
       lastUpdated: new Date('2022/01/01')
     }
     return ict;
+  }
+
+  /**
+   * get the list of URL objects that are source-element attributes
+   * for this media; array return allows for multiple srcs
+   * @param mediaID
+   */
+  getSrcListForMediaEd(mediaID: string) : IMediaSource[] {
+    return this.miosvc.getSrcListForMediaId(mediaID);
   }
 
   // -------- ACTION ------------- //

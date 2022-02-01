@@ -1,0 +1,26 @@
+/** see the models interfaces **
+
+/Users/{uid}
+
+/Media/{mid} -> IMedia
+  author: string; // User uid
+  sources: IMediaSource[]; // [{src: "..."; type: "..."}]
+  tags: string[];
+  dateCreated?: Date;
+  lengthMS?: number;
+  courses?: string[]; // "[courseId]"
+  irt?: string; // ID of 'parent' media
+
+/Comments/
+
+/Course
+
+/Cuetracks/{mid} -> ICuetrack
+  id: string;
+  user: string; // User uid
+  dateCreated: Date;
+  lastUpdated: Date;
+  cues?: string; // a JSON doc of ICues
+  aboutMedia: string; // Media mid
+
+/Lesson/

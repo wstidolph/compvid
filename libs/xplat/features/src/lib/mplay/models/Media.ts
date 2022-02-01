@@ -1,8 +1,14 @@
 export interface IMedia {
   author: string;
-  irt: string; // ID of 'parent' media
-  fileURL: string;
-  mediaMimeType: string;
+  sources: IMediaSource[];
   tags: string[];
-  courses: string[]; // "courseID_lessonID"
+  dateCreated?: Date;
+  lengthMS?: number;
+  courses?: string[]; // "courseID_lessonID"
+  irt?: string; // ID of 'parent' media
+}
+
+export interface IMediaSource {
+  src: string; // URL
+  type: string; // e.g., video/ogg
 }
