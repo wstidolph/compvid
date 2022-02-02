@@ -2,6 +2,8 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { MplayerBaseComponent } from './mplayer.base-component';
 import { CueIOService, CuemgrService, MediacoordService, MediaIOService } from '../services';
 import { Component, ElementRef } from '@angular/core';
+import { ngMocks, MockProvider, MockBuilder, MockRender, MockInstance, MockReset} from 'ng-mocks';
+import { IMediaSource } from '../models';
 
 /**
  * This tests the non-DOM logic to be inherited by child classes
@@ -12,8 +14,6 @@ import { Component, ElementRef } from '@angular/core';
   template: ``,
 })
 class ChildComponent extends MplayerBaseComponent {
-
-
   constructor(
     public ref: ElementRef,
     public mcsvc: MediacoordService,
@@ -23,14 +23,25 @@ class ChildComponent extends MplayerBaseComponent {
     super(ref, mcsvc, cmgrsvc, ciosvc, miosvc);
   }
 }
-describe('MplayerBaseComponent', () => {
+describe('MplayerBaseComponent thru ChildComponent', () => {
 
   let component: ChildComponent;
   let fixture: ComponentFixture<ChildComponent>;
-  beforeEach(async () => {
-    TestBed.configureTestingModule({
-      declarations: [ ChildComponent ]
-    }).compileComponents();
+  beforeEach(
+
+    () => {
+    // TestBed.configureTestingModule({
+    //   declarations: [ ChildComponent ],
+    //   providers: [
+    //     MockProvider(MediaIOService)
+    //   ]
+    // }).compileComponents();
+    TestBed.configureTestingModule(
+      ngMocks.guts(
+        ChildComponent,
+        [CueIOService, CuemgrService, MediaIOService, MediacoordService]
+      )
+    )
   });
 
   beforeEach(() => {
@@ -49,13 +60,8 @@ describe('MplayerBaseComponent', () => {
       expect(arr).toEqual([]);
     })
   })
-  describe('getSrcListForMediaEd', () => {
-    it('should return an empty array if given a null or invalid mediaID', () =>{
-      const resultArr = component.getSrcListForMediaEd('');
-      expect(resultArr).toHaveLength(0);
-    });
-
-    const testSrcsArray = [
+  describe('getSrcListForMediaId', () => {
+    const testSrcsArray: IMediaSource[] = [
       {
           src: "http://static.videogular.com/assets/videos/videogular.mp4",
           type: "video/mp4"
@@ -69,8 +75,25 @@ describe('MplayerBaseComponent', () => {
           type: "video/webm"
       }
     ];
+
+    beforeEach(()=>MockBuilder(ChildComponent))
+    beforeAll(()=>{
+      MockInstance(MediaIOService, {
+        init:instance => {
+          instance.getSrcListForMediaId = () => testSrcsArray;
+        }
+      })
+    });
+
+    afterAll(MockReset);
+    it('should return an empty array if given a null or invalid mediaID', () =>{
+      const resultArr = component.getSrcListForMediaId('');
+      expect(resultArr).toHaveLength(0);
+    });
+
     it('should return an array of sources given a mediaID', () => {
-      component.getSrcListForMediaEd('test');
+      const resultArr = component.getSrcListForMediaId('test');
+      expect(resultArr).toHaveLength(testSrcsArray.length);
     })
   })
 

@@ -90,8 +90,12 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
    * for this media; array return allows for multiple srcs
    * @param mediaID
    */
-  getSrcListForMediaEd(mediaID: string) : IMediaSource[] {
-    return this.miosvc.getSrcListForMediaId(mediaID);
+   getSrcListForMediaId(mediaID: string) : IMediaSource[] {
+    if(mediaID == null || mediaID == '') {
+      return [];
+    }
+    const resArray = this.miosvc.getSrcListForMediaId(mediaID);
+    return resArray;
   }
 
   // -------- ACTION ------------- //
@@ -187,7 +191,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
 
    /** make an array, orderd by cue start time */
    makeCueArrayFromList(list: TextTrackCueList | null | undefined): TextTrackCue[] {
-    console.log('MPlayerBase #makeCueArrayFromList', list)
+    // console.log('MPlayerBase #makeCueArrayFromList', list)
     if(list == null || list == undefined || list?.length == 0) return [];
 
     const arr = [];

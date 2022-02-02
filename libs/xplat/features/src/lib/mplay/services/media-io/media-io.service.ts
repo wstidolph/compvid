@@ -13,7 +13,7 @@ export class MediaIOService {
    * @param mediaID
    */
      getSrcListForMediaId(mediaID: string): IMediaSource[] {
-
+      console.log('MediaIOService #getSrcListForMediaId', mediaID);
       return [];
     }
 
