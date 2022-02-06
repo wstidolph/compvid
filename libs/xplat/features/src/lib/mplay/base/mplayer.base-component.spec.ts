@@ -61,6 +61,7 @@ describe('MplayerBaseComponent thru ChildComponent', () => {
           type: "video/webm"
       }
     ];
+    MockInstance.scope('case');
     MockInstance(MediaIOService, 'getSrcListForMediaId', () => testSrcsArray);
 
     fixture = MockRender(ChildComponent);
@@ -69,7 +70,6 @@ describe('MplayerBaseComponent thru ChildComponent', () => {
 
     const resultArr = component.getSrcListForMediaId('test');
     expect(resultArr).toHaveLength(testSrcsArray.length);
-    MockInstance.restore();
   })
 
   describe('makeCueArrayFromList',() => {
