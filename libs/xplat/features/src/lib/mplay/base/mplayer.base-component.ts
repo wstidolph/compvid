@@ -177,7 +177,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
    * @param userId
    * @returns
    */
-  protected addCueTrack(mediaId: string, userId: string) {
+  addCueTrack(mediaId: string, userId: string) {
     console.log('MPlayerBase #addCues adding cues to', mediaId, userId);
     const media = this.findMediaFromMediaId(mediaId);
     if(media == null) { return;}
@@ -212,7 +212,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
    * @param cue
    * @returns
    */
-  protected makeVttCue(cue: ICue): VTTCue| null {
+  makeVttCue(cue: ICue): VTTCue| null {
     if(cue.id == null || cue.id == ''
       || cue.startTime < cue.endTime
     ) {
@@ -224,7 +224,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     vttc.id = cue.id;
     return vttc;
   }
-  protected isValidMediaId(mediaId:string): boolean {
+  isValidMediaId(mediaId:string): boolean {
     let isValid = true;
     const isEmpty = mediaId == '';
     // add tests for schama match // TODO
@@ -232,7 +232,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     return isValid;
   }
 
-  protected attachCuesForMediaById (cues: ICue[], mediaId: string) : number {
+  attachCuesForMediaById (cues: ICue[], mediaId: string) : number {
     if(cues ==null || cues.length == 0) {
       console.warn('MPlayerBase #attachCuesToMediaById got no cues');
       return 0;
@@ -249,7 +249,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     }
     return this.attachCuesToMedia(cues, media);
   }
-  protected attachCuesToMedia(cues: ICue[], media: VgMediaDirective) : number {
+  attachCuesToMedia(cues: ICue[], media: VgMediaDirective) : number {
     if(cues ==null || cues.length == 0) {
       console.warn('MPlayerBase #attachCuesToMedia got no cues');
       return 0;
