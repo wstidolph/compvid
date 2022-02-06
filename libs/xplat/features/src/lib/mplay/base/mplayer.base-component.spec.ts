@@ -1,9 +1,17 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { MplayerBaseComponent } from './mplayer.base-component';
 import { CueIOService, CuemgrService, MediacoordService, MediaIOService } from '../services';
 import { Component, ElementRef } from '@angular/core';
-import { ngMocks, MockProvider, MockBuilder, MockRender, MockInstance, MockReset} from 'ng-mocks';
-import { IMediaSource } from '../models';
+import { ngMocks, MockProvider, MockBuilder, MockRender, MockInstance, MockReset, MockDirective} from 'ng-mocks';
+import { IMediaSource, ICue} from '../models';
+import { cues } from '../cueTestData.json';
+import {
+  VgApiService,
+  VgEvents,
+  VgMediaDirective,
+} from '@videogular/ngx-videogular/core';
+import { from } from 'rxjs';
+import { MplayModule } from '..';
 
 /**
  * This tests the non-DOM logic to be inherited by child classes
@@ -11,7 +19,14 @@ import { IMediaSource } from '../models';
  */
 @Component({
   selector: 'test-mplayer',
-  template: ``,
+  // template: `
+  // <test-mplayer>
+  //   <video [VgMedia]="child1">
+  //   </video>
+  //   <video [VgMedia]="child2">
+  //   </video>
+
+  // </test-mplayer> `
 })
 class ChildComponent extends MplayerBaseComponent {
   constructor(
@@ -27,40 +42,11 @@ describe('MplayerBaseComponent thru ChildComponent', () => {
 
   let component: ChildComponent;
   let fixture: ComponentFixture<ChildComponent>;
-  beforeEach(
-
-    () => {
-    // TestBed.configureTestingModule({
-    //   declarations: [ ChildComponent ],
-    //   providers: [
-    //     MockProvider(MediaIOService)
-    //   ]
-    // }).compileComponents();
-    TestBed.configureTestingModule(
-      ngMocks.guts(
-        ChildComponent,
-        [CueIOService, CuemgrService, MediaIOService, MediacoordService]
-      )
-    )
-  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChildComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  describe('makeCueArrayFromList',() => {
-    it('should make an empty array if no param', () => {
-      const arr = component.makeCueArrayFromList(null);
-      expect(arr).toEqual([]);
-    })
-    it('should make an empty array if empty list', () => {
-      const arr = component.makeCueArrayFromList(null);
-      expect(arr).toEqual([]);
-    })
+    return MockBuilder(ChildComponent, MplayModule)
   })
-  describe('getSrcListForMediaId', () => {
+  it('should return an array of sources given a mediaID', () => {
     const testSrcsArray: IMediaSource[] = [
       {
           src: "http://static.videogular.com/assets/videos/videogular.mp4",
@@ -75,28 +61,88 @@ describe('MplayerBaseComponent thru ChildComponent', () => {
           type: "video/webm"
       }
     ];
+    MockInstance(MediaIOService, 'getSrcListForMediaId', () => testSrcsArray);
+
+    fixture = MockRender(ChildComponent);
+    expect (fixture).toBeDefined();
+    component = fixture.componentInstance;
+
+    const resultArr = component.getSrcListForMediaId('test');
+    expect(resultArr).toHaveLength(testSrcsArray.length);
+    MockInstance.restore();
+  })
+
+  describe('makeCueArrayFromList',() => {
+    it('should make an empty array if no param', () => {
+      const arr = component.makeCueArrayFromList(null);
+      expect(arr).toEqual([]);
+    })
+    it('should make an empty array if empty list', () => {
+      const arr = component.makeCueArrayFromList(null);
+      expect(arr).toEqual([]);
+    })
+  })
+  describe('getSrcListForMediaId', () => {
+
 
     beforeEach(()=>MockBuilder(ChildComponent))
-    beforeAll(()=>{
-      MockInstance(MediaIOService, {
-        init:instance => {
-          instance.getSrcListForMediaId = () => testSrcsArray;
-        }
-      })
-    });
+    afterEach(MockReset);
 
-    afterAll(MockReset);
     it('should return an empty array if given a null or invalid mediaID', () =>{
       const resultArr = component.getSrcListForMediaId('');
       expect(resultArr).toHaveLength(0);
     });
 
-    it('should return an array of sources given a mediaID', () => {
-      const resultArr = component.getSrcListForMediaId('test');
-      expect(resultArr).toHaveLength(testSrcsArray.length);
-    })
+
   })
 
+describe('attachCuesToMediaById', () => {
+
+  it('should return 0 if no cues provided', () => {
+
+    const numAttached = component.attachCuesForMediaById([], 'test');
+    expect(numAttached).toBe(0);
+  });
+
+  xit('should return 0 if all cues provided are invalid', () => {
+    // need to moxk VgMediaDirective and return an api
+    const invalidCues: ICue[] = [
+      {startTime: 0,
+      endTime: 1,
+      id: ''
+      },
+      {
+        id:'valid',
+        startTime: 1,
+        endTime: 0
+      }
+    ]
+    const numAttached = component.attachCuesForMediaById(invalidCues, 'test');
+    expect(numAttached).toBe(0);
+});
+
+  it('should return the number of cues attached if valid cues provided', () => {
+    pending();
+  });
+
+  it('should skip attaching invalid cues', () => {
+    pending();
+  });
+});
+
+describe('findOrAddTextForMedia', () => {
+  it('should ', () => {
+    // MockInstance(MediaIOService, 'getSrcListForMediaId', () => testSrcsArray);
+
+    fixture = MockRender(ChildComponent);
+    expect (fixture).toBeDefined();
+    component = fixture.componentInstance;
+
+    expect(component).toBeTruthy();
+  });
+
+
+});
 
 
 })

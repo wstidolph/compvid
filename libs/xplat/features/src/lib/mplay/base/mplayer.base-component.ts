@@ -91,6 +91,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
    * @param mediaID
    */
    getSrcListForMediaId(mediaID: string) : IMediaSource[] {
+
     if(mediaID == null || mediaID == '') {
       return [];
     }
@@ -105,14 +106,14 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     if(theCue == null) return;
     const cueStartTime = theCue.startTime;
 
-    const media = this.findMediaFromId(mediaId);
+    const media = this.findMediaFromMediaId(mediaId);
     // we know media is non-null because the earlier findCueById succeeded
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     media!.seekTime(cueStartTime); // TODO animate the seeking to be smoother
                                           // ideas: http://www.developphp.com/video/JavaScript/Video-Player-Custom-Controls-Programming-Tutorial
   }
   // --------  UTILITIES --------- //
-  findMediaFromId(mediaId: string): VgMediaDirective | undefined {
+  findMediaFromMediaId(mediaId: string): VgMediaDirective | undefined {
     const media: VgMediaDirective = this.api.getMediaById(
       mediaId
     ) as VgMediaDirective;
@@ -123,7 +124,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     return media;
   }
   findTextTrackFromMediaId(mediaId: string): TextTrack | undefined {
-    const media = this.findMediaFromId(mediaId);
+    const media = this.findMediaFromMediaId(mediaId);
     if(media == null) return;
 
     return this.findTextTrackFromMedia(media);
@@ -147,7 +148,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
 
     const theCue = ttrack.cues?.getCueById(cueId);
     if (!theCue) {
-      const media = this.findMediaFromId(mediaId);
+      const media = this.findMediaFromMediaId(mediaId);
       console.warn(
         `MPlayerBase #findCueById could not find cue ${cueId} on media ${media}`, ttrack.cues
       );
@@ -156,7 +157,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     return theCue;
   }
   addTextTrackToMediaById(mediaId: string) : TextTrack | undefined {
-    const media = this.findMediaFromId(mediaId);
+    const media = this.findMediaFromMediaId(mediaId);
     if(media == null) return;
     return this.addTextTrackToMedia(media);
   }
@@ -171,18 +172,17 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
     return t1;
   }
   /**
-   *
-   * @param mediaId Add User's cues to a
-   * media inside the player
+   * Add User's cues to a media inside the player
+   * @param mediaId
    * @param userId
    * @returns
    */
-  addCueTrack(mediaId: string, userId: string) {
+  protected addCueTrack(mediaId: string, userId: string) {
     console.log('MPlayerBase #addCues adding cues to', mediaId, userId);
-    const media = this.findMediaFromId(mediaId);
+    const media = this.findMediaFromMediaId(mediaId);
     if(media == null) { return;}
 
-    let ttrack = this.findOrAddTextTrackForMedia(media);
+    let ttrack = this.findOrAddTextTrackForMedia(media); // FIXME INCOMPLETE
 
       // this.subscriptions.push(
       //  fromEvent(t1, 'cuechange').subscribe(this.onCueChange.bind(this)));
@@ -212,20 +212,44 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
    * @param cue
    * @returns
    */
-  makeVttCue(cue: ICue): VTTCue {
-    const jsonText = 'hi from unimplemented part of makeVttCue'
+  protected makeVttCue(cue: ICue): VTTCue| null {
+    if(cue.id == null || cue.id == ''
+      || cue.startTime < cue.endTime
+    ) {
+      console.warn("MPlayerBase #makeVttCue got malformed cue", cue);
+      return null;
+    }
+    const jsonText = JSON.stringify(cue);
     const vttc = new VTTCue(cue.startTime, cue.endTime, jsonText);
     vttc.id = cue.id;
     return vttc;
   }
-  attachCuesForMediaById (cues: ICue[], mediaId: string,) : number {
-    const media = this.findMediaFromId(mediaId);
+  protected isValidMediaId(mediaId:string): boolean {
+    let isValid = true;
+    const isEmpty = mediaId == '';
+    // add tests for schama match // TODO
+    isValid = !isEmpty;
+    return isValid;
+  }
+
+  protected attachCuesForMediaById (cues: ICue[], mediaId: string) : number {
+    if(cues ==null || cues.length == 0) {
+      console.warn('MPlayerBase #attachCuesToMediaById got no cues');
+      return 0;
+    }
+
+    if(!this.isValidMediaId(mediaId)) {
+      console.warn('MPlayerBase #attachCuesToMediaById got invalid mediaId', mediaId);
+      return 0;
+    }
+
+    const media = this.findMediaFromMediaId(mediaId);
     if(media == null) {
       return 0;
     }
     return this.attachCuesToMedia(cues, media);
   }
-  attachCuesToMedia(cues: ICue[], media: VgMediaDirective) : number {
+  protected attachCuesToMedia(cues: ICue[], media: VgMediaDirective) : number {
     if(cues ==null || cues.length == 0) {
       console.warn('MPlayerBase #attachCuesToMedia got no cues');
       return 0;
@@ -234,16 +258,21 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
       console.warn('MPlayerBase #attachCuesToMedia got no media');
       return 0;
     }
-    const track = this.findOrAddTextTrackForMedia(media);
-    let numAttached = 0
+
+    const validCues: VTTCue[] = [];
     cues.forEach(cue => {
       const vcue = this.makeVttCue(cue);
       if(vcue !== null) {
-        track.addCue(vcue);
-        numAttached++;
+        validCues.push(vcue)
       }
     })
-    return numAttached;
+
+    if(validCues.length >0){
+      const track = this.findOrAddTextTrackForMedia(media);
+      validCues.forEach(c => track.addCue(c));
+    }
+
+    return validCues.length;;
   }
 
 }

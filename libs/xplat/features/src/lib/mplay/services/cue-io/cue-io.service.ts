@@ -17,10 +17,12 @@ export class CueIOService {
 //  constructor(private firestore: Firestore) { }
 
 
-      getUsersCuesForMedia(uid: string, mid: string): Observable<ICueTrack> {
+      getUsersCuesForMedia(uid: string, mid: string): ICueTrack | null {
        //   const cueDocRef = collection(this.firestore, 'cues');
-    //   return collectionData(cueDocRef, {idField: 'id'}) as Observable<CueDoc[]>;
-      return of({} as ICueTrack);
+       //   return collectionData(cueDocRef, {idField: 'id'}) as Observable<CueDoc[]>;
+       //   const ucm : ICueTrack;
+
+      return null;
     }
 
 }
