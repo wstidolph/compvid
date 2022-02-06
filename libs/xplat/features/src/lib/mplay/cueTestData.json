@@ -1,0 +1,18 @@
+{
+  "cues": [
+    {
+      "id": "cid1",
+      "title": "cue 1",
+      "description": "dummy description",
+      "startTime": 0,
+      "endTime": 1
+    },
+    {
+      "id": "snuffle",
+      "title": "cue 2",
+      "description": "dummy description",
+      "startTime": 2,
+      "endTime": 3
+    }
+  ]
+}
