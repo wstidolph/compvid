@@ -29,19 +29,12 @@
 /.sass-cache
 /connect.lock
 /coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
+*.log
 /typings
 
 # System Files
 .DS_Store
 Thumbs.db
-
 .angular
-
 .runtimeconfig.json
-firestore-debug.log
-database-debug.log
-pubsub-debug.log
+
