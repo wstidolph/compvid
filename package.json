@@ -13,7 +13,7 @@
     "open.ionic.compariview.android": "cd apps/ionic-compariview && npm run cap.android",
     "sync.ionic.compariview": "cd apps/ionic-compariview && npm run cap.sync",
     "clean.ionic.compariview": "cd apps/ionic-compariview && npx rimraf hooks node_modules platforms www plugins package-lock.json && yarn config set ignore-engines true && yarn",
-    "postinstall": "ngcc --properties es2015 browser module main"
+    "postinstall": "patch-package && ngcc --properties es2015 browser module main"
   },
   "private": true,
   "devDependencies": {
@@ -93,6 +93,7 @@
     "firebase": "^9.6.3",
     "firebase-admin": "latest",
     "firebase-functions": "latest",
+    "patch-package": "^6.4.7",
     "rxjs": "~7.5.2",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
@@ -102,4 +103,3 @@
     "framework": "angular"
   }
 }
-
