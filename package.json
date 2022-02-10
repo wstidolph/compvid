@@ -13,7 +13,8 @@
     "open.ionic.compariview.android": "cd apps/ionic-compariview && npm run cap.android",
     "sync.ionic.compariview": "cd apps/ionic-compariview && npm run cap.sync",
     "clean.ionic.compariview": "cd apps/ionic-compariview && npx rimraf hooks node_modules platforms www plugins package-lock.json && yarn config set ignore-engines true && yarn",
-    "postinstall": "patch-package && ngcc --properties es2015 browser module main"
+    "postinstall": "patch-package && ngcc --properties es2015 browser module main",
+    "kill-all": "npx kill-port 4000 5000 5001 8080 8085 9099 9199"
   },
   "private": true,
   "devDependencies": {
@@ -90,9 +91,10 @@
     "@nstudio/ionic-angular": "^13.4.3",
     "@videogular/ngx-videogular": "^5.0.1",
     "core-js": "^3.6.5",
-    "firebase": "^9.6.3",
+    "firebase": "^9.6.6",
     "firebase-admin": "latest",
     "firebase-functions": "latest",
+    "kill-port": "^1.6.1",
     "patch-package": "^6.4.7",
     "rxjs": "~7.5.2",
     "tslib": "^2.0.0",
@@ -103,4 +105,3 @@
     "framework": "angular"
   }
 }
-
