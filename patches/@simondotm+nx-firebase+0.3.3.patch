@@ -25,7 +25,7 @@ index ba14795..8909a9b 100644
          const incompatibleNestedDeps = [];
          // rewrite references to library packages in the functions package.json
          // to be local package references to the copies we made
-         const functionsPackageFile = `${options.outputPath}/package.json`;
+-        const functionsPackageFile = `${options.outputPath}/package.json`;
 +        const functionsPackageJson = devkit_1.readJsonFile(functionsPackageFile);
          debugLog("- functions PackageFile=" + functionsPackageFile);
 -        const functionsPackageJson = workspace_1.readJsonFile(functionsPackageFile);
