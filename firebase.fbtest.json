@@ -1,7 +1,4 @@
 {
-  "database": {
-    "rules": "apps/fbtest/database.rules.json"
-  },
   "firestore": {
     "rules": "apps/fbtest/firestore.rules",
     "indexes": "apps/fbtest/firestore.indexes.json"
@@ -35,9 +32,6 @@
     },
     "auth": {
       "port": "9099"
-    },
-    "pubsub": {
-      "port": "8085"
     }
   }
 }
