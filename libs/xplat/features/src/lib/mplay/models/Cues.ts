@@ -10,10 +10,11 @@ export interface ICue {
 export interface ICueTrack {
   id: string;
   user: string;
+  authviewers: string[]; //
   dateCreated: Date;
   lastUpdated: Date;
   cues?: string; // a JSON doc of ICues
-  aboutMedia: string;
+  aboutMedia: string; // media ID
 }
 
 export type usermediacues = {

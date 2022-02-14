@@ -79,6 +79,7 @@ export abstract class MplayerBaseComponent extends BaseComponent  {
       id: '0',
       user: '0',
       aboutMedia: 'dummy',
+      authviewers: [],
       dateCreated: new Date('2022/01/01'),
       lastUpdated: new Date('2022/01/01')
     }
