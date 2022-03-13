@@ -18,6 +18,7 @@
 /Cuetracks/{mid} -> ICuetrack
   id: string;
   user: string; // User uid
+  authviewers: string[]; // list of regex, match any for access
   dateCreated: Date;
   lastUpdated: Date;
   cues?: string; // a JSON doc of ICues
