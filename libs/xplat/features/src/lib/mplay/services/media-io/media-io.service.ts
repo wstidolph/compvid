@@ -16,5 +16,8 @@ export class MediaIOService {
       console.log('MediaIOService #getSrcListForMediaId', mediaID);
       return [];
     }
+    fetchMedia(mediaID: string): boolean {
+      return false;
+    }
 
 }
