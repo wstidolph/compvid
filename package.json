@@ -64,7 +64,8 @@
     "prettier": "2.5.1",
     "ts-jest": "27.0.5",
     "typescript": "4.5.5",
-    "util": "^0.12.4"
+    "util": "^0.12.4",
+    "@nstudio/web": "13.4.3"
   },
   "dependencies": {
     "@angular/animations": "13.2.1",
@@ -105,4 +106,3 @@
     "framework": "angular"
   }
 }
-
