@@ -46,7 +46,7 @@
     "@nstudio/xplat": "^13.4.3",
     "@simondotm/nx-firebase": "^0.3.3",
     "@types/core-js": "^2.5.5",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.4.1",
     "@types/jsdom": "^16.2.14",
     "@types/node": "14.14.33",
     "@typescript-eslint/eslint-plugin": "5.18.0",
@@ -56,8 +56,9 @@
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
     "firestore-jest-mock": "^0.17.0",
-    "jest": "27.2.3",
+    "jest": "^27.2.3",
     "jest-environment-jsdom": "^27.4.6",
+    "jest-preset-angular": "^11.1.1",
     "jsdom": "^19.0.0",
     "ng-mocks": "^13.0.0",
     "nx": "13.10.3",
@@ -105,4 +106,3 @@
     "framework": "angular"
   }
 }
-
