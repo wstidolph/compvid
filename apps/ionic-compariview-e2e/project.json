@@ -1,0 +1,28 @@
+{
+  "root": "apps/ionic-compariview-e2e",
+  "sourceRoot": "apps/ionic-compariview-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/ionic-compariview-e2e/cypress.json",
+        "devServerTarget": "ionic-compariview:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "ionic-compariview:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/ionic-compariview-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["ionic-compariview"]
+}
