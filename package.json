@@ -31,13 +31,13 @@
     "@capacitor/cli": "^3.0.0",
     "@firebase/rules-unit-testing": "^2.0.1",
     "@ionic/angular-toolkit": "^5.0.0",
-    "@nrwl/angular": "13.10.1",
-    "@nrwl/cli": "13.10.1",
-    "@nrwl/cypress": "13.10.1",
-    "@nrwl/eslint-plugin-nx": "13.10.1",
-    "@nrwl/jest": "^13.10.1",
-    "@nrwl/linter": "13.10.1",
-    "@nrwl/workspace": "13.10.1",
+    "@nrwl/angular": "13.10.3",
+    "@nrwl/cli": "13.10.3",
+    "@nrwl/cypress": "13.10.3",
+    "@nrwl/eslint-plugin-nx": "13.10.3",
+    "@nrwl/jest": "13.10.3",
+    "@nrwl/linter": "13.10.3",
+    "@nrwl/workspace": "13.10.3",
     "@nstudio/angular": "13.4.3",
     "@nstudio/ionic": "13.4.3",
     "@nstudio/ionic-angular": "13.4.3",
@@ -60,7 +60,7 @@
     "jest-environment-jsdom": "^27.4.6",
     "jsdom": "^19.0.0",
     "ng-mocks": "^13.0.0",
-    "nx": "13.10.1",
+    "nx": "13.10.3",
     "prettier": "2.5.1",
     "ts-jest": "27.0.5",
     "typescript": "4.6.3",
@@ -105,3 +105,4 @@
     "framework": "angular"
   }
 }
+
