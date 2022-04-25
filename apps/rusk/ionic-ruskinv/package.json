@@ -1,0 +1,26 @@
+{
+  "name": "ruskinv",
+  "version": "0.0.1",
+  "author": "Ionic Framework",
+  "description": "An Ionic project",
+  "homepage": "https://ionicframework.com/",
+  "scripts": {
+    "cap.add.ios": "npx ionic cap add ios",
+    "cap.add.android": "npx ionic cap add android",
+    "cap.ios": "npx ionic cap open ios",
+    "cap.android": "npx ionic cap open android",
+    "cap.sync": "npx ionic cap sync"
+  },
+  "dependencies": {
+    "@capacitor/app": "~1.0.2",
+    "@capacitor/android": "^3.0.0",
+    "@capacitor/core": "^3.0.0",
+    "@capacitor/haptics": "~1.0.2",
+    "@capacitor/ios": "^3.0.0",
+    "@capacitor/keyboard": "~1.0.2",
+    "@capacitor/status-bar": "~1.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^3.0.0"
+  }
+}

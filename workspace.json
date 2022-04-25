@@ -4,6 +4,7 @@
     "fbtest": "apps/fbtest",
     "ionic-compariview": "apps/ionic-compariview",
     "ionic-compariview-e2e": "apps/ionic-compariview-e2e",
+    "ionic-ruskinv": "apps/rusk/ionic-ruskinv",
     "xplat-core": "libs/xplat/core",
     "xplat-features": "libs/xplat/features",
     "xplat-ionic-core": "libs/xplat/ionic/core",

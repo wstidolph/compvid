@@ -5,22 +5,22 @@
       "styleext": "scss"
     }
   },
-  "root": "apps/ionic-compariview/",
-  "sourceRoot": "apps/ionic-compariview/src",
+  "root": "apps/rusk/ionic-ruskinv/",
+  "sourceRoot": "apps/rusk/ionic-ruskinv/src",
   "prefix": "compvid",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "options": {
-        "outputPath": "apps/ionic-compariview/www",
-        "index": "apps/ionic-compariview/src/index.html",
-        "main": "apps/ionic-compariview/src/main.ts",
-        "polyfills": "apps/ionic-compariview/src/polyfills.ts",
-        "tsConfig": "apps/ionic-compariview/tsconfig.app.json",
+        "outputPath": "apps/rusk/ionic-ruskinv/www",
+        "index": "apps/rusk/ionic-ruskinv/src/index.html",
+        "main": "apps/rusk/ionic-ruskinv/src/main.ts",
+        "polyfills": "apps/rusk/ionic-ruskinv/src/polyfills.ts",
+        "tsConfig": "apps/rusk/ionic-ruskinv/tsconfig.app.json",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/ionic-compariview/src/assets",
+            "input": "apps/rusk/ionic-ruskinv/src/assets",
             "output": "assets"
           },
           {
@@ -31,13 +31,10 @@
         ],
         "styles": [
           {
-            "input": "node_modules/@videogular/ngx-videogular/fonts/videogular.css"
+            "input": "apps/rusk/ionic-ruskinv/src/theme/variables.scss"
           },
           {
-            "input": "apps/ionic-compariview/src/theme/variables.scss"
-          },
-          {
-            "input": "apps/ionic-compariview/src/global.scss"
+            "input": "apps/rusk/ionic-ruskinv/src/global.scss"
           }
         ],
         "scripts": [],
@@ -53,8 +50,8 @@
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/ionic-compariview/src/environments/environment.ts",
-              "with": "apps/ionic-compariview/src/environments/environment.prod.ts"
+              "replace": "apps/rusk/ionic-ruskinv/src/environments/environment.ts",
+              "with": "apps/rusk/ionic-ruskinv/src/environments/environment.prod.ts"
             }
           ],
           "optimization": true,
@@ -81,11 +78,11 @@
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
       "options": {
-        "browserTarget": "ionic-compariview:build"
+        "browserTarget": "ionic-ruskinv:build"
       },
       "configurations": {
         "production": {
-          "browserTarget": "ionic-compariview:build:production"
+          "browserTarget": "ionic-ruskinv:build:production"
         },
         "ci": {
           "progress": false
@@ -95,28 +92,27 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "ionic-compariview:build"
+        "browserTarget": "ionic-ruskinv:build"
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@angular-devkit/build-angular:karma",
       "options": {
-        "main": "apps/ionic-compariview/src/test.ts",
-        "polyfills": "apps/ionic-compariview/src/polyfills.ts",
-        "tsConfig": "apps/ionic-compariview/tsconfig.spec.json",
-        "jestConfig": "apps/ionic-compariview/jest.config.js",
-        "passWithNoTests": true,
+        "main": "apps/rusk/ionic-ruskinv/src/test.ts",
+        "polyfills": "apps/rusk/ionic-ruskinv/src/polyfills.ts",
+        "tsConfig": "apps/rusk/ionic-ruskinv/tsconfig.spec.json",
+        "karmaConfig": "apps/rusk/ionic-ruskinv/karma.conf.js",
         "styles": [],
         "scripts": [],
         "assets": [
           {
             "glob": "favicon.ico",
-            "input": "apps/ionic-compariview/src/",
+            "input": "apps/rusk/ionic-ruskinv/src/",
             "output": "/"
           },
           {
             "glob": "**/*",
-            "input": "apps/ionic-compariview/src/assets",
+            "input": "apps/rusk/ionic-ruskinv/src/assets",
             "output": "/assets"
           }
         ]
@@ -132,9 +128,9 @@
       "executor": "@angular-eslint/builder:lint",
       "options": {
         "tsConfig": [
-          "apps/ionic-compariview/tsconfig.app.json",
-          "apps/ionic-compariview/tsconfig.spec.json",
-          "apps/ionic-compariview/e2e/tsconfig.json"
+          "apps/rusk/ionic-ruskinv/tsconfig.app.json",
+          "apps/rusk/ionic-ruskinv/tsconfig.spec.json",
+          "apps/rusk/ionic-ruskinv/e2e/tsconfig.json"
         ],
         "lintFilePatterns": [
           "src/**/*.ts",
@@ -145,24 +141,24 @@
     "ionic-cordova-build": {
       "executor": "@ionic/angular-toolkit:cordova-build",
       "options": {
-        "browserTarget": "ionic-compariview:build"
+        "browserTarget": "ionic-ruskinv:build"
       },
       "configurations": {
         "production": {
-          "browserTarget": "ionic-compariview:build:production"
+          "browserTarget": "ionic-ruskinv:build:production"
         }
       }
     },
     "ionic-cordova-serve": {
       "executor": "@ionic/angular-toolkit:cordova-serve",
       "options": {
-        "cordovaBuildTarget": "ionic-compariview:ionic-cordova-build",
-        "devServerTarget": "ionic-compariview:serve"
+        "cordovaBuildTarget": "ionic-ruskinv:ionic-cordova-build",
+        "devServerTarget": "ionic-ruskinv:serve"
       },
       "configurations": {
         "production": {
-          "cordovaBuildTarget": "ionic-compariview:ionic-cordova-build:production",
-          "devServerTarget": "ionic-compariview:serve:production"
+          "cordovaBuildTarget": "ionic-ruskinv:ionic-cordova-build:production",
+          "devServerTarget": "ionic-ruskinv:serve:production"
         }
       }
     }

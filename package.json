@@ -6,7 +6,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "clean": "npx rimraf hooks node_modules package-lock.json && yarn config set ignore-engines true && yarn",
+    "clean": "npx rimraf hooks node_modules package-lock.json yarn.lock && yarn",
     "prepare.ionic.compariview.ios": "cd apps/ionic-compariview && npm run cap.add.ios",
     "prepare.ionic.compariview.android": "cd apps/ionic-compariview && npm run cap.add.android",
     "open.ionic.compariview.ios": "cd apps/ionic-compariview && npm run cap.ios",
@@ -14,14 +14,20 @@
     "sync.ionic.compariview": "cd apps/ionic-compariview && npm run cap.sync",
     "clean.ionic.compariview": "cd apps/ionic-compariview && npx rimraf hooks node_modules platforms www plugins package-lock.json && yarn config set ignore-engines true && yarn",
     "postinstall": "patch-package && ngcc --properties es2015 browser module main",
-    "kill-all": "npx kill-port 4000 5000 5001 8080 8085 9099 9199"
+    "kill-all": "npx kill-port 4000 5000 5001 8080 8085 9099 9199",
+    "prepare.ionic.ruskinv.ios": "cd apps/rusk/ionic-ruskinv && npm run cap.add.ios",
+    "prepare.ionic.ruskinv.android": "cd apps/rusk/ionic-ruskinv && npm run cap.add.android",
+    "open.ionic.ruskinv.ios": "cd apps/rusk/ionic-ruskinv && npm run cap.ios",
+    "open.ionic.ruskinv.android": "cd apps/rusk/ionic-ruskinv && npm run cap.android",
+    "sync.ionic.ruskinv": "cd apps/rusk/ionic-ruskinv && npm run cap.sync",
+    "clean.ionic.ruskinv": "cd apps/rusk/ionic-ruskinv && npx rimraf hooks node_modules platforms www plugins package-lock.json yarn.lock && yarn"
   },
   "private": true,
   "devDependencies": {
     "@angular-devkit/architect": "^0.1301.2",
-    "@angular-devkit/build-angular": "13.3.2",
-    "@angular-devkit/core": "~13.1.0",
-    "@angular-devkit/schematics": "~13.1.0",
+    "@angular-devkit/build-angular": "^13.0.0",
+    "@angular-devkit/core": "^13.0.0",
+    "@angular-devkit/schematics": "^13.0.0",
     "@angular-eslint/eslint-plugin": "~13.0.1",
     "@angular-eslint/eslint-plugin-template": "~13.0.1",
     "@angular-eslint/template-parser": "~13.0.1",
@@ -65,7 +71,16 @@
     "prettier": "2.5.1",
     "ts-jest": "27.0.5",
     "typescript": "4.6.3",
-    "util": "^0.12.4"
+    "util": "^0.12.4",
+    "@types/jasmine": "~3.6.2",
+    "@types/jasminewd2": "~2.0.3",
+    "jasmine-core": "~3.8.0",
+    "jasmine-spec-reporter": "~6.0.0",
+    "karma": "~6.3.2",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage-istanbul-reporter": "~2.0.3",
+    "karma-jasmine": "~4.0.0",
+    "karma-jasmine-html-reporter": "^1.5.0"
   },
   "dependencies": {
     "@angular/animations": "13.3.2",
@@ -99,7 +114,10 @@
     "patch-package": "^6.4.7",
     "rxjs": "~7.5.4",
     "tslib": "^2.0.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "@ionic-native/core": "^5.30.0",
+    "@ionic-native/splash-screen": "^5.30.0",
+    "@ionic-native/status-bar": "^5.30.0"
   },
   "xplat": {
     "prefix": "compvid",
