@@ -96,12 +96,12 @@
       }
     },
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
+      "executor": "@nrwl/jest:jest",
       "options": {
         "main": "apps/rusk/ionic-ruskinv/src/test.ts",
         "polyfills": "apps/rusk/ionic-ruskinv/src/polyfills.ts",
         "tsConfig": "apps/rusk/ionic-ruskinv/tsconfig.spec.json",
-        "karmaConfig": "apps/rusk/ionic-ruskinv/karma.conf.js",
+        "jestConfig": "apps/rusk/ionic-ruskinv/jest.config.js",
         "styles": [],
         "scripts": [],
         "assets": [
