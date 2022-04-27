@@ -1,0 +1,28 @@
+{
+  "root": "apps/rusk/ionic-ruskinv-e2e",
+  "sourceRoot": "apps/rusk/ionic-ruskinv-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/rusk/ionic-ruskinv-e2e/cypress.json",
+        "devServerTarget": "ionic-ruskinv:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "ionic-ruskinv:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/rusk/ionic-ruskinv-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["ionic-ruskinv"]
+}
