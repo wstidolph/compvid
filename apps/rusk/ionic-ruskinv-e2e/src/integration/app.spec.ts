@@ -1,4 +1,4 @@
-import { getGreeting } from '../support/app.po';
+import { getGreeting, getTitle } from '../support/app.po';
 
 describe('ionic-ruskinv', () => {
   beforeEach(() => cy.visit('/'));
@@ -9,5 +9,9 @@ describe('ionic-ruskinv', () => {
 
     // Function helper example, see `../support/app.po.ts` file
     getGreeting().contains('Welcome ionic-ruskinv');
+  });
+  it('should have Rusk Inventory page title', () => {
+    getTitle().contains('Rusk Inventory');
+
   });
 });
