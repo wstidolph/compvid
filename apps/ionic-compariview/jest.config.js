@@ -1,7 +1,7 @@
 module.exports = {
   displayName: 'compariview',
   preset: '../../jest.preset.js',
-  setupFilesAfterEnv: ['<rootDir>/test-setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
