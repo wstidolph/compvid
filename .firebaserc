@@ -1,6 +1,6 @@
 {
   "targets": {},
   "projects": {
-    "default": "fbtest"
+    "default": "ionic-ruskinv"
   }
 }
