@@ -12,6 +12,10 @@ const routes: Routes = [
     path: 'mainpics',
     loadChildren: () => import('./mainpics/mainpics.module').then( m => m.MainpicsPageModule)
   },
+  {
+    path: 'migrate',
+    loadChildren: () => import('./migrate/migrate.module').then( m => m.MigratePageModule)
+  },
 ];
 
 @NgModule({

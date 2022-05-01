@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>migrate</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngFor="let pd of picdocs">
+    <ion-card>
+      <ion-card-header>{{pd.name}}</ion-card-header>
+      <ion-card-content>
+        <img [src]="pd?.downloadUrl">
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>

@@ -1,9 +1,22 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Rusk Inventory</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <h1>Welcome ionic-ruskinv</h1>
+  <ion-list>
+    <ion-item *ngFor="let picDoc of picDocs | async" (click)="openPic(pic)">
+      <ion-label>
+        {{picDoc.name}} - {{ picDoc.desc }} - {{picDoc.downloadUrl}}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addPic()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

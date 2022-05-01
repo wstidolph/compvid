@@ -1,0 +1,37 @@
+{
+  "firestore": {
+    "rules": "apps/ionic-ruskinv/firestore.rules",
+    "indexes": "apps/ionic-ruskinv/firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "apps/ionic-ruskinv/public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "storage": {
+    "rules": "apps/ionic-ruskinv/storage.rules"
+  },
+  "functions": {
+    "predeploy": ["npx nx build ionic-ruskinv --with-deps", "npx nx lint ionic-ruskinv"],
+    "source": "dist/apps/ionic-ruskinv"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "auth": {
+      "port": "9099"
+    }
+  }
+}
