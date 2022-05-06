@@ -11,7 +11,7 @@ export class HomePage implements OnInit {
   picDocs: Observable<PicDoc[]>;
 
   constructor(private dataService: RuskdataService, private cd: ChangeDetectorRef) {
-    this.picDocs = this.dataService.getPicDocs();
+
   }
 
   ngOnInit() {
@@ -29,6 +29,6 @@ export class HomePage implements OnInit {
     }
 
     console.log('HomePage got addPic')
-    this.dataService.addPicDoc(testPicDoc);
+
   }
 }

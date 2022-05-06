@@ -5,11 +5,11 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngFor="let pd of picdocs">
+  <ion-list *ngFor="let pdwi of pdwis$ | async">
     <ion-card>
-      <ion-card-header>{{pd.name}}</ion-card-header>
+      <ion-card-header>NAME: {{pdwi?.pd.name}}</ion-card-header>
       <ion-card-content>
-        <img [src]="pd?.downloadUrl">
+        <img [src]="pdwi?.pd?.downloadUrl">
       </ion-card-content>
     </ion-card>
   </ion-list>
