@@ -11,12 +11,11 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 
-// import {AngularFirestore} from '@angular/fire/compat/firestore';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 // describe the things in the picture
 export interface ItemSeen {
-  id?: string;
+  id: string;
   inpicdoc: string; // item is seen in (join key)
   desc: string;     // description of the Item
   goesTo: string;   // disposition target
@@ -32,6 +31,7 @@ const COLLECTION = 'itemseens';
 export class ItemseenService {
   private itemseens = new BehaviorSubject<ItemSeen[]>([]);
   itemseens$ = this.itemseens.asObservable();
+
   constructor(private firestore: Firestore) {}
 
   // getItemsSeenByPic(pic: PicDoc){
@@ -60,8 +60,8 @@ export class ItemseenService {
     return deleteDoc(itemseenRefRef);
   }
 
-  updateItemSeen(itemseen: ItemSeen) { //TODO fix passing data
-    const itemseenRefRef = doc(this.firestore, `${COLLECTION}/${itemseen.id}`);
+  updateItemSeen(itemseenChgs: Partial<ItemSeen>) { //TODO fix passing data
+    const itemseenRefRef = doc(this.firestore, `${COLLECTION}/${itemseenChgs.id}`);
     return updateDoc(itemseenRefRef, {} );
   }
 }

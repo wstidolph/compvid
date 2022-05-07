@@ -5,6 +5,7 @@
     "ionic-compariview": "apps/ionic-compariview",
     "ionic-compariview-e2e": "apps/ionic-compariview-e2e",
     "ionic-ruskinv": "apps/rusk/ionic-ruskinv",
+    "rusk-functions": "apps/rusk/functions",
     "rusk-ionic-ruskinv-e2e": "apps/rusk/ionic-ruskinv-e2e",
     "xplat-core": "libs/xplat/core",
     "xplat-features": "libs/xplat/features",

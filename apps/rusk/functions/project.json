@@ -1,0 +1,69 @@
+{
+  "root": "apps/rusk/functions",
+  "sourceRoot": "apps/rusk/functions/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@simondotm/nx-firebase:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/rusk/functions",
+        "main": "apps/rusk/functions/src/index.ts",
+        "tsConfig": "apps/rusk/functions/tsconfig.app.json",
+        "packageJson": "apps/rusk/functions/package.json",
+        "assets": [
+          "apps/rusk/functions/*.md",
+          "apps/rusk/functions/.runtimeconfig.json"
+        ]
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "firebase deploy --config firebase.rusk-functions.json"
+      }
+    },
+    "getconfig": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "firebase functions:config:get --config firebase.rusk-functions.json > apps/rusk/functions/.runtimeconfig.json"
+      }
+    },
+    "emulate": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "firebase emulators:start --config firebase.rusk-functions.json"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "nx run rusk-functions:build --with-deps && nx run rusk-functions:build --watch"
+          },
+          {
+            "command": "nx run rusk-functions:emulate"
+          }
+        ],
+        "parallel": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/rusk/functions/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/rusk/functions"],
+      "options": {
+        "jestConfig": "apps/rusk/functions/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
