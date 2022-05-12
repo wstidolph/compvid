@@ -6,6 +6,7 @@
 
 <ion-content>
   <h1>Welcome ionic-ruskinv</h1>
+  <ion-button (click)="addPic()">addPic test</ion-button>
   <ion-list>
     <ion-item *ngFor="let picDoc of picDocs | async" (click)="openPic(pic)">
       <ion-label>

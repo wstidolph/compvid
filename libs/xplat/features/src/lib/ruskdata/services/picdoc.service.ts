@@ -18,7 +18,7 @@ import {
 import {
   getDownloadURL,
   ref,
-  Storage, uploadBytes
+  Storage, uploadBytes, UploadMetadata
 } from '@angular/fire/storage'
 
 import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
@@ -26,7 +26,8 @@ import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 export interface PicDoc {
   id?: string;
   name: string;
-  img_name: string;
+  mediaUrl: string;
+  storageId: string;
   uploadedBy?: string; // user ID
   downloadURL?: string;
 }
@@ -72,7 +73,7 @@ export class PicdocService {
     return deleteDoc(picDocRef);
   }
 
-  updatePicDoc(picdocChgs: Partial<PicDoc>) { //TODO fix passing data
+  updatePicDoc(picdocChgs: Partial<PicDoc>) {
     const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdocChgs.id}`);
     return updateDoc(picDocRef, picdocChgs);
   }
@@ -80,12 +81,13 @@ export class PicdocService {
   async uploadImage(img: Blob, picdoc: PicDoc){
     const path = `images`
     const storageRef = ref(this.storage, path);
+    const metadata: UploadMetadata = {} // TODO add a name-as-key from picdoc
     try {
-      await uploadBytes(storageRef, img);
+      await uploadBytes(storageRef, img, metadata );
       const downloadURL = await getDownloadURL(storageRef);
       const pdRef = doc(this.firestore, `COLLECTION/${picdoc.id}`)
       await updateDoc(pdRef, {downloadURL});
-      return true;
+      return downloadURL;
     } catch (e) {
         console.log(e);
         return null;

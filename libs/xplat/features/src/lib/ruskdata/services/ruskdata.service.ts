@@ -48,6 +48,10 @@ export class RuskdataService {
   private pdWithItemSeen = new BehaviorSubject<PicDocWithItemsSeen[]>([]);
   picdocsWithItemSeens$ = this.pdWithItemSeen.asObservable();
 
+  getImageListInPicDocs() {
+
+  }
+
 }
 
 
