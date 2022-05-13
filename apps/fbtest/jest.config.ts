@@ -1,5 +1,5 @@
 /* eslint-disable */
-module.exports = {
+export default {
   displayName: 'fbtest',
   preset: '../../jest.preset.js',
   globals: {

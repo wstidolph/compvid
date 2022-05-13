@@ -1,26 +1,19 @@
 {
-  "root": "libs/xplat/web/core",
   "sourceRoot": "libs/xplat/web/core/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/xplat/web/core/**/*.ts"
-        ]
+        "lintFilePatterns": ["libs/xplat/web/core/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/libs/xplat/web/core"
-      ],
+      "outputs": ["coverage/libs/xplat/web/core"],
       "options": {
-        "jestConfig": "libs/xplat/web/core/jest.config.js",
+        "jestConfig": "libs/xplat/web/core/jest.config.ts",
         "passWithNoTests": true
       }
     }

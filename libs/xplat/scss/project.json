@@ -1,26 +1,19 @@
 {
-  "root": "libs/xplat/scss",
   "sourceRoot": "libs/xplat/scss/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/xplat/scss/**/*.ts"
-        ]
+        "lintFilePatterns": ["libs/xplat/scss/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/libs/xplat/scss"
-      ],
+      "outputs": ["coverage/libs/xplat/scss"],
       "options": {
-        "jestConfig": "libs/xplat/scss/jest.config.js",
+        "jestConfig": "libs/xplat/scss/jest.config.ts",
         "passWithNoTests": true
       }
     }

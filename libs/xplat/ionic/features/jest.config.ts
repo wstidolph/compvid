@@ -1,5 +1,5 @@
 /* eslint-disable */
-module.exports = {
+export default {
   displayName: 'xplat-ionic-features',
   preset: '../../../../jest.preset.js',
   globals: {

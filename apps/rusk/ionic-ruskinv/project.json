@@ -5,7 +5,6 @@
       "styleext": "scss"
     }
   },
-  "root": "apps/rusk/ionic-ruskinv/",
   "sourceRoot": "apps/rusk/ionic-ruskinv/src",
   "prefix": "compvid",
   "targets": {
@@ -101,7 +100,7 @@
         "main": "apps/rusk/ionic-ruskinv/src/test.ts",
         "polyfills": "apps/rusk/ionic-ruskinv/src/polyfills.ts",
         "tsConfig": "apps/rusk/ionic-ruskinv/tsconfig.spec.json",
-        "jestConfig": "apps/rusk/ionic-ruskinv/jest.config.js",
+        "jestConfig": "apps/rusk/ionic-ruskinv/jest.config.ts",
         "styles": [],
         "scripts": [],
         "assets": [
@@ -132,10 +131,7 @@
           "apps/rusk/ionic-ruskinv/tsconfig.spec.json",
           "apps/rusk/ionic-ruskinv/e2e/tsconfig.json"
         ],
-        "lintFilePatterns": [
-          "src/**/*.ts",
-          "src/**/*.html"
-        ]
+        "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
       }
     },
     "ionic-cordova-build": {

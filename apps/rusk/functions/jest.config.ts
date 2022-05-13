@@ -1,5 +1,5 @@
 /* eslint-disable */
-module.exports = {
+export default {
   displayName: 'rusk-functions',
   preset: '../../../jest.preset.js',
   globals: {

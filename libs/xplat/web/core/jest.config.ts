@@ -1,5 +1,5 @@
 /* eslint-disable */
-module.exports = {
+export default {
   displayName: 'xplat-web-core',
   preset: '../../../../jest.preset.js',
   globals: {

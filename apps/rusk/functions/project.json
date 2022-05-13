@@ -1,5 +1,4 @@
 {
-  "root": "apps/rusk/functions",
   "sourceRoot": "apps/rusk/functions/src",
   "projectType": "application",
   "targets": {
@@ -60,7 +59,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/rusk/functions"],
       "options": {
-        "jestConfig": "apps/rusk/functions/jest.config.js",
+        "jestConfig": "apps/rusk/functions/jest.config.ts",
         "passWithNoTests": true
       }
     }
