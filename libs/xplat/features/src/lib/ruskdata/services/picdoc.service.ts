@@ -78,7 +78,7 @@ export class PicdocService {
     return updateDoc(picDocRef, picdocChgs);
   }
 
-  async uploadImage(img: Blob, picdoc: PicDoc){
+  async uploadImageForPicDoc(img: Blob, picdoc: PicDoc){
     const path = `images`
     const storageRef = ref(this.storage, path);
     const metadata: UploadMetadata = {} // TODO add a name-as-key from picdoc

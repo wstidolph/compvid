@@ -27,17 +27,18 @@ export class HomePage implements OnInit {
       console.log('HomePage openPic', picdoc)
   }
 
-  addPic(picDoc: PicDoc) {
+  addPic(picDoc: PicDoc | null) {
     const testPicDoc: PicDoc = {
-        id: 'foo',
-        name: 'wayne test',
+        // id: 'foo',
+        name: 'some stuff',
         uploadedBy: 'WS',
-        mediaUrl: 'https://stidolph.com/kestate/20220305_081558.jpg',
-        storageId: 'test_img',
+        mediaUrl: 'https://stidolph.com/kestate/20220305_081749.jpg',
+        storageId: 'rusk_'+ new Date().getTime() / 1000
     }
 
+    const localPicDoc = picDoc? picDoc : testPicDoc;
     console.log('HomePage got addPic')
-    this.picdocService.addPicDoc(testPicDoc).then((rtn)=> {
+    this.picdocService.addPicDoc(localPicDoc).then((rtn)=> {
       console.log('addPic got back', rtn);
     });
 

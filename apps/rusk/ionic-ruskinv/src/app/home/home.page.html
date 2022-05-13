@@ -11,13 +11,13 @@
 </ion-header>
 
 <ion-content>
-  <h1>Welcome ionic-ruskinv</h1>
   <ion-button (click)="addPic()">addPic test</ion-button>
   <ion-list>
     <ion-item *ngFor="let picDoc of picDocs | async" (click)="openPic(pic)">
       <ion-label>
-        {{picDoc.name}} - {{ picDoc.desc }} - {{picDoc.downloadUrl}}
+        Name: {{picDoc.name}} ID: {{ picDoc.id }} DLU: {{picDoc.downloadURL}} storageId {{picDoc.storageId}}
       </ion-label>
+      <img src={{picDoc?.downloadURL}}/>
     </ion-item>
   </ion-list>
 

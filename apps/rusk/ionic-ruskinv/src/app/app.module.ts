@@ -13,7 +13,7 @@ import { environment } from '../environments/environment';
 import { getAuth, provideAuth, connectAuthEmulator  } from '@angular/fire/auth'
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore, connectFirestoreEmulator } from '@angular/fire/firestore';
-import { getStorage, provideStorage, connectStorageEmulator} from '@angular/fire/storage';
+import { getStorage, provideStorage, connectStorageEmulator } from '@angular/fire/storage';
 import { getFunctions, provideFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 
 // import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
@@ -23,6 +23,8 @@ import { getFunctions, provideFunctions, connectFunctionsEmulator } from '@angul
 
 // import { AngularFireModule } from '@angular/fire/compat';
 // import { AngularFirestoreModule,  } from '@angular/fire/compat/firestore';
+
+
 
 @NgModule({
   declarations: [AppComponent],
