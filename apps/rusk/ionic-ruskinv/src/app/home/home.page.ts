@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { RuskdataService, PicDoc, PicdocService } from '@compvid/xplat/features';
+import { Router } from '@angular/router';
+import { RuskdataService, PicDoc, PicdocService, AuthService } from '@compvid/xplat/features';
 import { from, Observable } from 'rxjs'
 
 @Component({
@@ -10,7 +11,11 @@ import { from, Observable } from 'rxjs'
 export class HomePage implements OnInit {
   picDocs: Observable<PicDoc[]>;
 
-  constructor(private dataService: RuskdataService, private picdocService: PicdocService, private cd: ChangeDetectorRef) {
+  constructor(private dataService: RuskdataService,
+    private picdocService: PicdocService,
+    private cd: ChangeDetectorRef,
+    private router: Router,
+    private authService: AuthService) {
 
   }
 
@@ -22,7 +27,7 @@ export class HomePage implements OnInit {
       console.log('HomePage openPic', picdoc)
   }
 
-  addPic() {
+  addPic(picDoc: PicDoc) {
     const testPicDoc: PicDoc = {
         id: 'foo',
         name: 'wayne test',
@@ -32,6 +37,14 @@ export class HomePage implements OnInit {
     }
 
     console.log('HomePage got addPic')
+    this.picdocService.addPicDoc(testPicDoc).then((rtn)=> {
+      console.log('addPic got back', rtn);
+    });
 
+  }
+
+  async logout() {
+    await this.authService.logout();
+    this.router.navigateByUrl('/');
   }
 }

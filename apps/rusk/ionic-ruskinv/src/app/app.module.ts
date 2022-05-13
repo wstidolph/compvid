@@ -10,12 +10,13 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from '../environments/environment';
+import { getAuth, provideAuth } from '@angular/fire/auth'
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFirestoreModule,  } from '@angular/fire/compat/firestore';
+// import { AngularFireModule } from '@angular/fire/compat';
+// import { AngularFirestoreModule,  } from '@angular/fire/compat/firestore';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,7 @@ import { AngularFirestoreModule,  } from '@angular/fire/compat/firestore';
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule,
     // AngularFirestoreModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(()=> getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage())],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
