@@ -1,6 +1,6 @@
 {
-  "targets": {},
   "projects": {
-    "default": "ionic-ruskinv"
-  }
+    "default": "homeinv-f3597"
+  },
+  "targets": {}
 }

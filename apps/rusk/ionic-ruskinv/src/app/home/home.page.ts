@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RuskdataService, PicDoc, PicdocService, AuthService } from '@compvid/xplat/features';
+import { RuskdataService, PicDoc, PicdocService, AuthService, ItemseenService, ItemSeen } from '@compvid/xplat/features';
 import { from, Observable } from 'rxjs'
 
 @Component({
@@ -10,17 +10,23 @@ import { from, Observable } from 'rxjs'
 })
 export class HomePage implements OnInit {
   picDocs: Observable<PicDoc[]>;
+  itemseens: Observable<ItemSeen[]>;
 
   constructor(private dataService: RuskdataService,
     private picdocService: PicdocService,
+    private itemseenService: ItemseenService,
     private cd: ChangeDetectorRef,
     private router: Router,
     private authService: AuthService) {
+      this.picDocs = this.picdocService.getPicDocs();
+      this.itemseens = this.itemseenService.getItemSeens();
+      // this.picDocs.subscribe(pd => {
+      //   console.log('HomePage got pd', pd);
+      // })
 
   }
 
   ngOnInit() {
-    this.picDocs = this.picdocService.getPicDocs();
   }
 
   openPic(picdoc: PicDoc){
@@ -37,10 +43,14 @@ export class HomePage implements OnInit {
     }
 
     const localPicDoc = picDoc? picDoc : testPicDoc;
-    console.log('HomePage got addPic')
+    console.log('HomePage addPic sending', localPicDoc);
     this.picdocService.addPicDoc(localPicDoc).then((rtn)=> {
       console.log('addPic got back', rtn);
     });
+
+  }
+
+  openItemseen(itemseen) {
 
   }
 

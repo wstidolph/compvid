@@ -26,6 +26,8 @@ import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 export interface PicDoc {
   id?: string;
   name: string;
+  desc?: string;
+  location?: string;
   mediaUrl: string;
   storageId: string;
   uploadedBy?: string; // user ID
@@ -41,7 +43,9 @@ export class PicdocService {
   private pda = new BehaviorSubject<PicDoc[]>([]);
   picdocs$ = this.pda.asObservable();
 
-  constructor(private firestore: Firestore, private storage: Storage) {}
+  constructor(private firestore: Firestore, private storage: Storage) {
+    console.log('picdoc service see firestore with options', firestore, firestore.app.options);
+  }
 
   getPicDocs(): Observable<PicDoc[]> {
     const picDocCollection = collection(this.firestore, COLLECTION);

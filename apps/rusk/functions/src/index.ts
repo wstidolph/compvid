@@ -1,12 +1,16 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+// Object.defineProperty(exports, "__esModule", { value: true });
 exports.logMetadata = exports.helloWorld = void 0;
-const tslib_1 = require("tslib");
+// const tslib_1 = require("tslib");
 /* eslint-disable @typescript-eslint/no-var-requires */
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
-const functions = tslib_1.__importStar(require("firebase-functions"));
+// const functions = tslib_1.__importStar(require("firebase-functions"));
 // The Firebase Admin SDK to access Firebase Features from within Cloud Functions.
-const admin = tslib_1.__importStar(require("firebase-admin"));
+// const admin = tslib_1.__importStar(require("firebase-admin"));
+
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+
 const https = require("https");
 const axios = require("axios");
 const path = require('path');
@@ -19,8 +23,8 @@ const fs = require('fs');
 // import * as fs from 'fs';
 const got = require('got');
 const FileType = require('file-type');
-const crypto = require('crypto');
-const spawn = require('child-process-promise').spawn;
+// const crypto = require('crypto');
+// const spawn = require('child-process-promise').spawn;
 const { Storage } = require('@google-cloud/storage');
 const gcs = new Storage();
 // The Firebase Admin SDK to access Firebase Features from within Cloud Functions.
@@ -80,7 +84,7 @@ const imageBucket = "images/"; // on firebase Storage
 */
 exports.downloadPhotoOnCreatePicdoc = functions.firestore.document(`${collection}/{id}`).onCreate(async (snapshot,context) => {
     const data = snapshot.data();
-    // functions.logger.info('snapshot data', data);
+    functions.logger.info('snapshot data', data);
     const mediaUrl = data.mediaUrl;
     const storageMediaId = data.storageId;
     let tmpDownloadedFile = null;

@@ -25,7 +25,7 @@
         "command": "firebase functions:config:get --config firebase.fbtest.json > apps/fbtest/.runtimeconfig.json"
       }
     },
-    "emulate": {
+    "hide-emulate": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "firebase emulators:start --config firebase.fbtest.json"
