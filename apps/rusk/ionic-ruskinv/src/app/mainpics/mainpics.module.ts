@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormlyModule } from '@ngx-formly/core'
+import { FormlyIonicModule } from '@ngx-formly/ionic';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -11,8 +13,10 @@ import { MainpicsPage } from './mainpics.page';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     IonicModule,
+    FormlyModule.forChild(),
+    FormlyIonicModule,
     MainpicsPageRoutingModule
   ],
   declarations: [MainpicsPage]

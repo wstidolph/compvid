@@ -24,12 +24,16 @@ import { getFunctions, provideFunctions, connectFunctionsEmulator } from '@angul
 // import { AngularFireModule } from '@angular/fire/compat';
 // import { AngularFirestoreModule,  } from '@angular/fire/compat/firestore';
 
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyIonicModule } from '@ngx-formly/ionic';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule,
+    FormlyModule.forRoot(),
+    FormlyIonicModule,
     // AngularFirestoreModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(()=> {

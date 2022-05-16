@@ -13,6 +13,7 @@ import {
   CollectionReference,
   where,
   query,
+  Timestamp,
 } from '@angular/fire/firestore';
 
 import {
@@ -27,6 +28,7 @@ export interface PicDoc {
   id?: string;
   name: string;
   desc?: string;
+  editDate: Timestamp;
   location?: string;
   mediaUrl: string;
   storageId: string;
