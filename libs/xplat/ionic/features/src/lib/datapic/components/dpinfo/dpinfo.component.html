@@ -1,2 +1,10 @@
 <!-- ionic -->
-<div>{{picdoc.name}}</div>
+<ion-grid>
+  <ion-col>
+    <ion-row>{{picdoc.name}}</ion-row>
+    <ion-row>At/in: {{picdoc.location}}</ion-row>
+    <ion-row>Is: {{picdoc.desc}}</ion-row>
+    <ion-row>When Taken: {{picdoc.picTakenDate?.toDate() | date: 'dd MMM YY hh:mm'}}</ion-row>
+    <ion-row>Number of Items: {{picdoc.numItemsseen}}</ion-row>
+  </ion-col>
+</ion-grid>
