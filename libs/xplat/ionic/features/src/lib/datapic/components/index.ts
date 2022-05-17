@@ -4,10 +4,11 @@ import { DpinfoComponent } from './dpinfo/dpinfo.component';
 
 import { DpitemseenComponent } from './dpitemseen/dpitemseen.component';
 
+
 export const DATAPIC_COMPONENTS = [
   DatapicComponent,
   DpinfoComponent,
-  DpitemseenComponent,
+  DpitemseenComponent
 ];
 
 export * from './datapic/datapic.component';

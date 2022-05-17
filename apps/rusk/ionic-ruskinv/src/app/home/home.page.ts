@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RuskdataService, PicDoc, PicdocService, AuthService, ItemseenService, ItemSeen } from '@compvid/xplat/features';
+import { Timestamp } from 'firebase/firestore';
 import { from, Observable } from 'rxjs'
 
 @Component({
@@ -39,7 +40,9 @@ export class HomePage implements OnInit {
         name: 'some stuff',
         uploadedBy: 'WS',
         mediaUrl: 'https://stidolph.com/kestate/20220305_081749.jpg',
-        storageId: 'rusk_'+ new Date().getTime() / 1000
+        storageId: 'rusk_'+ new Date().getTime() / 1000,
+        editDate: new Timestamp(0,0),
+        numItemsseen: 0
     }
 
     const localPicDoc = picDoc? picDoc : testPicDoc;

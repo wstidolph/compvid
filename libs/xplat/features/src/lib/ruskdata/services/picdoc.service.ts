@@ -34,6 +34,7 @@ export interface PicDoc {
   storageId: string;
   uploadedBy?: string; // user ID
   downloadURL?: string;
+  numItemsseen: number;
 }
 
 const COLLECTION = 'picdocs';

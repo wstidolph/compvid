@@ -5,6 +5,7 @@ import { FormlyModule } from '@ngx-formly/core'
 import { FormlyIonicModule } from '@ngx-formly/ionic';
 
 import { IonicModule } from '@ionic/angular';
+import { DatapicModule, DatapicComponent } from '@compvid/xplat/ionic/features'
 
 import { MainpicsPageRoutingModule } from './mainpics-routing.module';
 
@@ -17,6 +18,7 @@ import { MainpicsPage } from './mainpics.page';
     IonicModule,
     FormlyModule.forChild(),
     FormlyIonicModule,
+    DatapicModule,
     MainpicsPageRoutingModule
   ],
   declarations: [MainpicsPage]

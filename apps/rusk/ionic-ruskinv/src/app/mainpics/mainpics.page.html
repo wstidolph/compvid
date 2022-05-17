@@ -1,13 +1,36 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>mainpics</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+        Logout
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Pics</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="form" (ngSubmit)="onSubmit(model)">
-    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
 
+  <ion-list>
+    <ion-item *ngFor="let picDoc of picDocs | async" >
+      <compvid-datapic [picdoc]="picDoc" (click)="openPic($event)"></compvid-datapic>
+      <compvid-dpinfo [picdoc]="picDoc"></compvid-dpinfo>
+
+    </ion-item>
+  </ion-list>
+
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addPic()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+<!--
+        <form [formGroup]="form" (ngSubmit)="onSubmit(model)">
+        <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+-->
