@@ -28,6 +28,7 @@ export interface PicDoc {
   id?: string;
   name: string;
   desc?: string;
+  picTakenDate?: Timestamp;
   editDate: Timestamp;
   location?: string;
   mediaUrl: string;
