@@ -13,6 +13,7 @@ import {
   CollectionReference,
   where,
   query,
+  Timestamp,
 } from '@angular/fire/firestore';
 
 import {
@@ -27,11 +28,26 @@ export interface PicDoc {
   id?: string;
   name: string;
   desc?: string;
-  location?: string;
+  picTakenDate?: Timestamp;
+  editDate: Timestamp;
+  loc?: string;
   mediaUrl: string;
   storageId: string;
+  numItemsseen: number;
   uploadedBy?: string; // user ID
   downloadURL?: string;
+  itemsseen?: [{
+    // id: number,
+    desc: string,
+    addedOn: Timestamp,
+    whereInPic?: string,
+    category?: string,
+    goesTo?: {to: string,
+              accordingTo: string
+    }
+  }]
+
+
 }
 
 const COLLECTION = 'picdocs';
@@ -82,19 +98,19 @@ export class PicdocService {
     return updateDoc(picDocRef, picdocChgs);
   }
 
-  async uploadImageForPicDoc(img: Blob, picdoc: PicDoc){
-    const path = `images`
-    const storageRef = ref(this.storage, path);
-    const metadata: UploadMetadata = {} // TODO add a name-as-key from picdoc
-    try {
-      await uploadBytes(storageRef, img, metadata );
-      const downloadURL = await getDownloadURL(storageRef);
-      const pdRef = doc(this.firestore, `COLLECTION/${picdoc.id}`)
-      await updateDoc(pdRef, {downloadURL});
-      return downloadURL;
-    } catch (e) {
-        console.log(e);
-        return null;
-    }
-  }
+  // async uploadImageForPicDoc(img: Blob, picdoc: PicDoc){
+  //   const path = `images`
+  //   const storageRef = ref(this.storage, path);
+  //   const metadata: UploadMetadata = {} // TODO add a name-as-key from picdoc
+  //   try {
+  //     await uploadBytes(storageRef, img, metadata );
+  //     const downloadURL = await getDownloadURL(storageRef);
+  //     const pdRef = doc(this.firestore, `COLLECTION/${picdoc.id}`)
+  //     await updateDoc(pdRef, {downloadURL});
+  //     return downloadURL;
+  //   } catch (e) {
+  //       console.log(e);
+  //       return null;
+  //   }
+  // }
 }
