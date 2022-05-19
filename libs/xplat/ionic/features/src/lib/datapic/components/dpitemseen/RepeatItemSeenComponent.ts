@@ -9,19 +9,29 @@ import { Observable, of } from 'rxjs';
 @Component({
   selector: 'dpis-repeat-section',
   template: `
-    <div class="mb-3">
-      <legend *ngIf="to.props.label">{{ to.props.label }}</legend>
-      <p *ngIf="to.props.description">{{ to.props.description }}</p>
 
-      <div *ngFor="let field of field.fieldGroup; let i = index" class="row align-items-baseline">
-        <formly-field class="col" [field]="field"></formly-field>
-        <div class="col-1 d-flex align-items-center">
-          <button class="btn btn-danger" type="button" (click)="remove(i)">-</button>
-        </div>
-      </div>
-      <div style="margin:30px 0;">
-        <button class="btn btn-primary" type="button" (click)="add()">{{ to.props.addText }}</button>
-      </div>
+    <div class="mb-3">
+      <ion-label *ngIf="to.props.label">{{ to.props.label }}</ion-label>
+      <ion-button (click)="add()">Add</ion-button>
+      <p *ngIf="to.props.description">{{ to.props.description }}</p>
+      <ion-list>
+        <ion-item-sliding *ngFor="let field of field.fieldGroup; let i = index">
+          <ion-item-options side="end">
+
+            <ion-item-option color="danger" expandable (click)="remove(i)">
+                Delete
+            </ion-item-option>
+          </ion-item-options>
+
+          <ion-item  class="row align-items-baseline">
+            <formly-field class="col" [field]="field"></formly-field>
+            <!-- <div class="col-1 d-flex align-items-center">
+              <button class="btn btn-danger" type="button" (click)="remove(i)">-</button>
+            </div> -->
+          </ion-item>
+        </ion-item-sliding>
+      </ion-list>
+
     </div>
   `,
 })

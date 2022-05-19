@@ -10,6 +10,9 @@ import {
   deleteDoc,
   updateDoc,
   Timestamp,
+  CollectionReference,
+  query,
+  where,
 } from '@angular/fire/firestore';
 
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -36,12 +39,6 @@ export class ItemseenService {
 
   constructor(private firestore: Firestore) {}
 
-  // getItemsSeenByPic(pic: PicDoc){
-  //   this.afs.collection(COLLECTION,
-  //     q=> q.where('inpicdoc','==', pic.id))
-  //     .valueChanges().subscribe(val => console.log(`itemsSeenByPic ${pic}`, val))
-  // }
-
   getItemSeens(): Observable<ItemSeen[]> {
     const itsc = collection(this.firestore, COLLECTION);
     return collectionData(itsc, { idField: 'id' }) as Observable<ItemSeen[]>;
@@ -50,6 +47,16 @@ export class ItemseenService {
   getItemSeenById(id: string): Observable<ItemSeen> {
     const itemseenRefRef = doc(this.firestore, `${COLLECTION}/${id}`);
     return docData(itemseenRefRef, { idField: 'id' }) as Observable<ItemSeen>;
+  }
+
+  getItemSeensByPicdoc(pdId: string) {
+    const itemseensCollection =
+      collection(this.firestore, COLLECTION) as  CollectionReference<ItemSeen>;
+
+    return collectionData<ItemSeen>(
+      query(itemseensCollection, where('inpicdoc','==',pdId)),
+        {idField: 'id'}
+      );
   }
 
   addItemSeen(itemseen: ItemSeen) {

@@ -22,9 +22,12 @@
       <ion-grid>
       <ion-row>
         <ion-col><compvid-datapic [picdoc]="picDoc" (click)="openPic($event)"></compvid-datapic></ion-col>
-        <ion-col><compvid-dpinfo [picdoc]="picDoc"></compvid-dpinfo>
-                 <compvid-dpitemseen [picdoc]="picDoc"></compvid-dpitemseen></ion-col>
+        <ion-col><compvid-dpinfo [picdoc]="picDoc"></compvid-dpinfo></ion-col>
+
      </ion-row>
+     <ion-row>
+       <ion-col><compvid-dpitemseen [picdoc]="picDoc"></compvid-dpitemseen></ion-col>
+      </ion-row>
     </ion-grid>
     </ion-item>
   </ion-list>

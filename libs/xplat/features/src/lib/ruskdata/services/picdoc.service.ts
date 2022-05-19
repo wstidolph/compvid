@@ -30,12 +30,24 @@ export interface PicDoc {
   desc?: string;
   picTakenDate?: Timestamp;
   editDate: Timestamp;
-  location?: string;
+  loc?: string;
   mediaUrl: string;
   storageId: string;
+  numItemsseen: number;
   uploadedBy?: string; // user ID
   downloadURL?: string;
-  numItemsseen: number;
+  itemsseen?: [{
+    // id: number,
+    desc: string,
+    addedOn: Timestamp,
+    whereInPic?: string,
+    category?: string,
+    goesTo?: {to: string,
+              accordingTo: string
+    }
+  }]
+
+
 }
 
 const COLLECTION = 'picdocs';

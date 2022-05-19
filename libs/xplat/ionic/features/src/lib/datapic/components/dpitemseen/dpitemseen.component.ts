@@ -24,17 +24,19 @@ export class DpitemseenComponent extends BaseComponent implements OnInit   {
   ngOnInit() {
     const pdid = this.picdoc?.id ? this.picdoc.id : '';
     this.items$ = this.itemseenservice.getItemSeensByPicdoc(pdid)
+    this.model = this.picdoc;
   }
 
   form = new FormGroup({});
-  model: any = {
-    items: [null],
-  };
+  model = {};
+  // {
+  //   goesTo: [{}], // <== somehow not hooked up here
+  // };
   options: FormlyFormOptions = {};
 
   fields: FormlyFieldConfig[] = [
     {
-      key: 'items',
+      key: 'goesTo',
       type: 'repeat',
       templateOptions: { // props moved inside templateOptions sometime in version 6 evolution ...
         props: {
@@ -43,17 +45,42 @@ export class DpitemseenComponent extends BaseComponent implements OnInit   {
         }
       },
       fieldArray: {
-        type: 'input',
-        templateOptions: {
-        // props: {
-          placeholder: 'Item name',
-          required: true,
-        },
-      },
-    },
+        fieldGroup: [
+          { key: 'desc',
+            type: 'input',
+            templateOptions: {
+            // props: {
+              label: 'X',
+              placeholder: 'Item name',
+              required: true,
+            },
+          },
+          { key: 'to',
+            type: 'input',
+            templateOptions: {
+            // props: {
+              label: 'TO',
+              placeholder: 'person name',
+              required: false,
+            },
+          },
+          { key: 'per',
+            type: 'input',
+            templateOptions: {
+            // props: {
+              label: 'SAYS',
+              placeholder: 'person name',
+              required: false,
+            },
+          },
+
+        ]
+      }
+    }
   ];
 
   submit() {
+    // this is where we update the itemseen for this picdoc
     alert(JSON.stringify(this.model));
   }
 }
