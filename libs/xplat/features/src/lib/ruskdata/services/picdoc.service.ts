@@ -36,6 +36,8 @@ export interface PicDoc {
   numItemsseen: number;
   uploadedBy?: string; // user ID
   downloadURL?: string;
+  recipients: string[]; // copied from itemsseen.goesTo.to field
+                        // for "what pics have something goe to Bob?"
   itemsseen?: [{
     // id: number,
     desc: string,
