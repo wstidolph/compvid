@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DynamicFormsMaterialUIModule } from "@ng-dynamic-forms/ui-material";
 
 @Component({
   selector: 'compvid-mainpics',

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { DynamicFormService } from '@ng-dynamic-forms/core'
 import { PicdocformBaseComponent } from '@compvid/xplat/features';
 
 @Component({
@@ -7,7 +7,7 @@ import { PicdocformBaseComponent } from '@compvid/xplat/features';
   templateUrl: 'picdocform.component.html',
 })
 export class PicdocformComponent extends PicdocformBaseComponent {
-  constructor() {
-    super();
+  constructor(public dynamicFormService: DynamicFormService) {
+    super(dynamicFormService);
   }
 }
