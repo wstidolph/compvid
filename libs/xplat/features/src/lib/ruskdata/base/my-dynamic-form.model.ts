@@ -2,9 +2,9 @@ import { PROVIDED_STORAGE_INSTANCES } from "@angular/fire/storage/storage.module
 import {
   DynamicFormModel,
   DynamicFormOptionConfig,
-  DynamicCheckboxModel,
+  DynamicFormArrayModel,
   DynamicInputModel,
-  DynamicRadioGroupModel,
+  DynamicFormGroupModel,
   DynamicSelectModel,
   DynamicTextAreaModel,
 } from "@ng-dynamic-forms/core";
@@ -22,40 +22,46 @@ export const LOCATIONS_LIST: DynamicFormOptionConfig<string>[] = [
 */
 export const MY_FORM_MODEL: DynamicFormModel   = [
 
-  new DynamicInputModel({
-      id: "pdName",
-      label: "Sample Input",
-      maxLength: 24,
-      placeholder: "name this picture"
-  }),
+  new DynamicFormGroupModel({
+    id: "pdCore",
+    group: [
+      new DynamicInputModel({
+            id: "pdName",
+            label: "Sample Input",
+            maxLength: 24,
+            placeholder: "name this picture"
+        }),
 
-  new DynamicTextAreaModel({
-    id: "pdDesc",
-    label: "Description",
-    maxLength: 80,
-    placeholder: "general description of pic/contents",
-  }),
+        new DynamicTextAreaModel({
+          id: "pdDesc",
+          label: "Description",
+          maxLength: 80,
+          placeholder: "general description of pic/contents",
+        }),
 
-  new DynamicSelectModel({
-    id: "pdLoc",
-    label: "Location",
-    options: new BehaviorSubject(LOCATIONS_LIST) // replace with observable i the using component
-  }),
+        new DynamicSelectModel({
+          id: "pdLoc",
+          label: "Location",
+          options: new BehaviorSubject(LOCATIONS_LIST) // replace with observable i the using component
+        }),
+  ]}),
 
-
-  new DynamicRadioGroupModel<string>({
-      id: "sampleRadioGroup",
-      label: "Sample Radio Group",
-      options: [
-          {label: "Option 1", value: "option-1"},
-          {label: "Option 2", value: "option-2"},
-          {label: "Option 3", value: "option-3"}
-      ],
-      value: "option-3"
-  }),
-
-  new DynamicCheckboxModel({
-      id: "sampleCheckbox",
-      label: "I do agree"
+  new DynamicFormGroupModel({
+    id: "pditemseen",
+    group: [
+      new DynamicFormArrayModel({
+        id: "itemseenFormArray",
+        initialCount: 0,
+        groupFactory: () => {
+          return [
+              new DynamicInputModel({
+                  id: "itemseen",
+                  label: "Desc"
+              })
+          ];
+        }
+      })
+    ]
   })
+
 ];

@@ -1,7 +1,11 @@
 <!-- ionic -->
 <div>{{ text }}</div>
-<form [formGroup]="formGroup">
+<form (ngSubmit)="formSub()" [formGroup]="formGroup" >
 
   <dynamic-ionic-form [group]="formGroup" [model]="formModel"></dynamic-ionic-form>
 
+  <pre>{{formGroup.value | json}}</pre>
+<button type="submit" >
+  Save
+</button>
 </form>

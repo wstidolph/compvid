@@ -29,6 +29,10 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     this.subs.forEach((sub) => sub.unsubscribe());
   }
 
+  formSub() {
+    console.log('form submitted', this.formGroup.value)
+  }
+
   private subscribePlaceOptions(){
     const locModel =
       this.formService.findModelById<DynamicSelectModel<string>>('pdLoc', this.formModel);
@@ -37,7 +41,8 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     if (locModel != undefined) {
       const sub = loc$.pipe(
         map((x) => x.map(loc =>  new DynamicFormOption<string>(loc))),
-        tap((wrapped) => locModel.options = wrapped)
+        tap((wrapped) => locModel.options = wrapped),
+        tap(() => this.formService.detectChanges())
       ).subscribe();
       this.subs.push(sub);
     } else {
