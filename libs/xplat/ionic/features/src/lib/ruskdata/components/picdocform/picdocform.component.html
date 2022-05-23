@@ -1,1 +1,26 @@
-<div>{{ text }}</div>
+<form [formGroup]="pdForm" (ngSubmit)="formSubmit()">
+  <ion-item>
+    <ion-label position="floating">Name</ion-label>
+    <ion-input formControlName="name" type="text" required></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Description</ion-label>
+    <ion-textarea formControlName="desc" required></ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Location</ion-label>
+    <ion-input formControlName="loc"></ion-input>
+  </ion-item>
+
+  <ion-buttons>
+    <ion-button expand (click)="addItemSeen()">I see...</ion-button>
+  </ion-buttons>
+  <div formArrayName="itemsseen">
+    <div *ngFor="let item of itemsseenForms.controls; let i=index" [formGroupName]="i">
+      <ion-label>Desc</ion-label>
+      <ion-input formControlName="desc"></ion-input>
+    </div>
+  </div>
+</form>

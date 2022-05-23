@@ -16,6 +16,7 @@ import {
 } from '@angular/fire/firestore';
 
 import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
+import { Place } from '../models';
 
 export interface PlaceOption {
   id?: string;

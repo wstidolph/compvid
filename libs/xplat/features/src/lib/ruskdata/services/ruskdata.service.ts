@@ -24,8 +24,9 @@ import {
 
 import { Observable, forkJoin, pipe, BehaviorSubject } from 'rxjs';
 
-import { PicDoc, PicdocService } from './picdoc.service';
-import { ItemSeen, ItemseenService} from './itemseen.service';
+import { PicDoc, ItemSeen } from '../models'
+import { PicdocService } from './picdoc.service';
+import { ItemseenService} from './itemseen.service';
 
 
 // this service exposes the ModelViews

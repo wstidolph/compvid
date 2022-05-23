@@ -23,8 +23,8 @@ const routes: Routes = [
      // ...canActivate(redirectUnauthorizedToLogin)
   },
   {
-    path: 'mainpics',
-    loadChildren: () => import('./mainpics/mainpics.module').then( m => m.MainpicsPageModule)
+    path: 'pic',
+    loadChildren: () => import('./picture/picture.module').then( m => m.PicturePageModule)
   },
   {
     path: 'migrate',

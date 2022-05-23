@@ -23,34 +23,7 @@ import {
 } from '@angular/fire/storage'
 
 import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
-
-export interface PicDoc {
-  id?: string;
-  name: string;
-  desc?: string;
-  picTakenDate?: Timestamp;
-  editDate: Timestamp;
-  loc?: string;
-  mediaUrl: string;
-  storageId: string;
-  numItemsseen: number;
-  uploadedBy?: string; // user ID
-  downloadURL?: string;
-  recipients: string[]; // copied from itemsseen.goesTo.to field
-                        // for "what pics have something goe to Bob?"
-  itemsseen?: [{
-    // id: number,
-    desc: string,
-    addedOn: Timestamp,
-    whereInPic?: string,
-    category?: string,
-    goesTo?: {to: string,
-              accordingTo: string
-    }
-  }]
-
-
-}
+import { PicDoc } from '../models';
 
 const COLLECTION = 'picdocs';
 
