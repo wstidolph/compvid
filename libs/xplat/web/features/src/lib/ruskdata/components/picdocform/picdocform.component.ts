@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { PlaceOptionsService } from '@compvid/xplat/features';
 import { PicdocformBaseComponent } from '@compvid/xplat/features';
 
 @Component({
@@ -7,7 +7,9 @@ import { PicdocformBaseComponent } from '@compvid/xplat/features';
   templateUrl: 'picdocform.component.html',
 })
 export class PicdocformComponent extends PicdocformBaseComponent {
-  constructor() {
-    super();
+  text = "web Picdocform";
+
+  constructor(public placeOptionsService: PlaceOptionsService) {
+    super(placeOptionsService);
   }
 }
