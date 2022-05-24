@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { PlaceOptionsService } from '@compvid/xplat/features';
+import { FormBuilder } from '@angular/forms';
+import { GoesToService, PicdocService, PlaceOptionsService } from '@compvid/xplat/features';
 import { PicdocformBaseComponent } from '@compvid/xplat/features';
 
 @Component({
@@ -9,7 +10,11 @@ import { PicdocformBaseComponent } from '@compvid/xplat/features';
 export class PicdocformComponent extends PicdocformBaseComponent {
   text = "web Picdocform";
 
-  constructor(public placeOptionsService: PlaceOptionsService) {
-    super(placeOptionsService);
+  constructor( public picDocService: PicdocService,
+    public placeOptionsService: PlaceOptionsService,
+    public goesToService: GoesToService,
+    public fb: FormBuilder) {
+    super(picDocService, placeOptionsService,
+      goesToService, fb);
   }
 }

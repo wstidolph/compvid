@@ -2,10 +2,11 @@ import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 
 import { BaseComponent } from '@compvid/xplat/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { PicDoc } from '../models';
 // import { Subscription } from 'rxjs';
 import { PicdocService, PlaceOptionsService } from '../services';
+import { GoesToService, GoesToOption } from '../services/goesto.service';
 
 @Directive({
   selector: 'compvid-base-dummy'
@@ -19,14 +20,18 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   pdForm!: FormGroup;
 
   subs: Subscription[] = [];
+  gtoptions$!: Observable<GoesToOption[]>;
 
   constructor(public picdocService: PicdocService,
               public poService: PlaceOptionsService,
+              public goesToService: GoesToService,
               public fb: FormBuilder ) {
       super();
   }
 
   ngOnInit(): void {
+    this.gtoptions$ = this.goesToService.getGoesToAsOptions();
+
     this.pdForm = this.fb.group({
       name: [this.pd.name, Validators.required],
       desc: [this.pd.desc],
