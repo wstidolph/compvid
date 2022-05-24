@@ -43,7 +43,9 @@ export class GoesToService {
   getGoesToAsOptions(): Observable<GoesToOption[]> {
     return this.getGoesTos().pipe(
       map(gta=>gta.map(gt => {
-        return {'label': gt.fullnameTo? gt.fullnameTo : gt.to, value: gt.to} as GoesToOption
+        return {label: gt.fullnameTo? gt.fullnameTo : gt.to,
+                value: gt.to,
+                id: gt.id} as GoesToOption
         }
       ))
   )}

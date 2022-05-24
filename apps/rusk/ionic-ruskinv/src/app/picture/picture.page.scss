@@ -1,0 +1,5 @@
+ion-accordion.accordion-expanding ion-item[slot="header"],
+ion-accordion.accordion-expanded ion-item[slot="header"] {
+  --background: var(--ion-color-secondary);
+  --color: #0f0
+}

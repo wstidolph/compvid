@@ -45,7 +45,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   }
 
   addItemSeen() {
-    const itemseen = this.fb.group({
+     const itemseen = this.fb.group({
       desc: [''],
       goesTo: [''],
       whereInPic: ['']
@@ -53,6 +53,10 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
 
     this.itemsseenForms.push(itemseen)
     console.log('pdForm', this.pdForm)
+  }
+
+  clearGoesTo(idx: number) {
+    this.itemsseenForms.at(idx).patchValue({goesTo:''})
   }
 
   deleteItemSeen(i) {
@@ -65,7 +69,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   }
 
   formSubmit() {
-    console.log('form submitted');
+    console.log('form submitted', this.pdForm.value);
   }
 
 }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GoesToService, PicdocService, PlaceOptionsService } from '@compvid/xplat/features';
 import { PicdocformBaseComponent } from '@compvid/xplat/features';
+import { IonAccordionGroup } from '@ionic/angular';
 
 // ionic
 @Component({
@@ -9,6 +10,7 @@ import { PicdocformBaseComponent } from '@compvid/xplat/features';
   templateUrl: 'picdocform.component.html',
 })
 export class PicdocformComponent extends PicdocformBaseComponent {
+  @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
   text = "ionic Picdocform";
   constructor( public picDocService: PicdocService,
      public placeOptionsService: PlaceOptionsService,
@@ -20,4 +22,9 @@ export class PicdocformComponent extends PicdocformBaseComponent {
         fb);
   }
 
+  addItemSeen() {
+    super.addItemSeen(); // add the form entry
+    console.log('exiting back through component');
+   // this.accordionGroup.value='itemsseen';
+  }
 }

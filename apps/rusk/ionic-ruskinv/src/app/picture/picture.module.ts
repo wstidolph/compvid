@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms'
 import { RuskdataModule  } from '@compvid/xplat/ionic/features'
 
-import { MainpicsPageRoutingModule } from './picture-routing.module';
+import { PicturePageRoutingModule } from './picture-routing.module';
 
 import { PicturePage } from './picture.page';
 
@@ -16,7 +16,7 @@ import { PicturePage } from './picture.page';
     ReactiveFormsModule,
     IonicModule,
     RuskdataModule,
-    MainpicsPageRoutingModule
+    PicturePageRoutingModule
   ],
   declarations: [PicturePage]
 })

@@ -22,7 +22,7 @@ import {
   Storage, uploadBytes, UploadMetadata
 } from '@angular/fire/storage'
 
-import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { PicDoc } from '../models';
 
 const COLLECTION = 'picdocs';
