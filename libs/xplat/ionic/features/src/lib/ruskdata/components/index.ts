@@ -1,5 +1,11 @@
 import { PicdocformComponent } from './picdocform/picdocform.component';
 
-export const PICDOCFORM_COMPONENTS = [PicdocformComponent];
+import { PdclosemodalComponent } from './pdclosemodal/pdclosemodal.component';
+
+export const PICDOCFORM_COMPONENTS = [
+  PicdocformComponent,
+  PdclosemodalComponent,
+];
 
 export * from './picdocform/picdocform.component';
+export * from './pdclosemodal/pdclosemodal.component';

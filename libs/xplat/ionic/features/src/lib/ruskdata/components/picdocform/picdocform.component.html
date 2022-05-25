@@ -1,51 +1,50 @@
 
-   <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-      <ion-fab-button (click)="addItemSeen()">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+<ion-fab vertical="bottom" horizontal="start" slot="fixed">
+  <ion-fab-button (click)="addItemSeen()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
 
-    <!-- the primary picture -->
-    <ion-item>
-      <ion-img [src]="pd.downloadURL"></ion-img>
-    </ion-item>
-
-
-    <form [formGroup]="pdForm" (ngSubmit)="formSubmit()" slot="content">
-      <!-- <ion-item>
-        <ion-label position="floating">Name</ion-label>
-        <ion-input formControlName="name" type="text" required></ion-input>
-      </ion-item> -->
-      <!-- <button ion-button type="submit">Save</button> -->
-      <ion-fab vertical="center" horizontal="end" slot="fixed">
-        <ion-fab-button type="submit" (click)="formSubmit()"
-        [disabled]="!(pdForm.valid && pdForm.dirty)">
-          <ion-icon name="checkmark"></ion-icon>
-        </ion-fab-button>
-
-        <ion-fab-button type="button" (click)="closeForm()">
-          <ion-icon name="close"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-
-      <ion-accordion-group >
-        <ion-accordion value="core">
-
-          <ion-item slot="header">
-            <ion-label position="floating">Picture Description</ion-label>
-            <ion-textarea formControlName="desc" required></ion-textarea>
-          </ion-item>
-
-          <ion-item slot="content">
-            <ion-label position="floating">Location</ion-label>
-            <ion-input formControlName="loc"></ion-input>
-          </ion-item>
-
-        </ion-accordion>
+<!-- the primary picture -->
+<ion-item>
+  <ion-img [src]="pd.downloadURL"></ion-img>
+</ion-item>
 
 
-  <div formArrayName="itemsseen">
+<form [formGroup]="pdForm" (ngSubmit)="formSubmit()" slot="content">
+  <!-- <ion-item>
+    <ion-label position="floating">Name</ion-label>
+    <ion-input formControlName="name" type="text" required></ion-input>
+  </ion-item> -->
+  <!-- <button ion-button type="submit">Save</button> -->
+  <ion-fab vertical="center" horizontal="end" slot="fixed">
+    <ion-fab-button type="submit" (click)="formSubmit()"
+    [disabled]="!(pdForm.valid && pdForm.dirty)">
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-fab-button>
 
+    <ion-fab-button type="button" (click)="openModal()">
+      <ion-icon name="close"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-accordion-group >
+    <ion-accordion value="core">
+
+      <ion-item slot="header">
+        <ion-label position="floating">Picture Description</ion-label>
+        <ion-textarea formControlName="desc" required></ion-textarea>
+      </ion-item>
+
+      <ion-item slot="content">
+        <ion-label position="floating">Location</ion-label>
+        <ion-input formControlName="loc"></ion-input>
+      </ion-item>
+
+    </ion-accordion>
+
+
+    <div formArrayName="itemsseen">
       <ion-accordion value="itemsseen">
         <ion-item slot="header">
           <ion-grid>
@@ -69,10 +68,8 @@
         </ion-grid>
         </ion-list>
       </ion-accordion>
-
-  </div>
-
-    </ion-accordion-group>
+    </div>
+  </ion-accordion-group>
 </form>
 
 
