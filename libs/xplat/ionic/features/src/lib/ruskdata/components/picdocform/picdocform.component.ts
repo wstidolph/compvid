@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GoesToService, PicdocService, PlaceOptionsService } from '@compvid/xplat/features';
 import { PicdocformBaseComponent } from '@compvid/xplat/features';
@@ -13,6 +13,7 @@ import { PdclosemodalComponent } from '../pdclosemodal/pdclosemodal.component'
 export class PicdocformComponent extends PicdocformBaseComponent {
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
 
+  @Output() abandonEdits = new EventEmitter();
   dataReturned: any;
 
   text = "ionic Picdocform";
@@ -48,6 +49,9 @@ export class PicdocformComponent extends PicdocformBaseComponent {
       if (dataReturned !== null) {
         this.dataReturned = dataReturned.data;
         console.log('Modal Sent Data :', dataReturned);
+      }
+      if(dataReturned.data == 'discard'){
+        this.abandonEdits.emit();
       }
     });
 

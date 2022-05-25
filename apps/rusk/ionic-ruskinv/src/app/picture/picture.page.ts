@@ -31,4 +31,9 @@ export class PicturePage implements OnInit {
   ngOnInit() {
   }
 
+  abandonEdits(){
+    console.log('ABANDON SHIP');
+  }
+
+
 }

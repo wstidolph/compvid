@@ -23,7 +23,13 @@ export class PdclosemodalComponent extends BaseComponent implements OnInit  {
   }
 
   async closeModal() {
-    const onClosedData = "Wrapped Up!";
-    await this.modalController.dismiss(onClosedData);
+    // could pass back structured data
+    // const onClosedData = {should: 'continue', confirmed: true};
+    // but simple string adequate here
+    await this.modalController.dismiss('continue');
+  }
+
+  async discardChanges() {
+    await this.modalController.dismiss('discard');
   }
 }

@@ -60,7 +60,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     this.itemsseenForms.at(idx).patchValue({goesTo:''})
   }
 
-  deleteItemSeen(i) {
+  deleteItemSeen(i: number) {
     this.itemsseenForms.removeAt(i);
   }
 
