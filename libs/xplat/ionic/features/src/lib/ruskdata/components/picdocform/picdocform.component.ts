@@ -11,6 +11,7 @@ import { IonAccordionGroup } from '@ionic/angular';
 })
 export class PicdocformComponent extends PicdocformBaseComponent {
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
+
   text = "ionic Picdocform";
   constructor( public picDocService: PicdocService,
      public placeOptionsService: PlaceOptionsService,
@@ -24,7 +25,16 @@ export class PicdocformComponent extends PicdocformBaseComponent {
 
   addItemSeen() {
     super.addItemSeen(); // add the form entry
-    console.log('exiting back through component');
-   // this.accordionGroup.value='itemsseen';
+    console.log('component addItemSeen super()  done, now value ',this.accordionGroup.value);
+
+    this.accordionGroup.value='itemsseen';
+    console.log('component addItemSeen done, now value ',this.accordionGroup.value);
+  }
+
+  AGValChanged() {
+    console.log('AG Val',this.accordionGroup.value);
+  }
+  testbutton() {
+    this.accordionGroup.value=='core' ? this.accordionGroup.value='itemsseen' : this.accordionGroup.value='core';
   }
 }
