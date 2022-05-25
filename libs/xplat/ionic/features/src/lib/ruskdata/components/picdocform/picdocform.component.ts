@@ -25,16 +25,7 @@ export class PicdocformComponent extends PicdocformBaseComponent {
 
   addItemSeen() {
     super.addItemSeen(); // add the form entry
-    console.log('component addItemSeen super()  done, now value ',this.accordionGroup.value);
-
-    this.accordionGroup.value='itemsseen';
-    console.log('component addItemSeen done, now value ',this.accordionGroup.value);
+    this.accordionGroup.value='itemsseen'; // keep form open for typing
   }
 
-  AGValChanged() {
-    console.log('AG Val',this.accordionGroup.value);
-  }
-  toggleAG() {
-    this.accordionGroup.value=='core' ? this.accordionGroup.value='itemsseen' : this.accordionGroup.value='core';
-  }
 }

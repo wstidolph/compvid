@@ -45,13 +45,15 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   }
 
   addItemSeen() {
+    console.log('base, enter addItemSeen, form:', this.pdForm)
      const itemseen = this.fb.group({
       desc: [''],
       goesTo: [''],
       whereInPic: ['']
     })
 
-    this.itemsseenForms.push(itemseen)
+    // this.itemsseenForms.push(itemseen)
+    this.itemsseenForms.insert(0,itemseen);
   }
 
   clearGoesTo(idx: number) {
@@ -64,7 +66,11 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
 
 
   ngOnDestroy() {
-    this.subs.forEach((sub) => sub.unsubscribe());
+    this.subs.forEach((sub) => sub.unsubscribe()); // just in case boilerplate
+  }
+
+  closeForm() {
+    // confirm closing if form is dirty
   }
 
   formSubmit() {
