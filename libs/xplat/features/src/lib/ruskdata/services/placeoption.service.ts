@@ -35,7 +35,7 @@ export class PlaceOptionsService {
   placeOptions$ = this.pda.asObservable();
 
   constructor(private firestore: Firestore) {
-    console.log('place options service see firestore with options', firestore, firestore.app.options);
+    //console.log('place options service see firestore with options', firestore, firestore.app.options);
   }
 
   getPlaceOptions(): Observable<PlaceOption[]> {

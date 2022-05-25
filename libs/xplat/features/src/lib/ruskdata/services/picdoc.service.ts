@@ -35,7 +35,7 @@ export class PicdocService {
   picdocs$ = this.pda.asObservable();
 
   constructor(private firestore: Firestore, private storage: Storage) {
-    console.log('picdoc service see firestore with options', firestore, firestore.app.options);
+    // console.log('picdoc service see firestore with options', firestore, firestore.app.options);
   }
 
   getPicDocs(): Observable<PicDoc[]> {
