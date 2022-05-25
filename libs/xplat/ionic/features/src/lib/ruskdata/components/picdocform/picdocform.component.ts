@@ -34,7 +34,7 @@ export class PicdocformComponent extends PicdocformBaseComponent {
   AGValChanged() {
     console.log('AG Val',this.accordionGroup.value);
   }
-  testbutton() {
+  toggleAG() {
     this.accordionGroup.value=='core' ? this.accordionGroup.value='itemsseen' : this.accordionGroup.value='core';
   }
 }
