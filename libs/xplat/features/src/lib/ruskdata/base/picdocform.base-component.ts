@@ -52,7 +52,6 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     })
 
     this.itemsseenForms.push(itemseen)
-    console.log('pdForm', this.pdForm)
   }
 
   clearGoesTo(idx: number) {
