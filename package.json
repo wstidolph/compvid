@@ -122,6 +122,7 @@
     "kill-port": "^1.6.1",
     "patch-package": "^6.4.7",
     "rxjs": "~7.5.4",
+    "swiper": "^8.1.6",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
   },
@@ -130,4 +131,3 @@
     "framework": "angular"
   }
 }
-

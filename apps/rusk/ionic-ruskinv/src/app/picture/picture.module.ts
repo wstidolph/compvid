@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms'
 import { RuskdataModule  } from '@compvid/xplat/ionic/features'
 
+import { SwiperModule } from 'swiper/angular';
+
 import { PicturePageRoutingModule } from './picture-routing.module';
 
 import { PicturePage } from './picture.page';
@@ -15,6 +17,7 @@ import { PicturePage } from './picture.page';
     CommonModule,
     ReactiveFormsModule,
     IonicModule,
+    SwiperModule,
     RuskdataModule,
     PicturePageRoutingModule
   ],

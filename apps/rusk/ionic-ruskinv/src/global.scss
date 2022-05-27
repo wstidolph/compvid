@@ -25,6 +25,11 @@
 @import '@ionic/angular/css/text-transformation.css';
 @import '@ionic/angular/css/flex-utils.css';
 
+/* Swiper will be replacing ion-slides*/
+@import 'swiper/scss';
+@import 'swiper/scss/navigation';
+@import 'swiper/scss/pagination';
+
 .pdclose-modal {
   --background: #0000005c;
 
@@ -35,3 +40,19 @@
     backdrop-filter: blur(12px);
   }
 }
+
+/*
+use up the screen
+.swiper{
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+*/
+

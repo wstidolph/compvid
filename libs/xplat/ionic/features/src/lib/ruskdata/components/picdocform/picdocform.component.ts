@@ -1,17 +1,28 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterContentChecked, Component, EventEmitter, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GoesToService, PicdocService, PlaceOptionsService } from '@compvid/xplat/features';
 import { PicdocformBaseComponent } from '@compvid/xplat/features';
 import { IonAccordionGroup, IonRouterOutlet, ModalController } from '@ionic/angular';
 import { PdclosemodalComponent } from '../pdclosemodal/pdclosemodal.component'
 
+import Swiper, { SwiperOptions, EffectFlip } from 'swiper';
+import { SwiperComponent } from 'swiper/angular';
+Swiper.use([EffectFlip]);
 // ionic
 @Component({
   selector: 'compvid-picdocform',
   templateUrl: 'picdocform.component.html',
+  encapsulation: ViewEncapsulation.None
 })
-export class PicdocformComponent extends PicdocformBaseComponent {
+export class PicdocformComponent extends PicdocformBaseComponent /* implements AfterContentChecked */ {
+
+  public swiperConfig: SwiperOptions = {
+   // direction: 'vertical'
+   effect: 'flip'
+
+  }
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
+  // @ViewChild('swiper', { static: false }) swiper: SwiperComponent;
 
   @Output() abandonEdits = new EventEmitter();
   dataReturned: any;
@@ -28,10 +39,24 @@ export class PicdocformComponent extends PicdocformBaseComponent {
          goesToService,
         fb);
   }
+  // ngAfterContentChecked(): void {
+  //   if (this.swiper) {
+  //     this.swiper.updateSwiper({});
+  //   }
+  // }
+  // swiperSlideChanged(e) {
+  //   console.log('swiperSlide changed: ', e);
+  // }
 
-  addItemSeen() {
-    super.addItemSeen(); // add the form entry
+  addItemSeen(evt) {
+    evt.stopPropagation();
+    super.addItemSeen(evt); // add the form entry
     this.accordionGroup.value='itemsseen'; // keep form open for typing
+  }
+
+  removeItemSeen(idx: number) {
+    super.removeItemSeen(idx);
+    // reposition here?
   }
 
   async openModal() {

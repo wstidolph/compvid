@@ -3,3 +3,16 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
   --background: var(--ion-color-secondary);
   --color: #0f0
 }
+
+// use up the screen
+.swiper{
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

@@ -44,7 +44,8 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     return this.pdForm.get('itemsseen') as FormArray
   }
 
-  addItemSeen() {
+  // javascript event carried because children need it, and so base has to accept it
+  addItemSeen(evt:any) {
     console.log('base, enter addItemSeen, form:', this.pdForm)
      const itemseen = this.fb.group({
       desc: [''],
@@ -56,6 +57,9 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     this.itemsseenForms.insert(0,itemseen);
   }
 
+  removeItemSeen(idx:number) {
+    this.itemsseenForms.removeAt(idx);
+  }
   clearGoesTo(idx: number) {
     this.itemsseenForms.at(idx).patchValue({goesTo:''})
   }

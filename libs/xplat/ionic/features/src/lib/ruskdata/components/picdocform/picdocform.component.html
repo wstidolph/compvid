@@ -1,32 +1,29 @@
 
-<ion-fab vertical="bottom" horizontal="start" slot="fixed">
-  <ion-fab-button (click)="addItemSeen()">
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
-
 <!-- the primary picture -->
-<ion-item>
-  <ion-img [src]="pd.downloadURL"></ion-img>
-</ion-item>
+
+  <ion-item>
+    <ion-img [src]="pd.downloadURL"></ion-img>
+  </ion-item>
+
+  <!-- page-level controls-->
+  <ion-row>
+    <ion-col>
+      <ion-button type="button"
+        color="danger" (click)="openModal()">
+        <ion-icon name="trash"></ion-icon>Abandon
+      </ion-button></ion-col>
+    <ion-col>
+      <ion-button type="submit" class="ion-float-right"
+      color="primary" (click)="formSubmit()"
+      [disabled]="!(pdForm.valid && pdForm.dirty)">
+        <ion-icon name="checkmark"></ion-icon>Keep Edits
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <form [formGroup]="pdForm" (ngSubmit)="formSubmit()" slot="content">
 
 
-<form [formGroup]="pdForm" (ngSubmit)="formSubmit()" slot="content">
-  <!-- <ion-item>
-    <ion-label position="floating">Name</ion-label>
-    <ion-input formControlName="name" type="text" required></ion-input>
-  </ion-item> -->
-  <!-- <button ion-button type="submit">Save</button> -->
-  <ion-fab vertical="center" horizontal="end" slot="fixed">
-    <ion-fab-button type="submit" (click)="formSubmit()"
-    [disabled]="!(pdForm.valid && pdForm.dirty)">
-      <ion-icon name="checkmark"></ion-icon>
-    </ion-fab-button>
-
-    <ion-fab-button type="button" (click)="openModal()">
-      <ion-icon name="close"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 
   <ion-accordion-group >
     <ion-accordion value="core">
@@ -43,20 +40,32 @@
 
     </ion-accordion>
 
-
     <div formArrayName="itemsseen">
       <ion-accordion value="itemsseen">
-        <ion-item slot="header">
+        <ion-item slot="header" >
+
           <ion-grid>
             <ion-row >
-              <ion-col size="8"><ion-label>Item Description</ion-label></ion-col>
+              <ion-col size="2">
+                <ion-button type="button" style="z-index: 10;"
+                    color="secondary" (click)="addItemSeen($event)">
+                <ion-icon name="add"></ion-icon>
+              </ion-button></ion-col>
+              <ion-col size="6"><ion-label >Item Description</ion-label></ion-col>
               <ion-col size="4"><ion-label class="ion-text-right">Goes To</ion-label></ion-col>
             </ion-row></ion-grid>
         </ion-item>
         <ion-list slot="content">
           <ion-grid>
           <ion-row  *ngFor="let item of itemsseenForms.controls; let i=index" [formGroupName]="i">
-            <ion-col size="8">
+            <ion-col size="2">
+              <ion-button type="button"
+                color="danger"
+                (click)="removeItemSeen(i)">
+                <ion-icon name="trash"></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col size="6">
               <ion-textarea placeholder="describe item" formControlName="desc" class="ion-col"></ion-textarea></ion-col>
             <ion-col size="4">
               <ion-select formControlName="goesTo" cancelText="CLEAR" (ionCancel)="clearGoesTo(i)">
@@ -71,5 +80,3 @@
     </div>
   </ion-accordion-group>
 </form>
-
-
