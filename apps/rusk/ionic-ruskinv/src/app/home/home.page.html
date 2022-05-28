@@ -11,6 +11,7 @@
 </ion-header>
 
 <ion-content>
+  <ion-button (click)="initGT()">Init GT</ion-button>
   <ion-button (click)="addPic()">addPic test</ion-button>
   <ion-list>
     <ion-item *ngFor="let picDoc of picDocs | async" (click)="openPic(pic)">

@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { RuskdataService, PicDoc, PicdocService, AuthService, ItemseenService, ItemSeen } from '@compvid/xplat/features';
+import { RuskdataService, PicDoc, PicdocService, AuthService, GoesToService,
+        //ItemseenService, ItemSeen
+        } from '@compvid/xplat/features';
 import { from, Observable } from 'rxjs'
 
 @Component({
@@ -11,16 +12,19 @@ import { from, Observable } from 'rxjs'
 })
 export class HomePage implements OnInit {
   picDocs: Observable<PicDoc[]>;
-  itemseens: Observable<ItemSeen[]>;
+  // itemseens: Observable<ItemSeen[]>;
 
   constructor(private dataService: RuskdataService,
     private picdocService: PicdocService,
-    private itemseenService: ItemseenService,
+    private goesToService: GoesToService,
+    // private itemseenService: ItemseenService,
     private cd: ChangeDetectorRef,
     private router: Router,
     private authService: AuthService) {
+
       this.picDocs = this.picdocService.getPicDocs();
-      this.itemseens = this.itemseenService.getItemSeens();
+      // this.itemseens = this.itemseenService.getItemSeens();
+
       // this.picDocs.subscribe(pd => {
       //   console.log('HomePage got pd', pd);
       // })
@@ -34,26 +38,16 @@ export class HomePage implements OnInit {
       console.log('HomePage openPic', picdoc)
   }
 
-  addPic(picDoc: PicDoc | null) {
-    const testPicDoc: PicDoc = {
-        // id: 'foo',
-        name: 'some stuff',
-        uploadedBy: 'WS',
-        mediaUrl: 'https://stidolph.com/kestate/20220305_081749.jpg',
-        storageId: 'rusk_'+ new Date().getTime() / 1000,
-        editDate: Timestamp.fromDate(new Date()),
-        numItemsseen: 0,
-        recipients: []
-    }
-
-    const localPicDoc = picDoc? picDoc : testPicDoc;
-    console.log('HomePage addPic sending', localPicDoc);
-    this.picdocService.addPicDoc(localPicDoc).then((rtn)=> {
-      console.log('addPic got back', rtn);
-    });
-
+  addPic() {
+      this.picdocService.getPicDocById('test')
+        .subscribe(localPicDoc =>
+          this.picdocService.addPicDoc(localPicDoc)
+    );
   }
 
+  initGT(){
+    this.goesToService.initTestGT();
+  }
   openItemseen(itemseen) {
 
   }

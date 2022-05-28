@@ -32,14 +32,30 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   ngOnInit(): void {
     this.gtoptions$ = this.goesToService.getGoesToAsOptions();
 
+    console.log('init gets itemseen', this.pd.itemsseen);
+
     this.pdForm = this.fb.group({
       name: [this.pd.name, Validators.required],
       desc: [this.pd.desc],
       loc: [this.pd.loc],
       itemsseen: this.fb.array([])
     })
+
+    //sort the array by addedOn TODO
+    this.pd.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
   }
 
+  putItemsseenToForm(its:any){
+    const itemseen = this.fb.group({
+      desc: [its.desc],
+      addedOn: [its.addedOn],
+      category: [its.category],
+      whereInPic: [its.whereInPic],
+      goesTo: [''],
+    })
+
+    this.itemsseenForms.insert(0,itemseen);
+  }
   get itemsseenForms() {
     return this.pdForm.get('itemsseen') as FormArray
   }
@@ -47,10 +63,12 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   // javascript event carried because children need it, and so base has to accept it
   addItemSeen(evt:any) {
     console.log('base, enter addItemSeen, form:', this.pdForm)
-     const itemseen = this.fb.group({
+    const itemseen = this.fb.group({
       desc: [''],
+      addedOn: [''],
+      category: [''],
       goesTo: [''],
-      whereInPic: ['']
+      whereInPic: [''],
     })
 
     // this.itemsseenForms.push(itemseen)

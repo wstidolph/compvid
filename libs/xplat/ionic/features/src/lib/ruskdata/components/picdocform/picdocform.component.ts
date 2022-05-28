@@ -12,7 +12,7 @@ Swiper.use([EffectFlip]);
 @Component({
   selector: 'compvid-picdocform',
   templateUrl: 'picdocform.component.html',
-  encapsulation: ViewEncapsulation.None
+  styles: ['#ishheader::part(native) { color:red }']
 })
 export class PicdocformComponent extends PicdocformBaseComponent /* implements AfterContentChecked */ {
 
@@ -48,9 +48,10 @@ export class PicdocformComponent extends PicdocformBaseComponent /* implements A
   //   console.log('swiperSlide changed: ', e);
   // }
 
-  addItemSeen(evt) {
+  addItemSeen(evt: { stopPropagation: () => void; }) {
     evt.stopPropagation();
-    super.addItemSeen(evt); // add the form entry
+    super.addItemSeen(evt); // add the form entry event
+                            // base doesn't care about the data
     this.accordionGroup.value='itemsseen'; // keep form open for typing
   }
 

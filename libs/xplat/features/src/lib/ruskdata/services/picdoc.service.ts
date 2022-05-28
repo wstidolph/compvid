@@ -22,8 +22,31 @@ import {
   Storage, uploadBytes, UploadMetadata
 } from '@angular/fire/storage'
 
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { PicDoc } from '../models';
+
+// test/dev support
+const TEST_PICDOC: PicDoc = {
+  // id: 'foo',
+  name: 'some stuff',
+  uploadedBy: 'WS',
+  mediaUrl: 'https://stidolph.com/kestate/20220305_081749.jpg',
+  downloadURL: 'https://stidolph.com/kestate/20220305_081749.jpg',
+  storageId: 'rusk_'+ new Date().getTime() / 1000,
+  editDate: Timestamp.fromDate(new Date()),
+  numItemsseen: 0,
+  recipients: [],
+  itemsseen: [
+    { desc: 'sample item seen',
+      addedOn: Timestamp.fromDate(new Date()),
+      whereInPic: "top left",
+      goesTo: {
+        to: 'DS',
+        accordingTo: 'WS'
+      }
+    }
+  ]
+}
 
 const COLLECTION = 'picdocs';
 
@@ -44,6 +67,9 @@ export class PicdocService {
   }
 
   getPicDocById(id: string) {
+    if(id == 'test'){
+      return of(TEST_PICDOC)
+    }
     const picDocRef = doc(this.firestore,`${COLLECTION}/${id}`);
     return docData(picDocRef, { idField: 'id'}) as Observable<PicDoc>;
   }
@@ -59,8 +85,9 @@ export class PicdocService {
   }
 
   addPicDoc(picdoc: PicDoc) {
+    const pd = this.denormGoesto(picdoc);
     const picDocsCollection = collection(this.firestore,  COLLECTION);
-    return addDoc(picDocsCollection, picdoc);
+    return addDoc(picDocsCollection, pd);
   }
 
   deletePicDoc(picdoc: PicDoc) {
@@ -69,8 +96,21 @@ export class PicdocService {
   }
 
   updatePicDoc(picdocChgs: Partial<PicDoc>) {
+    // TODO if updating itemsseen, make sure to denormalize
     const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdocChgs.id}`);
     return updateDoc(picDocRef, picdocChgs);
+  }
+
+  private denormGoesto(pd: PicDoc): PicDoc {
+
+    pd.numItemsseen = pd.itemsseen ? pd.itemsseen.length : 0;
+    pd.recipients = [];
+    pd.itemsseen?.forEach(its => {
+      if(its.goesTo?.to) {pd.recipients.push(its.goesTo?.to)}
+    })
+    pd.recipients = pd.recipients.filter((r, i) => i === pd.recipients.indexOf(r));
+
+    return pd;
   }
 
   // async uploadImageForPicDoc(img: Blob, picdoc: PicDoc){

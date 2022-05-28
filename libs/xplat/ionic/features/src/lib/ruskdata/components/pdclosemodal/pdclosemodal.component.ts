@@ -22,7 +22,12 @@ export class PdclosemodalComponent extends BaseComponent implements OnInit  {
     this.modalTitle = this.navParams.data.paramTitle;
   }
 
-  async closeModal() {
+  // keep editing, no changes
+  closeModal() {
+
+  }
+
+  async confirmAbandon() {
     // could pass back structured data
     // const onClosedData = {should: 'continue', confirmed: true};
     // but simple string adequate here

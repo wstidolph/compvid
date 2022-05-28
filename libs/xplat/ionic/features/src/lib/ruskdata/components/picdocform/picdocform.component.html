@@ -8,12 +8,12 @@
   <!-- page-level controls-->
   <ion-row>
     <ion-col>
-      <ion-button type="button"
+      <ion-button type="button" shape="round"
         color="danger" (click)="openModal()">
         <ion-icon name="trash"></ion-icon>Abandon
       </ion-button></ion-col>
     <ion-col>
-      <ion-button type="submit" class="ion-float-right"
+      <ion-button type="submit" shape="round" class="ion-float-right"
       color="primary" (click)="formSubmit()"
       [disabled]="!(pdForm.valid && pdForm.dirty)">
         <ion-icon name="checkmark"></ion-icon>Keep Edits
@@ -22,10 +22,8 @@
   </ion-row>
 
   <form [formGroup]="pdForm" (ngSubmit)="formSubmit()" slot="content">
-
-
-
   <ion-accordion-group >
+
     <ion-accordion value="core">
 
       <ion-item slot="header">
@@ -40,43 +38,44 @@
 
     </ion-accordion>
 
-    <div formArrayName="itemsseen">
-      <ion-accordion value="itemsseen">
-        <ion-item slot="header" >
+    <ion-accordion value="itemsseen" formArrayName="itemsseen">
 
-          <ion-grid>
-            <ion-row >
-              <ion-col size="2">
-                <ion-button type="button" style="z-index: 10;"
-                    color="secondary" (click)="addItemSeen($event)">
-                <ion-icon name="add"></ion-icon>
-              </ion-button></ion-col>
-              <ion-col size="6"><ion-label >Item Description</ion-label></ion-col>
-              <ion-col size="4"><ion-label class="ion-text-right">Goes To</ion-label></ion-col>
-            </ion-row></ion-grid>
-        </ion-item>
-        <ion-list slot="content">
-          <ion-grid>
-          <ion-row  *ngFor="let item of itemsseenForms.controls; let i=index" [formGroupName]="i">
-            <ion-col size="2">
-              <ion-button type="button"
-                color="danger"
-                (click)="removeItemSeen(i)">
-                <ion-icon name="trash"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col size="6">
-              <ion-textarea placeholder="describe item" formControlName="desc" class="ion-col"></ion-textarea></ion-col>
-            <ion-col size="4">
-              <ion-select formControlName="goesTo" cancelText="CLEAR" (ionCancel)="clearGoesTo(i)">
-                <ion-select-option *ngFor="let opt of gtoptions$ | async"
-                  value="{{opt.id}}"
-                >{{opt.label}}</ion-select-option>
-            </ion-select></ion-col>
+      <ion-item slot="header" id="isheader">
+        <ion-grid>
+          <ion-row >
+            <ion-col size="2" >
+              <ion-button type="button" shape="round"
+
+                  color="secondary" (click)="addItemSeen($event)">
+              <ion-icon name="add"></ion-icon>
+            </ion-button></ion-col>
+            <ion-col size="6"><ion-label >Item Description</ion-label></ion-col>
+            <ion-col size="4"><ion-label class="ion-text-right">Goes To</ion-label></ion-col>
           </ion-row>
         </ion-grid>
-        </ion-list>
-      </ion-accordion>
-    </div>
+      </ion-item>
+      <ion-list slot="content">
+        <ion-grid>
+        <ion-row  *ngFor="let item of itemsseenForms.controls; let i=index" [formGroupName]="i">
+          <ion-col size="2">
+            <ion-button type="button"
+              color="danger"
+              (click)="removeItemSeen(i)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-textarea placeholder="describe item" formControlName="desc" class="ion-col"></ion-textarea></ion-col>
+          <ion-col size="4">
+            <ion-select formControlName="goesTo" cancelText="CLEAR" (ionCancel)="clearGoesTo(i)">
+              <ion-select-option *ngFor="let opt of gtoptions$ | async"
+                value="{{opt.id}}"
+              >{{opt.label}}</ion-select-option>
+          </ion-select></ion-col>
+        </ion-row>
+      </ion-grid>
+      </ion-list>
+    </ion-accordion>
+
   </ion-accordion-group>
 </form>
