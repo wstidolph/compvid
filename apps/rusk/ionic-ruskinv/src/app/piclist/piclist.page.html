@@ -1,0 +1,9 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Picture List {{pdArray[0].name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <compvid-picdocform [pd]="pdArray[0]" (abandonEdits)="abandonEdits()"></compvid-picdocform>
+</ion-content>

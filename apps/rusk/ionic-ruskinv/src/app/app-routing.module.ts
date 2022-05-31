@@ -23,6 +23,10 @@ const routes: Routes = [
      // ...canActivate(redirectUnauthorizedToLogin)
   },
   {
+    path: 'piclist',
+    loadChildren: () => import('./piclist/piclist.module').then( m => m.PiclistPageModule)
+  },
+  {
     path: 'pic',
     loadChildren: () => import('./picture/picture.module').then( m => m.PicturePageModule)
   },
