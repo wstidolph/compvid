@@ -32,6 +32,9 @@
     },
     "auth": {
       "port": "9099"
+    },
+    "extensions": {
+      "storage-resize-images": "firebase/storage-resize-images@0.1.28"
     }
   }
 }
