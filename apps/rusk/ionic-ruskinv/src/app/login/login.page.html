@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-button type="button" expand="full" (click)="loginAnon()">Be Anonymous</ion-button>
   <form [formGroup]="credentials" (ngSubmit)="login()">
     <ion-item fill="solid" class="ion-margin-bottom">
       <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
@@ -20,4 +21,5 @@
     <ion-button type="button" expand="full" (click)="register()">Create Account</ion-button>
 
   </form>
+
 </ion-content>

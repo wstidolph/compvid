@@ -16,16 +16,6 @@ import { getFirestore, provideFirestore, connectFirestoreEmulator } from '@angul
 import { getStorage, provideStorage, connectStorageEmulator } from '@angular/fire/storage';
 import { getFunctions, provideFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 
-// import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
-// import { USE_EMULATOR as USE_DATABASE_EMULATOR } from '@angular/fire/compat/database';
-// import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/compat/firestore';
-// import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/compat/functions'
-
-// import { AngularFireModule } from '@angular/fire/compat';
-// import { AngularFirestoreModule,  } from '@angular/fire/compat/firestore';
-
-
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -53,11 +43,7 @@ import { getFunctions, provideFunctions, connectFunctionsEmulator } from '@angul
       return storage;
     })
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-  //   { provide: USE_AUTH_EMULATOR, useValue: environment.useEmulators ? ['localhost', 9099] : undefined },
-  //   { provide: USE_DATABASE_EMULATOR, useValue: environment.useEmulators ? ['localhost', 9000] : undefined },
-  //   { provide: USE_FIRESTORE_EMULATOR, useValue: environment.useEmulators ? ['localhost', 8080] : undefined },
-  //   { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.useEmulators ? ['localhost', 5001] : undefined },
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],
 })

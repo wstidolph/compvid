@@ -13,23 +13,8 @@
 <ion-content>
   <ion-button (click)="initGT()">Init GT</ion-button>
   <ion-button (click)="addPic()">addPic test</ion-button>
-  <ion-list>
-    <ion-item *ngFor="let picDoc of picDocs | async" (click)="openPic(pic)">
-      <ion-label>
-        Name: {{picDoc.name}} | ID: {{ picDoc.id }} | DLU: {{picDoc.downloadURL}} | storageId: {{picDoc.storageId}}
-      </ion-label>
-      <img src={{picDoc?.downloadURL}}/>
-    </ion-item>
-  </ion-list>
-  <ion-list>
-    <ion-item *ngFor="let itemseen of itemseens | async" (click)="openItemseen(itemseen)">
-      <ion-label>
-        {{itemseen | json}}
-      </ion-label>
-      <img src={{picDoc?.downloadURL}}/>
-    </ion-item>
-  </ion-list>
-
+  <p>PROFILE: {{(userProfile$ | async) | json}}</p>
+  <p>USER: {{(user$ | async) | json}}</p>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addPic()">

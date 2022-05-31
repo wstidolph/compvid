@@ -21,10 +21,14 @@ export class LoginPage implements OnInit {
 ) { }
 
   ngOnInit() {
+
     this.credentials = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     })
+  }
+  loginAnon(){
+    this.authService.loginAnon();
   }
 
   get email() {
@@ -76,5 +80,4 @@ export class LoginPage implements OnInit {
     });
     await alert.present();
   }
-
 }

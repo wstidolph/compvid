@@ -1,14 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Auth,
+import { Auth, User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut} from '@angular/fire/auth';
+  signInAnonymously,
+  getAuth,
+  signOut,
+  UserCredential} from '@angular/fire/auth';
+
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private auth: Auth) {}
+  user$!: Observable<User | null>;
+
+  constructor(private auth: Auth) {
+  }
 
   async register({email, password}) {
    try{
@@ -30,8 +38,22 @@ export class AuthService {
    }
   }
 
+  async loginAnon() {
+    const auth = getAuth();
+    await signInAnonymously(auth).then( () =>{
+      console.log('signed in anon, should trigger all the auth state handler stuff');
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log('anon login failed', errorCode, errorMessage)
+    });
+  }
+
+  // add other account /login providers and management here
+
   logout() {
     console.log('AuthService logout');
-    return signOut(this.auth);
+    return signOut(this.auth); // does logout belong here, or just on the UserService?
   }
 }
