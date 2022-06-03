@@ -10,6 +10,7 @@ exports.logMetadata = exports.helloWorld = void 0;
 
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+require("firebase-functions/lib/logger/compat"); // patch so console.log can work
 
 const https = require("https");
 const axios = require("axios");
@@ -40,20 +41,20 @@ admin.firestore().settings({
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 exports.helloWorld = functions.https.onRequest((request, response) => {
-    functions.logger.info('Hello logs!', { structuredData: true });
+    // functions.logger.info('Hello logs!', { structuredData: true });
     response.send('Hello from Firebase!');
 });
 
 exports.logMetadata = functions.storage.object().onFinalize(async (object) => {
   const filePath = object.name;
-  functions.logger.info('storage object created', object.name, object.contentType);
+  console.info('storage object created', object.name, object.contentType);
   // Create random filename with same extension as uploaded file.
   // const randomFileName = crypto.randomBytes(20).toString('hex') + path.extname(filePath);
   // const tempLocalFile = path.join(os.tmpdir(), randomFileName);
   // functions.logger.info('temp local filename is', tempLocalFile);
   // Exit if this is triggered on a file that is not an image.
   if (!object.contentType.startsWith('image/')) {
-      functions.logger.log('This is not an image.');
+      console.warn('This is not an image.');
       return null;
   }
 
@@ -61,7 +62,7 @@ exports.logMetadata = functions.storage.object().onFinalize(async (object) => {
   const theFile = bucket.file(filePath);
   const [metadata] = await theFile.getMetadata();
   // functions.logger.info('metadata is ', metadata);
-  functions.logger.debug('metadata mediaLink is ', metadata.mediaLink);
+  console.debug('metadata mediaLink is ', metadata.mediaLink);
   return;
 });
 
@@ -84,30 +85,43 @@ const imageBucket = "images/"; // on firebase Storage
 */
 exports.downloadPhotoOnCreatePicdoc = functions.firestore.document(`${collection}/{id}`).onCreate(async (snapshot,context) => {
     const data = snapshot.data();
-    functions.logger.info('snapshot data', data);
-    const mediaUrl = data.mediaUrl;
-    const storageMediaId = data.storageId;
-    let tmpDownloadedFile = null;
-    // don't do anything if there's already a Cloud Storage URL assigned
-    // or if there's no remote media define
+        // don't do anything if there's already a Cloud Storage URL assigned
     if (data.downloadURL) {
         return;
     }
-    if (!mediaUrl) {
-        functions.logger.warn(`downloadPhotoOnCreate function no remote mediaUrl, nothing downloaded, picdoc ${mediaUrl}`);
+    if(!data.copyToFirebaseStorage){
+      console.info('downloadPhotoOnCreate skipping because no copyToFirebaseStorage flag in picdoc', data.id);
+      return;
+    }
+    console.info('downloadPhotoOnCreate incoming snapshot.data', data);
+
+    const externMediaBase = data.externMediaBase;
+    const img_basename = data.img_basename;
+    let storageMediaId = data.storageId;
+    let tmpDownloadedFile = null;
+
+    if (!externMediaBase) {
+        console.warn('downloadPhotoOnCreate no remote externMediaBase, nothing downloaded, picdoc ',data);
         return; // no existing file, and no info on what to load
     }
-    if (!storageMediaId) {
-        functions.logger.warn(`downloadPhotoOnCreate function no storageId provided, picdoc ${data}`);
-        return; // must have a storageMediaId to name the file in the bucket
+    if (!img_basename) {
+      console.warn('downloadPhotoOnCreate no img_basename provided, picdoc', data);
+      return; // must have a img_basename to find and to name the file in the bucket
     }
+    if (!storageMediaId) {
+      console.warn('downloadPhotoOnCreate no storageId provided, picdoc ', data);
+      storageMediaId = img_basename; // must have a storageMediaId to name the file in the bucket
+    }
+
+    const mediaUrl = externMediaBase + img_basename;
+    console.log('set mediaUrl (for fetching) to ', mediaUrl);
     // TODO ensure storageMediaId is unique in the bucket
-    functions.logger.log('incoming picdoc has storageMediaId ', storageMediaId);
-    functions.logger.log('incoming picdoc has id ', context.params?.documentId);
+    console.log('incoming picdoc has storageMediaId ', storageMediaId);
+    console.log('incoming picdoc has id ', context.params?.documentId);
     try {
         // Step 1: Download mediaUrl to temporary directory
         tmpDownloadedFile = await downloadRemoteUrlImage(mediaUrl, storageMediaId);
-        functions.logger.log("Download Complete: File Path: " + tmpDownloadedFile.filePath + " - File Name: ", tmpDownloadedFile.fileName, "mime: " + tmpDownloadedFile.mime);
+        console.log("Download Complete: File Path: " + tmpDownloadedFile.filePath + " - File Name: ", tmpDownloadedFile.fileName, "mime: " + tmpDownloadedFile.mime);
         // Step 2: Upload to Firestore Storage
         await uploadLocalFileToStorage(tmpDownloadedFile.filePath, tmpDownloadedFile.fileName, tmpDownloadedFile.mime);
         // Step 3: Update `collection`
@@ -116,7 +130,7 @@ exports.downloadPhotoOnCreatePicdoc = functions.firestore.document(`${collection
         const theFile = bucket.file(`${imageBucket}${tmpDownloadedFile.fileName}`);
         const [metadata] = await theFile.getMetadata();
         const mediaLink = metadata.mediaLink;
-        functions.logger.info('adding mediaLink of ', mediaLink);
+        console.info('adding mediaLink of ', mediaLink);
 
         return snapshot.ref.set({
             storageMediaId: storageMediaId,
@@ -124,9 +138,11 @@ exports.downloadPhotoOnCreatePicdoc = functions.firestore.document(`${collection
         }, { merge: true });
     }
     catch (error) {
-        functions.logger.log("error on downloading and uploading remote media file to storage: " + error);
+      console.log("error on downloading and uploading remote media file to storage: " + error);
     }
 });
+
+
 /**
  *
  * @param {String} fileUrl
@@ -176,18 +192,18 @@ async function downloadRemoteUrlImage(fileUrl, fileName) {
  * @param {String} fileUrl
  */
 async function retrieveStreamFileType(fileUrl) {
-    functions.logger.log('retrieveStreamFileType gets fileUrl', fileUrl);
-    const stream = got.stream(fileUrl);
-    functions.logger.log('retrieveStreamFileType stream is', stream);
-    try {
-        const fileType = await FileType.fromStream(stream);
-        functions.logger.log('retrieveStreamFileType fileType is', fileType);
-        return fileType;
-    }
-    catch (e) {
-        console.error("error trying to identify remote file type: ", e);
-        return null;
-    }
+  console.log('retrieveStreamFileType gets fileUrl', fileUrl);
+  const stream = got.stream(fileUrl);
+  console.log('retrieveStreamFileType stream is', stream);
+  try {
+      const fileType = await FileType.fromStream(stream);
+      console.log('retrieveStreamFileType fileType is', fileType);
+      return fileType;
+  }
+  catch (e) {
+      console.error("retrieveStreamFileType error trying to identify remote file type: ", e);
+      return null;
+  }
 }
 /**
  * Upload the file in firestore storage
@@ -210,7 +226,7 @@ async function uploadLocalFileToStorage(filePath, fileName, mimetype) {
                 }
             },
         });
-        functions.logger.log(`${fileName}  uploaded to /${imageBucket}${fileName}.`);
+        console.log(`uploadLocalFileToStorage ${fileName}  uploaded to /${imageBucket}${fileName}.`);
     }
     catch (e) {
         throw new Error("uploadLocalFileToStorage failed: " + e);

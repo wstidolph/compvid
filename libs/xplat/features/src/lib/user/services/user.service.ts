@@ -37,6 +37,7 @@ export class UserService {
   user$ = this._user$.asObservable();
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   profile$ = this._profile$.asObservable();
+  profileNow: UserProfile | null = null;;
 
   isLoggedOut$: Observable<boolean>;
 
@@ -62,11 +63,15 @@ export class UserService {
         console.log(`UserService looking up user users/${user.uid}`)
         getDoc(profileRef).then(prof => {
           const profileDoc = prof.data();
+          if(profileDoc) {
+            this.profileNow = profileDoc as UserProfile;
+            console.log('setting user profileNow', this.profileNow)}
           this._profile$.next(profileDoc as UserProfile ?? null)
       })
       } else {
         this._isLoggedIn$.next(false);
         this._profile$.next(null);
+        this.profileNow = null;
       }
     });
 
@@ -80,14 +85,7 @@ export class UserService {
   }
 
   getUserProfile() {
-    const user = this.afAuth.currentUser;
-    if(!user) {
-      console.warn('UserService getUserProfile find no currentUser');
-      return;
-    }
-
-    const userDocRef = doc(this.firestore, `users/${user.uid}`);
-    return docData(userDocRef, { idField: 'id' });
+    return this.profile$;
   }
 
   // async uploadImage(cameraFile: Photo) {

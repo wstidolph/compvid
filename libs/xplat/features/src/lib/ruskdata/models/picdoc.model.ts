@@ -11,7 +11,8 @@ export interface PicDoc {
   loc?: string; // a Place namesInOrder key
   img_basename: string; // filename, prob as assigned by camera
   storageId: string; // main image name in Firebase
-  mediaUrl: string; // where to find for migration inload
+  externMediaBase: string; // where to find for migration inload
+  copyToFirebaseStorage: boolean;
   downloadURL?: string; // cached Firestore Storage download URL
                         // probably going away
 

@@ -1,8 +1,9 @@
 import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core';
-import { RuskdataService, PicDoc, PicDocWithItemsSeen, PicdocService } from '@compvid/xplat/features';
+import { RuskdataService, PicDoc, PicDocWithItemsSeen, PicdocService, UserService } from '@compvid/xplat/features';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
+import { AlertController } from '@ionic/angular';
 
 interface pdItem {
   name: string,
@@ -32,16 +33,18 @@ export class MigratePage implements OnInit, OnDestroy {
     items: pdItem[]
   }
 
-  constructor(private ds: RuskdataService,
+  constructor(private userService: UserService,
     private picdocService: PicdocService,
     private fb: FormBuilder,
-    private ngxCsvParser: NgxCsvParser) {}
+    private ngxCsvParser: NgxCsvParser,
+    private alertController: AlertController) {}
 
   ngOnInit() {
-    this.pdwis$ = this.ds.picdocsWithItemSeens$; // for the template
-    this.subs.push(this.ds.picdocsWithItemSeens$.subscribe(this.buildForms));
 
-    this.ds.getImageListInPicDocs();
+    // this.pdwis$ = this.ds.picdocsWithItemSeens$; // for the template
+    // this.subs.push(this.ds.picdocsWithItemSeens$.subscribe(this.buildForms));
+
+    // this.ds.getImageListInPicDocs();
   }
 
   ngOnDestroy(): void {
@@ -51,16 +54,29 @@ export class MigratePage implements OnInit, OnDestroy {
 
   // for each record in the csvRecords, make a PicDoc and file it
   async genPicDocs() {
-
-    console.log('csvRecords', this.csvRecords);
+    const user = this.userService.profileNow;
+    if(!user){
+      console.log('only logged-in user can make PicDocs in database');
+      const alert = await this.alertController.create({
+        header: 'NEED LOGIN',
+        message: 'Must log in to create database records',
+        buttons: ['OK']
+      });
+      await alert.present();
+      return;
+    }
+    const externMediaBase = 'TWICPICS';
     this.csvRecords?.forEach(rec =>{
       const pd: PicDoc = {
-        ...rec,
-        uploadedBy: 'TESTER',
-        recipients: [],
-        numItemsseen: 0,
-        itemsseen: []
+        isDeleted: false,
+        uploadedBy: user.nickname,
+        externMediaBase: externMediaBase,
+        itemsseen: [],
+        ...rec // incoming record overwrites defaults
       };
+
+      pd.copyToFirebaseStorage = rec.copyToFirebaseStorage ? rec.copyToFirebaseStorage == 'TRUE' : false;
+      console.log('converted pd', pd);
       this.picdocService.addPicDoc(pd).then(dbpd => console.log('created',dbpd.id));
     })
   }
@@ -69,6 +85,7 @@ export class MigratePage implements OnInit, OnDestroy {
 
     const files = $event.srcElement.files;
     this.header = (this.header as unknown as string) === 'true' || this.header === true;
+    console.log('CSV header control is ', this.header);
 
     this.ngxCsvParser.parse(files[0], { header: this.header, delimiter: ',' })
       .pipe().subscribe({
