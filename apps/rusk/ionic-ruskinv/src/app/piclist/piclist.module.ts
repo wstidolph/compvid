@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms'
+import { ImagekitioAngularModule } from 'imagekitio-angular'
+import { TwicPicsComponentsModule } from '@twicpics/components/angular13'
 import { RuskdataModule  } from '@compvid/xplat/ionic/features'
 
 import { SwiperModule } from 'swiper/angular';
@@ -16,7 +18,9 @@ import { PiclistPage } from './piclist.page';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TwicPicsComponentsModule,
     IonicModule,
+    ImagekitioAngularModule,
     SwiperModule,
     RuskdataModule,
     PiclistPageRoutingModule

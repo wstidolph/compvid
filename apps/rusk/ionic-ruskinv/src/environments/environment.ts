@@ -1,4 +1,6 @@
 import {firebaseConfig} from './firestore';
+import {imagekit} from './imagekit'
+import {twicpics} from './twicpics'
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
@@ -7,7 +9,9 @@ import {firebaseConfig} from './firestore';
 export const environment = {
   production: false,
   useEmulators: true,
-  firebase: firebaseConfig
+  firebase: firebaseConfig,
+  imagekit: imagekit,
+  twicpics: twicpics
 };
 
 /*

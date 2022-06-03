@@ -27,7 +27,7 @@ const routes: Routes = [
     loadChildren: () => import('./piclist/piclist.module').then( m => m.PiclistPageModule)
   },
   {
-    path: 'pic',
+    path: 'pic/:id',
     loadChildren: () => import('./picture/picture.module').then( m => m.PicturePageModule)
   },
   {

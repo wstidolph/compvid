@@ -109,6 +109,7 @@
     "@ngx-translate/http-loader": "~7.0.0",
     "@nrwl/devkit": "14.1.9",
     "@nstudio/ionic-angular": "^13.4.3",
+    "@twicpics/components": "^0.8.0",
     "@videogular/ngx-videogular": "^5.0.1",
     "axios": "^0.27.2",
     "child-process-promise": "^2.2.1",
@@ -119,6 +120,7 @@
     "firebase-admin": "latest",
     "firebase-functions": "latest",
     "got": "^11.8.3",
+    "imagekitio-angular": "^1.0.2",
     "kill-port": "^1.6.1",
     "patch-package": "^6.4.7",
     "rxjs": "~7.5.4",
@@ -131,4 +133,3 @@
     "framework": "angular"
   }
 }
-

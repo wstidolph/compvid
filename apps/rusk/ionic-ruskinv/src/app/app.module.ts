@@ -16,10 +16,19 @@ import { getFirestore, provideFirestore, connectFirestoreEmulator } from '@angul
 import { getStorage, provideStorage, connectStorageEmulator } from '@angular/fire/storage';
 import { getFunctions, provideFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 
+import { ImagekitioAngularModule } from 'imagekitio-angular'
+import { TwicPicsComponentsModule } from "@twicpics/components/angular13"
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule,
+    TwicPicsComponentsModule,
+    ImagekitioAngularModule.forRoot({
+      publicKey: environment.imagekit.publicKey,
+      urlEndpoint: environment.imagekit.urlEndpoint,
+      authenticationEndpoint: environment.imagekit.authenticationEndpoint,
+    }),
     // AngularFirestoreModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(()=> {

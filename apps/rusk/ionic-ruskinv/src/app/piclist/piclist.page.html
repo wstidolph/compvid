@@ -5,5 +5,38 @@
 </ion-header>
 
 <ion-content>
-  <p>show list of thumbnails, with filter/sort, and each one links out to a Picture Page for edit</p>
+
+  <div class="twic-life-cycle">
+    <ul class="">
+      <ng-container *ngFor="let pd of pdArray; let i = index">
+        <li class="twic-item">
+          <ion-label>({{i}}) {{pd.img_basename}}</ion-label>
+          <a [routerLink]="['/pic', pd?.id]" routerLinkActive="active" routerDirection="forward">
+            <TwicImg
+              [src]="pd?.img_basename"
+              [focus]="pd?.focus"
+              transition="fade+zoom"
+              ratio="4/3"
+              mode="cover"
+            >
+            </TwicImg>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+
+  <!-- <swiper #swiper [config]="config"
+     (slideChange)="swiperSlideChanged($event)"
+
+     >
+
+    <ng-template swiperSlide
+      *ngFor="let pd of pdArray; let i=index ">
+      <p>Slide {{i}} -> {{pd.img_basename}}</p>
+      <img src="https://stidolph.com/kestate/{{pd.img_basename}}">
+      <TwicImg src="{{pd.img_basename}}"></TwicImg>
+    </ng-template>
+  </swiper> -->
+
 </ion-content>
