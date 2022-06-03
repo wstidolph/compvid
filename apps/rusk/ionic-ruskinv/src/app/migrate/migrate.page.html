@@ -3,15 +3,22 @@
     <ion-title >migrate</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-header>
 
 <ion-content>
-  <ion-list *ngFor="let pdwi of pdwis$ | async">
-    <ion-card>
-      <ion-card-header>NAME: {{pdwi?.pd.name}}</ion-card-header>
-      <ion-card-content>
-        <img [src]="pdwi?.pd?.downloadURL">
-      </ion-card-content>
-    </ion-card>
-  </ion-list>
+
+  <ion-item>
+    <input type="file" #fileImportInput name="File Upload" id="csvFileUpload"
+      (change)="fileChangeListener($event)"
+       accept=".csv">
+  </ion-item>
+  <ion-label>Parse Headers?</ion-label>
+  <ion-select>
+    <ion-select-option [value]="true">Yes</ion-select-option>
+    <ion-select-option [value]="false">No</ion-select-option>
+  </ion-select>
+
+  <ion-buttons>
+    <ion-button expand="full" (click)="genPicDocs()">Click to gen PicDocs</ion-button>
+  </ion-buttons>
+
 </ion-content>

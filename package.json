@@ -122,6 +122,7 @@
     "got": "^11.8.3",
     "imagekitio-angular": "^1.0.2",
     "kill-port": "^1.6.1",
+    "ngx-csv-parser": "^1.1.1",
     "patch-package": "^6.4.7",
     "rxjs": "~7.5.4",
     "swiper": "^8.1.6",

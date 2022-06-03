@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RuskdataService, PicDoc, PicDocWithItemsSeen } from '@compvid/xplat/features';
+import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { RuskdataService, PicDoc, PicDocWithItemsSeen, PicdocService } from '@compvid/xplat/features';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
+import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 
 interface pdItem {
   name: string,
@@ -15,6 +16,10 @@ interface pdItem {
   styleUrls: ['./migrate.page.scss'],
 })
 export class MigratePage implements OnInit, OnDestroy {
+  csvRecords: any;
+  header: boolean = true;
+  @ViewChild('fileImportInput') fileImportInput: any;
+
   subs: Subscription[] = [];
 
   pdwis$: Observable<PicDocWithItemsSeen[]>;
@@ -27,7 +32,10 @@ export class MigratePage implements OnInit, OnDestroy {
     items: pdItem[]
   }
 
-  constructor(private ds: RuskdataService, private fb: FormBuilder) {}
+  constructor(private ds: RuskdataService,
+    private picdocService: PicdocService,
+    private fb: FormBuilder,
+    private ngxCsvParser: NgxCsvParser) {}
 
   ngOnInit() {
     this.pdwis$ = this.ds.picdocsWithItemSeens$; // for the template
@@ -38,6 +46,40 @@ export class MigratePage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
       this.subs.forEach(sub => sub.unsubscribe());
+  }
+
+
+  // for each record in the csvRecords, make a PicDoc and file it
+  async genPicDocs() {
+
+    console.log('csvRecords', this.csvRecords);
+    this.csvRecords?.forEach(rec =>{
+      const pd: PicDoc = {
+        ...rec,
+        uploadedBy: 'TESTER',
+        recipients: [],
+        numItemsseen: 0,
+        itemsseen: []
+      };
+      this.picdocService.addPicDoc(pd).then(dbpd => console.log('created',dbpd.id));
+    })
+  }
+
+  fileChangeListener($event: any): void {
+
+    const files = $event.srcElement.files;
+    this.header = (this.header as unknown as string) === 'true' || this.header === true;
+
+    this.ngxCsvParser.parse(files[0], { header: this.header, delimiter: ',' })
+      .pipe().subscribe({
+        next: (result): void => {
+          console.log('Result', result);
+          this.csvRecords = result;
+        },
+        error: (error: NgxCSVParserError): void => {
+          console.log('Error', error);
+        }
+      });
   }
 
   // build formas based on picdocs
