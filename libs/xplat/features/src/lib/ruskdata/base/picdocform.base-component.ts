@@ -32,8 +32,6 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   ngOnInit(): void {
     this.gtoptions$ = this.goesToService.getGoesToAsOptions();
 
-    console.log('init gets itemseen', this.pd.itemsseen);
-
     this.pdForm = this.fb.group({
       name: [this.pd.name, Validators.required],
       desc: [this.pd.desc],

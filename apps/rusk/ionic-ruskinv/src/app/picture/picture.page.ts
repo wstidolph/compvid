@@ -18,7 +18,7 @@ export class PicturePage implements OnInit {
 
   ngOnInit() { // looking for picdoc
     this.picdoc = this.route.snapshot.data['picdoc']
-    console.log('PicturePage picdoc', this.picdoc);
+    // console.log('PicturePage ngOnInit picdoc', this.picdoc);
   }
 
   abandonEdits(){

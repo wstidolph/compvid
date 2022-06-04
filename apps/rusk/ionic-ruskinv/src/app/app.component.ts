@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppRouteChangeService } from '@compvid/xplat/core';
 import { installTwicPics } from "@twicpics/components/angular13";
 import { environment } from '../environments/environment'
 
@@ -8,7 +9,9 @@ import { environment } from '../environments/environment'
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(
+    //public routeMonitor: AppRouteChangeService
+    ) {}
 }
 
 installTwicPics( {
