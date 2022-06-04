@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { PicdocResolverService } from '@compvid/xplat/features';
 import {
   redirectUnauthorizedTo,
   redirectLoggedInTo,
@@ -27,7 +28,8 @@ const routes: Routes = [
     loadChildren: () => import('./piclist/piclist.module').then( m => m.PiclistPageModule)
   },
   {
-    path: 'pic/:id',
+    path: 'pic/:img_basename',
+    resolve: {picdoc: PicdocResolverService},
     loadChildren: () => import('./picture/picture.module').then( m => m.PicturePageModule)
   },
   {

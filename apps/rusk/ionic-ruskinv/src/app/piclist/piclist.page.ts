@@ -9,6 +9,7 @@ import SwiperCore, {
   Navigation,
   Scrollbar
 } from 'swiper';
+import { tap } from 'rxjs/operators';
 SwiperCore.use([Grid,
   // Pagination,
   // Navigation,
@@ -45,15 +46,20 @@ export class PiclistPage implements OnInit, AfterViewInit {
   constructor(public picdocService: PicdocService) { }
 
   ngOnInit() {
-    this.picdocService.getPicDocById('test').subscribe(pd => {
-      this.pdArray.push({...pd, img_basename:'20220305_082626.jpg'});
-      this.pdArray.push({...pd});
-      this.pdArray.push({...pd, img_basename:'20220305_081449.jpg'});
-      this.pdArray.push({...pd, img_basename:'20220305_081537.jpg'});
-      this.pdArray.push({...pd, img_basename:'20220305_081730.jpg'});
-      this.pdArray.push({...pd, img_basename:'20220305_081736.jpg'});
-      this.pdArray.push({...pd, img_basename:'20220305_081746.jpg'});
-    });
+    this.picdocService.getPicDocs().pipe(
+      tap(pda => this.pdArray = pda),
+      tap(pda => console.log('ngOnInit pdArray', this.pdArray))
+    ).subscribe();
+
+        // this.picdocService.getPicDocById('test').subscribe(pd => {
+    //   this.pdArray.push({...pd, img_basename:'20220305_082626.jpg'});
+    //   this.pdArray.push({...pd});
+    //   this.pdArray.push({...pd, img_basename:'20220305_081449.jpg'});
+    //   this.pdArray.push({...pd, img_basename:'20220305_081537.jpg'});
+    //   this.pdArray.push({...pd, img_basename:'20220305_081730.jpg'});
+    //   this.pdArray.push({...pd, img_basename:'20220305_081736.jpg'});
+    //   this.pdArray.push({...pd, img_basename:'20220305_081746.jpg'});
+    // });
   }
 
   ngAfterViewInit(): void {

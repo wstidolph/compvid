@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
+import {PicdocResolverService } from '@compvid/xplat/features'
 import { PicturePage } from './picture.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: PicturePage
-  }
+    component: PicturePage,
+  },
 ];
 
 @NgModule({

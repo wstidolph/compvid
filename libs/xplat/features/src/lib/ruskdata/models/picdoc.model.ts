@@ -16,6 +16,8 @@ export interface PicDoc {
   downloadURL?: string; // cached Firestore Storage download URL
                         // probably going away
 
+  twicFocus?: string; // defaults to middle, but can be set as last
+                      // step in transfor chain e.g., 20x10 coordinates
   numItemsseen: number;
   uploadedBy?: string; // user ID
 

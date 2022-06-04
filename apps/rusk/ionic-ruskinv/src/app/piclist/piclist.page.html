@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Picture List {{pdArray[0].name}}</ion-title>
+    <ion-title>Picture List {{pdArray[0]?.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +11,8 @@
       <ng-container *ngFor="let pd of pdArray; let i = index">
         <li class="twic-item">
           <ion-label>({{i}}) {{pd.img_basename}}</ion-label>
-          <a [routerLink]="['/pic', pd?.id]" routerLinkActive="active" routerDirection="forward">
+          <a
+            [routerLink]="['/pic', pd?.img_basename]" routerLinkActive="active" routerDirection="forward">
             <TwicImg
               [src]="pd?.img_basename"
               [focus]="pd?.focus"

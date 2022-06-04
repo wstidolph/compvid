@@ -2,7 +2,12 @@
 <!-- the primary picture -->
 
   <ion-item>
-    <ion-img [src]="pd.downloadURL"></ion-img>
+    <TwicImg
+      [src]="pd?.img_basename"
+      [focus]="pd?.twicFocus">
+      transition="fade+zoom"
+      ratio="4/3"
+      mode="cover"</TwicImg>
   </ion-item>
 
   <!-- page-level controls-->

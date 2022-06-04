@@ -21,9 +21,12 @@ import {
   ref,
   Storage, uploadBytes, UploadMetadata
 } from '@angular/fire/storage'
+import { ɵNgSelectMultipleOption } from '@angular/forms';
 
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, map, tap } from 'rxjs';
+import { isNullOrUndefined } from 'util';
 import { PicDoc } from '../models';
+import {convertSnaps } from './db-utils';
 
 // test/dev support
 const TEST_PICDOC: PicDoc = {
@@ -59,6 +62,7 @@ const COLLECTION = 'picdocs';
   providedIn: 'root',
 })
 export class PicdocService {
+
   private pda = new BehaviorSubject<PicDoc[]>([]);
   picdocs$ = this.pda.asObservable();
 
@@ -72,12 +76,31 @@ export class PicdocService {
     return collectionData(picDocCollection, {idField: 'id'}) as Observable<PicDoc[]>;
   }
 
-  getPicDocById(id: string) {
+  getPicDocById(id: string | null): Observable<PicDoc | null> {
     if(id == 'test'){
       return of(TEST_PICDOC)
     }
+    if(!id){
+      console.warn('PicdocService getPicDocById got null id');
+      return of(null)
+    }
     const picDocRef = doc(this.firestore,`${COLLECTION}/${id}`);
     return docData(picDocRef, { idField: 'id'}) as Observable<PicDoc>;
+  }
+
+  getPicDocByImgBasename(imgBasename: string | null): Observable<PicDoc | null> {
+    const pdCollection =
+      collection(this.firestore, COLLECTION, ) as  CollectionReference<PicDoc>;
+      return collectionData<PicDoc>(
+        query(pdCollection, where('img_basename','==',imgBasename)),
+          {idField: 'id'}
+        ).pipe(
+            // tap(r => console.log('getPicDocByImgBasename ', r)),
+            map(results => {
+              // const picdocs = convertSnaps<PicDoc>(results);
+              return results.length == 1 ? results[0] : null
+          })
+        )
   }
 
   getPicDocsByImgName(iname: string) {

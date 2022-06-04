@@ -18,22 +18,24 @@ export class PicdocformComponent extends PicdocformBaseComponent /* implements A
 
   public swiperConfig: SwiperOptions = {
    // direction: 'vertical'
-   effect: 'flip'
+   // effect: 'flip'
 
   }
-  @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
+  @ViewChild(IonAccordionGroup) accordionGroup!: IonAccordionGroup;
   // @ViewChild('swiper', { static: false }) swiper: SwiperComponent;
 
   @Output() abandonEdits = new EventEmitter();
   dataReturned: any;
 
   text = "ionic Picdocform";
-  constructor( public picDocService: PicdocService,
-     public placeOptionsService: PlaceOptionsService,
-     public goesToService: GoesToService,
-     public fb: FormBuilder,
-     public modalController: ModalController,
-     private routerOutlet: IonRouterOutlet) {
+  constructor(
+
+    public picDocService: PicdocService,
+    public placeOptionsService: PlaceOptionsService,
+    public goesToService: GoesToService,
+    public fb: FormBuilder,
+    public modalController: ModalController,
+    private routerOutlet: IonRouterOutlet) {
     super(picDocService,
        placeOptionsService,
          goesToService,

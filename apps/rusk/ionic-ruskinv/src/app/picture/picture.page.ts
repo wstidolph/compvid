@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { PicDoc, PicdocService } from '@compvid/xplat/features';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'compvid-picpage',
@@ -9,19 +10,15 @@ import { PicDoc, PicdocService } from '@compvid/xplat/features';
   styleUrls: ['./picture.page.scss'],
 })
 export class PicturePage implements OnInit {
+  picdoc: PicDoc;
 
-  pdArray: PicDoc[] = [];
 
-  id = ''
   constructor(public picdocService: PicdocService,
     public route: ActivatedRoute) { }
 
-  ngOnInit() {
-    this.id = this.route.snapshot.params.id;
-    console.log('PicturePage id', this.id);
-    this.picdocService.getPicDocById(this.id).subscribe(pd => {
-      this.pdArray.push(pd);
-    });
+  ngOnInit() { // looking for picdoc
+    this.picdoc = this.route.snapshot.data['picdoc']
+    console.log('PicturePage picdoc', this.picdoc);
   }
 
   abandonEdits(){
