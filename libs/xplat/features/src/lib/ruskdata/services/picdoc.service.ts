@@ -41,12 +41,13 @@ const TEST_PICDOC: PicDoc = {
   editDate: Timestamp.fromDate(new Date()),
   isDeleted: false,
   numItemsseen: 0,
+  twicFocus: "250x250",
   recipients: [],
   itemsseen: [
     { desc: 'sample item seen',
       addedOn: Timestamp.fromDate(new Date()),
       isDeleted: false,
-      focus: "top left",
+      twicFocus: "200x200",
       goesTo: {
         to: 'DS',
         accordingTo: 'WS'
@@ -103,6 +104,7 @@ export class PicdocService {
         )
   }
 
+  // TODO delete?
   getPicDocsByImgName(iname: string) {
     const pdCollection =
       collection(this.firestore, COLLECTION) as  CollectionReference<PicDoc>;

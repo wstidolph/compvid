@@ -28,7 +28,7 @@ export interface PicDoc {
     isDeleted: boolean, // clear this itemSeen
     desc: string,
     addedOn: Timestamp,
-    focus?: string,
+    twicFocus?: string,
     category?: string,
     goesTo?: {to: string,
               accordingTo: string
