@@ -33,7 +33,7 @@ import { TwicPicsComponentsModule } from "@twicpics/components/angular13"
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(()=> {
       const auth = getAuth();
-      connectAuthEmulator(auth, 'http://localhost:9099');
+      connectAuthEmulator(auth, 'http://localhost:9099', {disableWarnings: true});
       return auth;
     }),
     provideFirestore(() => {
