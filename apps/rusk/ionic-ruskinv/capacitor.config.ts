@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.sse.inventory',
   appName: 'ruskinv',
   webDir: 'www',
   bundledWebRuntime: false,
