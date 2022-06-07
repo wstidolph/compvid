@@ -32,12 +32,14 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   ngOnInit(): void {
     this.gtoptions$ = this.goesToService.getGoesToAsOptions();
 
-    this.pdForm = this.fb.group({
-      name: [this.pd.name, Validators.required],
-      desc: [this.pd.desc],
-      loc: [this.pd.loc],
-      itemsseen: this.fb.array([])
-    })
+    this.pdForm = this.fb.group(
+      {
+        name: [this.pd.name],
+        desc: [this.pd.desc],
+        loc: [this.pd.loc],
+        itemsseen: this.fb.array([])
+      }
+    )
 
     //sort the array by addedOn TODO
     this.pd.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
@@ -94,7 +96,20 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   }
 
   formSubmit() {
+    const val = this.pdForm.value;
     console.log('form submitted', this.pdForm.value);
+    const changes = { // 1st attempt, but has prototypes and unchanged fields, too
+      id: this.pd.id,
+
+        desc: val.desc,
+        loc: val.loc,
+        itemsseen: this.itemsseenForms.value
+
+    }
+    console.log('calculated change object', changes);
+    this.picdocService.updatePicDoc(changes).then(
+      it => console.log('update got back',it)
+    )
   }
 
 }

@@ -1,17 +1,19 @@
-import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { PicDoc, PicdocService } from '@compvid/xplat/features';
 import Swiper, { SwiperOptions, Virtual } from 'swiper';
 import { SwiperComponent, EventsParams } from 'swiper/angular';
 import SwiperCore, {
   Grid,
-  Pagination,
-  Navigation,
-  Scrollbar
+   Pagination,
+  // Navigation,
+  // Scrollbar
 } from 'swiper';
 import { tap } from 'rxjs/operators';
-SwiperCore.use([Grid,
-  // Pagination,
+import { Subscription } from 'rxjs';
+SwiperCore.use([
+  Grid,
+  Pagination,
   // Navigation,
   // Virtual
   // EffectCube,
@@ -23,7 +25,7 @@ SwiperCore.use([Grid,
   styleUrls: ['./piclist.page.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PiclistPage implements OnInit, AfterViewInit {
+export class PiclistPage implements OnInit, AfterViewInit, OnDestroy {
 
   pdArray: PicDoc[] = [];
   // for imagekit:
@@ -32,34 +34,38 @@ export class PiclistPage implements OnInit, AfterViewInit {
   @ViewChild('swiper') swiper: SwiperComponent;
 
   config: SwiperOptions = {
-    slidesPerView: 2,
-    grid:{
-       rows: 2
+
+     slidesPerView: 2,
+     grid:{
+       rows: 3,
+
     },
-    spaceBetween:30,
-    // pagination:{
-    //   clickable: true
-    // }
+    loop: false,
+    // spaceBetween:5,
+    // virtual: true,
+    pagination:{
+      clickable: true,
+      renderBullet: function (index, className) {
+        return '<span class="' + className + '">' + (index + 1) + "</span>";
+      }
+    }
     // effect: 'cube'
   }
+
+  subs: Subscription[] = [];
 
   constructor(public picdocService: PicdocService) { }
 
   ngOnInit() {
-    this.picdocService.getPicDocs().pipe(
+    this.subs.push(this.picdocService.getPicDocs().pipe(
       tap(pda => this.pdArray = pda),
       tap(pda => console.log('ngOnInit pdArray', this.pdArray))
-    ).subscribe();
+    ).subscribe());
 
-        // this.picdocService.getPicDocById('test').subscribe(pd => {
-    //   this.pdArray.push({...pd, img_basename:'20220305_082626.jpg'});
-    //   this.pdArray.push({...pd});
-    //   this.pdArray.push({...pd, img_basename:'20220305_081449.jpg'});
-    //   this.pdArray.push({...pd, img_basename:'20220305_081537.jpg'});
-    //   this.pdArray.push({...pd, img_basename:'20220305_081730.jpg'});
-    //   this.pdArray.push({...pd, img_basename:'20220305_081736.jpg'});
-    //   this.pdArray.push({...pd, img_basename:'20220305_081746.jpg'});
-    // });
+  }
+
+  ngOnDestroy(): void {
+      this.subs.forEach(s => {s.unsubscribe()})
   }
 
   ngAfterViewInit(): void {
@@ -71,9 +77,9 @@ export class PiclistPage implements OnInit, AfterViewInit {
   }
 
   ngAfterContentChecked(): void {
-    // if (this.swiper) {
-    //   this.swiper.updateSwiper({});
-    // }
+    if (this.swiper) {
+      this.swiper.updateSwiper({});
+    }
   }
 
   swiperSlideChanged(e) {

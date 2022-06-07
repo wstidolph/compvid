@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-
+<!--
   <div class="twic-life-cycle">
     <ul class="">
       <ng-container *ngFor="let pd of pdArray; let i = index">
@@ -26,18 +26,27 @@
       </ng-container>
     </ul>
   </div>
+-->
 
-  <!-- <swiper #swiper [config]="config"
-     (slideChange)="swiperSlideChanged($event)"
-
-     >
-
+ <swiper #swiper [config]="config">
     <ng-template swiperSlide
       *ngFor="let pd of pdArray; let i=index ">
-      <p>Slide {{i}} -> {{pd.img_basename}}</p>
-      <img src="https://stidolph.com/kestate/{{pd.img_basename}}">
-      <TwicImg src="{{pd.img_basename}}"></TwicImg>
+      <div style="width:100%">
+       <a
+        [routerLink]="['/pic', pd?.img_basename]" routerDirection="forward">
+
+          <TwicImg
+            [src]="pd?.img_basename"
+            [focus]="pd?.twicFocus"
+            transition="fade+zoom"
+            mode="contain"
+          ></TwicImg>
+
+      </a>
+      <ion-label >({{i}}) {{pd.img_basename}}</ion-label>
+    </div>
     </ng-template>
-  </swiper> -->
+
+  </swiper>
 
 </ion-content>
