@@ -30,8 +30,8 @@ export interface PicDoc {
     addedOn: Timestamp,
     twicFocus?: string,
     category?: string,
-    goesTo?: {to: string,
+    goesTo?: [{to: string,
               accordingTo: string
-    }
+    }]
   }]
 }

@@ -48,10 +48,10 @@ const TEST_PICDOC: PicDoc = {
       addedOn: Timestamp.fromDate(new Date()),
       isDeleted: false,
       twicFocus: "200x200",
-      goesTo: {
+      goesTo: [{
         to: 'DS',
         accordingTo: 'WS'
-      },
+      }],
     }
   ]
 }
@@ -139,8 +139,19 @@ export class PicdocService {
 
     ppd.numItemsseen = ppd.itemsseen ? ppd.itemsseen.length : 0;
     ppd.recipients = [];
+    // itemsseen?: [{
+    // ...
+    //   goesTo?: [{to: string,
+    //             accordingTo: string
+    //   }]
+    // }]
     ppd.itemsseen?.forEach(its => {
-      if(its.goesTo) {ppd.recipients.push(its.goesTo)}
+      if(its.goesTo?.length>0) {
+        its.goesTo.forEach(gt => {
+          console.log('process goesto', gt);
+          ppd.recipients.push(gt);
+        })
+      }
     })
     ppd.recipients = ppd.recipients.filter((r, i) => i === ppd.recipients.indexOf(r));
     return ppd;

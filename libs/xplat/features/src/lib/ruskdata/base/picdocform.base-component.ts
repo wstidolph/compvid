@@ -51,7 +51,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
       addedOn: [its.addedOn],
       category: [its.category],
       whereInPic: [its.whereInPic],
-      goesTo: [''],
+      goesTo: [],
     })
 
     this.itemsseenForms.insert(0,itemseen);
@@ -67,7 +67,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
       desc: [''],
       addedOn: [''],
       category: [''],
-      goesTo: [''],
+      goesTo: [],
       whereInPic: [''],
     })
 
@@ -101,9 +101,9 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     const changes = { // 1st attempt, but has prototypes and unchanged fields, too
       id: this.pd.id,
 
-        desc: val.desc,
-        loc: val.loc,
-        itemsseen: this.itemsseenForms.value
+      desc: val.desc,
+      loc: val.loc,
+      itemsseen: this.itemsseenForms.value  // FIXME not adding in the accordingTp field
 
     }
     console.log('calculated change object', changes);
