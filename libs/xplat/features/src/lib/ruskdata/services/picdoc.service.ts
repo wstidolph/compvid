@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ɵdetectChanges } from '@angular/core';
 
 
 import {
@@ -130,19 +130,20 @@ export class PicdocService {
   updatePicDoc(picdocChgs: Partial<PicDoc>) {
     // TODO if updating itemsseen, make sure to denormalize
     const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdocChgs.id}`);
-    return updateDoc(picDocRef, picdocChgs);
+    const changes = this.denormGoesto(picdocChgs);
+    console.log('changes', changes);
+    return updateDoc(picDocRef, changes);
   }
 
-  private denormGoesto(pd: PicDoc): PicDoc {
+  private denormGoesto(ppd) {
 
-    pd.numItemsseen = pd.itemsseen ? pd.itemsseen.length : 0;
-    pd.recipients = [];
-    pd.itemsseen?.forEach(its => {
-      if(its.goesTo?.to) {pd.recipients.push(its.goesTo?.to)}
+    ppd.numItemsseen = ppd.itemsseen ? ppd.itemsseen.length : 0;
+    ppd.recipients = [];
+    ppd.itemsseen?.forEach(its => {
+      if(its.goesTo) {ppd.recipients.push(its.goesTo)}
     })
-    pd.recipients = pd.recipients.filter((r, i) => i === pd.recipients.indexOf(r));
-
-    return pd;
+    ppd.recipients = ppd.recipients.filter((r, i) => i === ppd.recipients.indexOf(r));
+    return ppd;
   }
 
   // async uploadImageForPicDoc(img: Blob, picdoc: PicDoc){
