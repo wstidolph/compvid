@@ -17,5 +17,6 @@
     "xplat-web-core": "libs/xplat/web/core",
     "xplat-web-features": "libs/xplat/web/features",
     "xplat-web-scss": "libs/xplat/web/scss"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

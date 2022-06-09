@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "generators": {
     "@schematics/angular:component": {
@@ -131,7 +132,10 @@
           "apps/rusk/ionic-ruskinv/tsconfig.spec.json",
           "apps/rusk/ionic-ruskinv/e2e/tsconfig.json"
         ],
-        "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+        "lintFilePatterns": [
+          "src/**/*.ts",
+          "src/**/*.html"
+        ]
       }
     },
     "ionic-cordova-build": {

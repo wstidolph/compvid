@@ -3,9 +3,6 @@
   "affected": {
     "defaultBase": "main"
   },
-  "cli": {
-    "defaultCollection": "@nstudio/xplat"
-  },
   "implicitDependencies": {
     "package.json": {
       "dependencies": "*",
@@ -49,5 +46,6 @@
       "style": "scss"
     }
   },
-  "defaultProject": "ionic-ruskinv"
+  "defaultProject": "ionic-ruskinv",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }

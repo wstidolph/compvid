@@ -60,6 +60,7 @@ export class PiclistPage implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+  // use ionViewWill* because init/destroy not always called by Ionic (keeps pages on a stack)
   ionViewWillEnter() {
     const sub = this.picdocService.getPicDocs().pipe(
       take(1),
@@ -76,10 +77,8 @@ export class PiclistPage implements OnInit, AfterViewInit, OnDestroy {
     console.log('piclistpage ionViewWillLeave after unsub',this.subs)
   }
 
-  ngOnDestroy(): void {
-    console.log('piclistpage ngOnDestroy', this.subs);
+  ngOnDestroy(): void { // just in case
     this.subs.forEach(s => {s.unsubscribe()})
-    console.log('piclistpage ngOnDestroy after unsub',this.subs)
   }
 
   ngAfterViewInit(): void {
