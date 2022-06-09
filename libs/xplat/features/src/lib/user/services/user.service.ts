@@ -22,7 +22,7 @@ export interface UserRoles {
 }
 
 export interface UserProfile {
-  nickname: string
+  nickname?: string
 }
 
 @Injectable({
@@ -82,6 +82,10 @@ export class UserService {
     this.pictureUrl$ = this.user$ ?
       this.user$.pipe(map((u)=>u?.photoURL ?? null))
       : of(null)
+  }
+
+  get uid() {
+    return this.afAuth.currentUser?.uid;
   }
 
   getUserProfile() {

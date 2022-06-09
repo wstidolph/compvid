@@ -1,4 +1,5 @@
 
+
 <!-- the primary picture -->
 
 
@@ -12,17 +13,17 @@
 
   <!-- page-level controls-->
   <ion-row>
-    <ion-col>
-      <ion-button type="button" shape="round"
-        color="danger" (click)="openModal()">
-        <ion-icon name="trash"></ion-icon>Abandon
+
+     <ion-col><ion-button type="reset" shape="round"
+        color="warning" (click)="resetForm()">
+        <ion-icon name="arrow-undo-outline"></ion-icon>Undo
       </ion-button></ion-col>
     <ion-col>
       <ion-button type="submit" shape="round" class="ion-float-right"
       color="primary" (click)="formSubmit()"
       [disabled]="!(pdForm.valid && pdForm.dirty)">
 
-        <ion-icon name="checkmark"></ion-icon>Keep Edits
+        <ion-icon name="checkmark-outline"></ion-icon>Keep
       </ion-button>
     </ion-col>
   </ion-row>

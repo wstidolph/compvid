@@ -19,6 +19,8 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
 
   pdForm!: FormGroup;
 
+  isFav = false;
+
   subs: Subscription[] = [];
   gtoptions$!: Observable<GoesToOption[]>;
 
@@ -32,18 +34,31 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   ngOnInit(): void {
     this.gtoptions$ = this.goesToService.getGoesToAsOptions();
 
-    this.pdForm = this.fb.group(
-      {
-        name: [this.pd.name],
-        desc: [this.pd.desc],
-        loc: [this.pd.loc],
-        itemsseen: this.fb.array([])
-      }
-    )
-
-    //sort the array by addedOn TODO
-    this.pd.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
+    this.setUpForm();
   }
+
+  setUpForm() {
+    this.pdForm = this.fb.group(
+          {
+            name: [this.pd.name],
+            desc: [this.pd.desc],
+            loc: [this.pd.loc],
+            favOf: [this.pd.favOf],
+            itemsseen: this.fb.array([])
+          }
+        )
+
+        //sort the array by addedOn TODO
+        this.pd.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
+  }
+
+  resetForm() {
+    this.setUpForm();
+  }
+
+  // get favOf(): string[] {
+  //   return this.pdForm.get('favOf') as string[]
+  // }
 
   putItemsseenToForm(its:any){
     const itemseen = this.fb.group({
@@ -56,6 +71,8 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
 
     this.itemsseenForms.insert(0,itemseen);
   }
+
+
   get itemsseenForms() {
     return this.pdForm.get('itemsseen') as FormArray
   }
@@ -73,10 +90,21 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
 
     // this.itemsseenForms.push(itemseen)
     this.itemsseenForms.insert(0,itemseen);
+    this.itemsseenForms.markAsDirty();
   }
 
   removeItemSeen(idx:number) {
     this.itemsseenForms.removeAt(idx);
+    this.itemsseenForms.markAsDirty();
+  }
+
+  toggleFav() {
+    this.isFav = !this.isFav;
+  }
+
+  private pdFormReverted(): boolean {
+
+    return false;
   }
   clearGoesTo(idx: number) {
     this.itemsseenForms.at(idx).patchValue({goesTo:''})

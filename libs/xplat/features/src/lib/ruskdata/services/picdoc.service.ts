@@ -1,4 +1,4 @@
-import { Injectable, ɵdetectChanges } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 
 import {
@@ -14,6 +14,7 @@ import {
   where,
   query,
   Timestamp,
+  getDoc,
 } from '@angular/fire/firestore';
 
 import {
@@ -21,12 +22,12 @@ import {
   ref,
   Storage, uploadBytes, UploadMetadata
 } from '@angular/fire/storage'
-import { ɵNgSelectMultipleOption } from '@angular/forms';
 
 import { Observable, BehaviorSubject, of, map, tap } from 'rxjs';
 import { isNullOrUndefined } from 'util';
+import { UserService } from '../../user';
 import { PicDoc } from '../models';
-import {convertSnaps } from './db-utils';
+import {convertSnaps, ensureStrInOnce, esnsureStrInNone} from './db-utils';
 
 // test/dev support
 const TEST_PICDOC: PicDoc = {
@@ -42,6 +43,7 @@ const TEST_PICDOC: PicDoc = {
   isDeleted: false,
   numItemsseen: 0,
   twicFocus: "250x250",
+  favOf:[],
   recipients: [],
   itemsseen: [
     { desc: 'sample item seen',
@@ -67,7 +69,8 @@ export class PicdocService {
   private pda = new BehaviorSubject<PicDoc[]>([]);
   picdocs$ = this.pda.asObservable();
 
-  constructor(private firestore: Firestore, private storage: Storage) {
+  constructor(private firestore: Firestore, private storage: Storage,
+    private userService: UserService) {
     // console.log('picdoc service see firestore with options', firestore, firestore.app.options);
 ;
   }
@@ -122,8 +125,8 @@ export class PicdocService {
     return addDoc(picDocsCollection, pd);
   }
 
-  deletePicDoc(picdoc: PicDoc) {
-    const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdoc.id}`);
+  deletePicDoc(picdocid: string) {
+    const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdocid}`);
     return deleteDoc(picDocRef);
   }
 
@@ -135,7 +138,44 @@ export class PicdocService {
     return updateDoc(picDocRef, changes);
   }
 
-  private denormGoesto(ppd) {
+  async setFavState(pd: PicDoc, isFav: boolean) { // todo just pass in ID
+    if(!pd) return;
+
+    const uid=this.userService.uid;
+    if(!uid) return;
+
+    // fetch current doc by id
+    const picDocRef = doc(this.firestore,  `${COLLECTION}/${pd.id}`);
+    const docSnap = await getDoc(picDocRef);
+    if(docSnap.exists()) {
+      const dd = docSnap.data() as PicDoc;
+      const [needsUpdate, newArray] =
+      isFav ?
+          ensureStrInOnce(dd.favOf, uid)
+        : esnsureStrInNone(dd.favOf, uid);
+      // console.log('picDocService setFavState: needsUpdate, newArray', needsUpdate, newArray)
+      if(needsUpdate) {
+        // update just the favs on doc in DB
+        // console.log('picDocService setFavState update ', pd.id, newArray);
+        updateDoc(picDocRef, {favOf : newArray })
+          .then(
+            //rtn => console.log('picDocService setFavState update got', rtn)
+          )
+          .catch(err => console.warn('picDocService setFavState update err', err))
+      }
+    } else {
+      console.warn('cannot setFav on nonexist doc', pd.id)
+    }
+  }
+
+  isFavOf(pd: PicDoc) : boolean {
+    const uid=this.userService.uid;
+    if(!uid || !pd || !pd.favOf) return false;
+    return (pd.favOf.length>0 && pd.favOf.indexOf(uid) > -1)
+  }
+
+  /* --- PRIVATE UTILITY FUNCTIONS --- */
+  private denormGoesto(ppd) { // ignoring accordingTo, for now
 
     ppd.numItemsseen = ppd.itemsseen ? ppd.itemsseen.length : 0;
     ppd.recipients = [];

@@ -9,7 +9,7 @@ import SwiperCore, {
   // Navigation,
   // Scrollbar
 } from 'swiper';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 SwiperCore.use([
   Grid,
@@ -57,15 +57,29 @@ export class PiclistPage implements OnInit, AfterViewInit, OnDestroy {
   constructor(public picdocService: PicdocService) { }
 
   ngOnInit() {
-    this.subs.push(this.picdocService.getPicDocs().pipe(
-      tap(pda => this.pdArray = pda),
-      tap(pda => console.log('ngOnInit pdArray', this.pdArray))
-    ).subscribe());
 
   }
 
+  ionViewWillEnter() {
+    const sub = this.picdocService.getPicDocs().pipe(
+      take(1),
+      tap(pda => this.pdArray = pda),
+      tap(pda => console.log('ionViewWillEnter in sub pdArray', this.pdArray))
+    ).subscribe();
+
+    this.subs.push(sub);
+    console.log('piclistpage ionviewwillenter subs', this.subs)
+  }
+  ionViewWillLeave() {
+    console.log('piclistpage ionViewWillLeave', this.subs)
+    this.subs.forEach(s => {s.unsubscribe()})
+    console.log('piclistpage ionViewWillLeave after unsub',this.subs)
+  }
+
   ngOnDestroy(): void {
-      this.subs.forEach(s => {s.unsubscribe()})
+    console.log('piclistpage ngOnDestroy', this.subs);
+    this.subs.forEach(s => {s.unsubscribe()})
+    console.log('piclistpage ngOnDestroy after unsub',this.subs)
   }
 
   ngAfterViewInit(): void {

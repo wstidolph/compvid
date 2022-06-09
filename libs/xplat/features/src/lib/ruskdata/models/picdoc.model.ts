@@ -20,7 +20,7 @@ export interface PicDoc {
                       // step in transfor chain e.g., 20x10 coordinates
   numItemsseen: number;
   uploadedBy?: string; // user ID
-
+  favOf?:string[]; // uid of those who have fav'ed this pic
   recipients: string[]; // copied from itemsseen.goesTo.to field
                         // for "what pics have something goe to Bob?"
   itemsseen?: [{
