@@ -1,17 +1,20 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="primary">
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="piclist"></ion-back-button>
+      <ion-title size="small">{{picdoc.name ?? picdoc.img_basename}} </ion-title>
+      <ion-button color="medium" expand="outline" type="button" (click)="addItem($event)">
+       <ion-icon name="eye"></ion-icon> +Item
+      </ion-button>
+    </ion-buttons>
 
-  <ion-title size="small">{{picdoc.name ?? picdoc.img_basename}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button  type="button" shape="round"
+          color="secondary" (click)="clickFav()">
+        <ion-icon name="{{isFav? 'heart-outline' : 'heart-dislike-outline'}}"></ion-icon>Fav
+      </ion-button>
 
-
-    <ion-button  type="button" shape="round"
-        color="secondary" (click)="clickFav()">
-      <ion-icon name="{{isFav? 'heart-outline' : 'heart-dislike-outline'}}"></ion-icon>Fav
-    </ion-button>
-
-    <ion-button type="button" shape="round"
+      <ion-button type="button" shape="round"
         color="danger" (click)="deletePicture(picdoc.id)">
         <ion-icon name="trash"></ion-icon>DEL
       </ion-button>

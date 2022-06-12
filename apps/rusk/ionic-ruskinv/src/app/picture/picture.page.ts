@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
+import { PicdocformComponent } from 'libs/xplat/ionic/features/src/lib/ruskdata/components';
 import { Observable } from 'rxjs';
 
 
@@ -15,6 +16,8 @@ export class PicturePage implements OnInit {
 
   isFav = false;
 
+  @ViewChild(PicdocformComponent) picform: PicdocformComponent;
+
   constructor(public picdocService: PicdocService,
     public route: ActivatedRoute) { }
 
@@ -25,6 +28,10 @@ export class PicturePage implements OnInit {
 
   abandonEdits(){
     console.log('ABANDON SHIP');
+  }
+
+  addItem(evt) {
+    this.picform.addItemSeen(evt);
   }
 
   clickFav() {
