@@ -6,6 +6,9 @@
       <ion-button color="medium" expand="outline" type="button" (click)="addItem($event)">
        <ion-icon name="eye"></ion-icon> +Item
       </ion-button>
+      <ion-button color="medium"  type="button" (click)="drawOn($event)">
+        <ion-icon name="brush"></ion-icon>
+       </ion-button>
     </ion-buttons>
 
     <ion-buttons slot="end">
@@ -23,5 +26,16 @@
 </ion-header>
 
 <ion-content>
+  <!-- the primary picture -->
+
+  <TwicImg id="thePhoto"
+  [src]="picdoc?.img_basename"
+  [focus]="picdoc?.twicFocus"
+  transition="fade+zoom"
+  ratio="4/3"
+  mode="cover"></TwicImg>
+
+  <canvas #mycanvas></canvas>
+
   <compvid-picdocform [pd]="picdoc" (abandonEdits)="abandonEdits()"></compvid-picdocform>
 </ion-content>

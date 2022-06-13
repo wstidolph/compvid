@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { RuskdataModule  } from '@compvid/xplat/ionic/features'
 
 import { SwiperModule } from 'swiper/angular';
+import { TwicPicsComponentsModule } from '@twicpics/components/angular13'
+
 
 import { PicturePageRoutingModule } from './picture-routing.module';
 
@@ -18,6 +20,7 @@ import { PicturePage } from './picture.page';
     ReactiveFormsModule,
     IonicModule,
     SwiperModule,
+    TwicPicsComponentsModule,
     RuskdataModule,
     PicturePageRoutingModule
   ],

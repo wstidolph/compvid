@@ -19,6 +19,8 @@ import { getFunctions, provideFunctions, connectFunctionsEmulator } from '@angul
 import { ImagekitioAngularModule } from 'imagekitio-angular'
 import { TwicPicsComponentsModule } from "@twicpics/components/angular13"
 
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

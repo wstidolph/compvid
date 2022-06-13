@@ -140,4 +140,8 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     )
   }
 
+  addMarkup(markup){
+    console.log('base got markup', markup)
+  }
+
 }

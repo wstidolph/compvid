@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
+import { TwicImgComponent } from '@twicpics/components/angular13';
 import { PicdocformComponent } from 'libs/xplat/ionic/features/src/lib/ruskdata/components';
 import { Observable } from 'rxjs';
 
@@ -11,12 +12,25 @@ import { Observable } from 'rxjs';
   templateUrl: './picture.page.html',
   styleUrls: ['./picture.page.scss'],
 })
-export class PicturePage implements OnInit {
+export class PicturePage implements OnInit, AfterViewInit {
   picdoc: PicDoc;
 
   isFav = false;
 
   @ViewChild(PicdocformComponent) picform: PicdocformComponent;
+
+  @ViewChild(TwicImgComponent) twic: TwicImgComponent;
+
+  @ViewChild('mycanvas') mycanvas: ElementRef<HTMLCanvasElement> = {} as ElementRef;
+  public context: CanvasRenderingContext2D;
+
+  ngAfterViewInit(): void {
+    this.context = this.mycanvas.nativeElement.getContext('2d');
+  }
+
+  ionViewDidEnter() {
+    this.initCanvas();
+  }
 
   constructor(public picdocService: PicdocService,
     public route: ActivatedRoute) { }
@@ -43,4 +57,17 @@ export class PicturePage implements OnInit {
     // nav back
   }
 
+  initCanvas() {
+    const twicPos = this.twic.wrapperElementRef.nativeElement.getBoundingClientRect();
+    console.log('initCanvas sees twicPos', twicPos);
+    console.log('initCanvas sees mycanvas', this.mycanvas);
+    //twicPos.clientWidth;
+    console.log('initCanvas sees second mycanvas', this.mycanvas);
+
+  }
+  // draw on picture for itemssen
+  drawOn(evt){
+    console.log('drawOn got', evt)
+
+  }
 }

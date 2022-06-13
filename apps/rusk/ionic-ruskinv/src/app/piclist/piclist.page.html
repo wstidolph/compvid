@@ -48,6 +48,26 @@
     </ng-template>
 
   </swiper> -->
+<!-- tried 'ng-gallery' but it's not a large grid as I hoped-->
+  <!-- <gallery [items]="images"></gallery> -->
 
+  <div class="twic-life-cycle">
+    <ul class="">
+    <ng-container *ngFor="let pd of pdArray; let i=index ">
+      <li  class="twoc-item"  >
+        <a href="#"
+        [routerLink]="['/pic', pd?.img_basename]" routerDirection="forward">
 
+          <TwicImg
+            [src]="pd?.img_basename"
+            [focus]="pd?.twicFocus"
+            mode="cover"
+          ></TwicImg>
+        </a>
+
+        <p>({{i}}) {{pd?.loc}}</p>
+      </li>
+    </ng-container>
+  </ul>
+  </div>
 </ion-content>
