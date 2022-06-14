@@ -5,9 +5,7 @@ import { PicdocformBaseComponent } from '@compvid/xplat/features';
 import { IonAccordionGroup, IonRouterOutlet, ModalController } from '@ionic/angular';
 import { PdclosemodalComponent } from '../pdclosemodal/pdclosemodal.component'
 
-import Swiper, { SwiperOptions, EffectFlip } from 'swiper';
-import { SwiperComponent } from 'swiper/angular';
-Swiper.use([EffectFlip]);
+
 // ionic
 @Component({
   selector: 'compvid-picdocform',
@@ -16,13 +14,7 @@ Swiper.use([EffectFlip]);
 })
 export class PicdocformComponent extends PicdocformBaseComponent /* implements AfterContentChecked */ {
 
-  public swiperConfig: SwiperOptions = {
-   // direction: 'vertical'
-   // effect: 'flip'
-
-  }
   @ViewChild(IonAccordionGroup) accordionGroup!: IonAccordionGroup;
-  // @ViewChild('swiper', { static: false }) swiper: SwiperComponent;
 
   @Output() abandonEdits = new EventEmitter();
   dataReturned: any;
@@ -41,14 +33,6 @@ export class PicdocformComponent extends PicdocformBaseComponent /* implements A
          goesToService,
         fb);
   }
-  // ngAfterContentChecked(): void {
-  //   if (this.swiper) {
-  //     this.swiper.updateSwiper({});
-  //   }
-  // }
-  // swiperSlideChanged(e) {
-  //   console.log('swiperSlide changed: ', e);
-  // }
 
   addItemSeen(evt: { stopPropagation: () => void; }) {
     evt.stopPropagation();

@@ -4,15 +4,35 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
   --color: #0f0
 }
 
-// use up the screen
-.swiper{
-  width: 100%;
-  height: 100%;
+compvid-picdocform {
+   // display: none;
 }
 
-.swiper-slide {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+twicimg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 3px solid blue;
+}
+
+canvas {
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  border: 3px solid green;
+  width: 100%;
+  height: 100%;
+
+  z-index: 2;
+}
+
+
+.piccanvas {
+  position: relative; // so canvas can be abs positioned
+  background-color: transparent;
+  width: 100%;
+  height: 500px; // will set by media query
+  border: 3px solid  red;
 }

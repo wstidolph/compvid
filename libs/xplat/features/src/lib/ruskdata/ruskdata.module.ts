@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   schemas: [NO_ERRORS_SCHEMA],
   imports: [ReactiveFormsModule],
-  declarations: [PicdocformBaseComponent]
+  declarations: [PicdocformBaseComponent],
+  exports: [],
 })
 export class RuskdataModule {}

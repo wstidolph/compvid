@@ -7,7 +7,8 @@ import { RuskdataModule  } from '@compvid/xplat/ionic/features'
 
 import { SwiperModule } from 'swiper/angular';
 import { TwicPicsComponentsModule } from '@twicpics/components/angular13'
-
+import { DomchangeDirective } from './domchange.directive';
+import { ResizeObserverDirective } from './resizeObserver.directive';
 
 import { PicturePageRoutingModule } from './picture-routing.module';
 
@@ -24,6 +25,6 @@ import { PicturePage } from './picture.page';
     RuskdataModule,
     PicturePageRoutingModule
   ],
-  declarations: [PicturePage]
+  declarations: [PicturePage, DomchangeDirective, ResizeObserverDirective]
 })
 export class PicturePageModule {}

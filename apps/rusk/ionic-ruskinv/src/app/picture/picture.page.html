@@ -28,14 +28,20 @@
 <ion-content>
   <!-- the primary picture -->
 
-  <TwicImg id="thePhoto"
-  [src]="picdoc?.img_basename"
-  [focus]="picdoc?.twicFocus"
-  transition="fade+zoom"
-  ratio="4/3"
-  mode="cover"></TwicImg>
+  <div class="piccanvas">
 
-  <canvas #mycanvas></canvas>
+    <TwicImg id="thePhoto"
+      (domChange)="onDomChange($event)"
+      (resized)="onResize($event)"
+      [src]="picdoc?.img_basename"
+      transition="fade+zoom"
+      ratio="none"
+      mode="contain">
+    </TwicImg>
+
+    <!-- canvas for overlay markup -->
+    <canvas #mycanvas></canvas>
+  </div>
 
   <compvid-picdocform [pd]="picdoc" (abandonEdits)="abandonEdits()"></compvid-picdocform>
 </ion-content>
