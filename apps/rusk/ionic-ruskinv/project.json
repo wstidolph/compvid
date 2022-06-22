@@ -35,9 +35,12 @@
           },
           {
             "input": "apps/rusk/ionic-ruskinv/src/global.scss"
+          },
+          {
+            "input": "node_modules/@recogito/annotorious/dist/annotorious.min.css"
           }
         ],
-        "scripts": [],
+        "scripts":  [ "node_modules/@recogito/annotorious/dist/annotorious.min.js"],
         "aot": false,
         "vendorChunk": true,
         "extractLicenses": false,

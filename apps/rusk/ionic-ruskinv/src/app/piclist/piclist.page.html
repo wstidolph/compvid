@@ -5,56 +5,11 @@
 </ion-header>
 
 <ion-content>
-<!--
-  <div class="twic-life-cycle">
-    <ul class="">
-      <ng-container *ngFor="let pd of pdArray; let i = index">
-        <li class="twic-item">
-          <ion-label>({{i}}) {{pd.img_basename}}</ion-label>
-          <a
-            [routerLink]="['/pic', pd?.img_basename]" routerLinkActive="active" routerDirection="forward">
-            <TwicImg
-              [src]="pd?.img_basename"
-              [focus]="pd?.focus"
-              transition="fade+zoom"
-              ratio="4/3"
-              mode="cover"
-            >
-            </TwicImg>
-          </a>
-        </li>
-      </ng-container>
-    </ul>
-  </div>
--->
-
- <!-- <swiper #swiper [config]="config">
-    <ng-template swiperSlide
-      *ngFor="let pd of pdArray; let i=index ">
-      <div style="width:100%">
-       <a
-        [routerLink]="['/pic', pd?.img_basename]" routerDirection="forward">
-
-          <TwicImg
-            [src]="pd?.img_basename"
-            [focus]="pd?.twicFocus"
-            transition="fade+zoom"
-            mode="contain"
-          ></TwicImg>
-
-      </a>
-      <ion-label >({{i}}) {{pd.img_basename}}</ion-label>
-    </div>
-    </ng-template>
-
-  </swiper> -->
-<!-- tried 'ng-gallery' but it's not a large grid as I hoped-->
-  <!-- <gallery [items]="images"></gallery> -->
 
   <div class="twic-life-cycle">
     <ul class="">
     <ng-container *ngFor="let pd of pdArray; let i=index ">
-      <li  class="twoc-item"  >
+      <li  class="twic-item"  > <!-- was twoc-item, I don't think iot's used, anyway -->
         <a href="#"
         [routerLink]="['/pic', pd?.img_basename]" routerDirection="forward">
 

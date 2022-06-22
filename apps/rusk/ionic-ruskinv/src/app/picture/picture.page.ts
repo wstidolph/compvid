@@ -1,12 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
+import { AnnoService, PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
 import { IonLabel, IonText } from '@ionic/angular';
+import { IonBackButtonDelegateDirective } from '@ionic/angular/directives/navigation/ion-back-button';
 import { TwicImgComponent } from '@twicpics/components/angular13';
 import { PicdocformComponent } from 'libs/xplat/ionic/features/src/lib/ruskdata/components';
-import { fromEvent, Observable, pairwise, switchMap, takeUntil, tap } from 'rxjs';
-
+import { fromEvent, interval, Observable, pairwise, switchMap, takeUntil, take, tap } from 'rxjs';
+import { environment } from '../../../src/environments/environment';
 
 @Component({
   selector: 'compvid-picpage',
@@ -19,121 +20,90 @@ export class PicturePage implements OnInit, AfterViewInit {
 
   @ViewChild(TwicImgComponent) twic: TwicImgComponent;
 
+  @ViewChild('piccanvas') piccanvas: ElementRef<HTMLDivElement> = {} as ElementRef;
   @ViewChild('mycanvas') canvas: ElementRef<HTMLCanvasElement> = {} as ElementRef;
 
-  private context: CanvasRenderingContext2D;
-  private canvasEl: HTMLCanvasElement;
+  @ViewChild('wrapper') wrapper: ElementRef<HTMLDivElement> = {} as ElementRef;
+  twicImg: HTMLImageElement
+  img_direct: HTMLImageElement
+
+  @ViewChild('picimg') picimg: ElementRef<HTMLImageElement> = {} as ElementRef;
+  @ViewChild('current_tool') current_tool: ElementRef<HTMLButtonElement> = {} as ElementRef;
 
   picdoc: PicDoc;
+  extern_img_src;
+  twicsrc;
+
   isFav = false;
   constructor(public picdocService: PicdocService,
-    public route: ActivatedRoute) { }
+    public route: ActivatedRoute,
+    private anno: AnnoService) { }
 
   ngAfterViewInit(): void {
-    this.canvasEl = this.canvas.nativeElement;
-
+    console.log('***ngAfterViewInit***');
+    this.logImg('ngAfterViewInit');
   }
 
-  ionViewDidLoad() {
-
-  }
-
+  // seems like we need ionViewDidEnter for img to be loaded
   ionViewDidEnter() {
-    this.initCanvas();
-    const context = this.canvasEl.getContext('2d');
+    console.log('***ionViewDidEnter***');
 
-    context.lineWidth = 10;
-    context.lineCap = 'round'
-    context.strokeStyle = '#FF0';
-    context.globalCompositeOperation = "multiply";
-    this.context = context
+    this.twicImg = document.querySelector('twicimg img')  as HTMLImageElement;
 
-    console.log('context is init to', this.context, this.context.canvas.getBoundingClientRect());
-
-    this.captureEvents(this.canvasEl);
+    this.annoInit('picimg'); // choose our img source
   }
 
+  private onLoadImg() {
+    console.log('*** loadend event ***');
+    this.logImg('onLoadImg')
+  }
   ngOnInit() { // looking for picdoc
+    console.log('***ngOnInit***');
     this.picdoc = this.route.snapshot.data['picdoc']
+    this.twicsrc="image:"+this.picdoc.img_basename;
+    console.log('ngOnInit twicsrc', this.twicsrc);
+
+    this.extern_img_src = `${environment.twicpics.paths[0]}${this.picdoc.img_basename}`
+    console.log('ngOnInit picdoc', this.picdoc);
+    console.log('ngOnInit extern_img_src', this.extern_img_src);
+;
     this.isFav = this.picdocService.isFavOf(this.picdoc);
   }
 
-  // drawing code based on
-  // https://medium.com/@tarik.nzl/creating-a-canvas-component-with-free-hand-drawing-with-rxjs-and-angular-61279f577415
-  private captureEvents(canvasEl: HTMLCanvasElement) {
-    // this will capture all mousedown events from the canvas element
-    // console.log('captureEvents rect', canvasEl, canvasEl.getBoundingClientRect());
+  annoInit( imageSel : string | HTMLImageElement) {
+    //console.log('annoInit with', imageSel);
 
-    fromEvent(canvasEl, 'pointerdown')
-      .pipe(
-        // tap((e) => console.log('pointerdown',e)),
-        switchMap((e) => {
-          // after a mouse down, we'll record all mouse moves
-          return fromEvent(canvasEl, 'pointermove')
-            .pipe(
-              // tap((e:PointerEvent) => console.log('pointermove e.clientX',e.clientX)),
-              // we'll stop (and unsubscribe) once the user releases the mouse
-              // this will trigger a 'mouseup' event
-              takeUntil(fromEvent(canvasEl, 'pointerup')),
-              // we'll also stop (and unsubscribe) once the mouse leaves the canvas (mouseleave event)
-              takeUntil(fromEvent(canvasEl, 'pointerleave')),
-              // pairwise lets us get the previous value to draw a line from
-              // the previous point to the current point
-              pairwise()
-            )
-        })
-      )
-      .subscribe((res: [PointerEvent, PointerEvent]) => {
-        const rect = canvasEl.getBoundingClientRect();
-
-        // previous and current position with the offset
-        const prevPos = {
-          x: res[0].clientX - rect.left,
-          y: res[0].clientY - rect.top
-        };
-
-        const currentPos = {
-          x: res[1].clientX - rect.left,
-          y: res[1].clientY - rect.top
-        };
-
-        this.drawOnCanvas(prevPos, currentPos);
-      });
+    const annoConfig = {
+      image: imageSel,
+      disableEditor: false,
+      drawOnSingleClick: true,
+          widgets: [
+            { widget: 'COMMENT' },
+            { widget: 'TAG', vocabulary: [ 'Animal', 'Building', 'Waterbody'] }
+          ]
+    }
+    this.anno.annoSetup(annoConfig);
   }
-  private drawOnCanvas(
-    prevPos: { x: number, y: number },
-    currentPos: { x: number, y: number }
-  ) {
-    // incase the context is not set
-    if (!this.context) {
-      console.warn('asked to draw on non-exist context');
-      return; }
 
-    // start our drawing path
-    this.context.beginPath();
-
-    // we're drawing lines so we need a previous position
-    if (prevPos) {
-      // sets the start point
-      this.context.moveTo(prevPos.x, prevPos.y); // from
-
-      // draws a line from the start pos until the current position
-      this.context.lineTo(currentPos.x, currentPos.y);
-
-      // strokes the current path with the styles we set earlier
-      this.context.stroke();
+  annoToggleTool() {
+    console.log('current_tool', this.current_tool);
+    if (this.current_tool.nativeElement.innerHTML == 'RECTANGLE') {
+      this.current_tool.nativeElement.innerHTML = 'POLYGON';
+      this.anno.setDrawingTool('polygon');
+    } else {
+        this.current_tool.nativeElement.innerHTML = 'RECTANGLE';
+        this.anno.setDrawingTool('rect');
     }
   }
 
   abandonEdits(){
     console.log('ABANDON SHIP');
   }
-
   addItem(evt) {
     this.picform.addItemSeen(evt);
   }
-
   clickFav() {
+    console.log('drawing markup');
     this.isFav = !this.isFav;
     this.picdocService.setFavState(this.picdoc, this.isFav);
   }
@@ -141,6 +111,8 @@ export class PicturePage implements OnInit, AfterViewInit {
     console.log('trash pic', picdocid);
     // nav back
   }
+
+
   onDomChange(mutationRecord: MutationRecord){
     if(mutationRecord.type=='attributes') {
       const name = mutationRecord.attributeName;
@@ -152,23 +124,57 @@ export class PicturePage implements OnInit, AfterViewInit {
   }
 
   onResize(resizeRect){
-    console.log('PicturePage onResize got rect', resizeRect);
-    const img = document.querySelector('twicimg img')  as HTMLImageElement;
-    console.log("PicturePage onResize img NW, NH is",img.naturalWidth, img.naturalHeight)
-    const twicPos = this.twic.wrapperElementRef.nativeElement.getBoundingClientRect();
-    console.log('PicturePage onResize sees twicPos gBRC', twicPos);
-    this.canvas.nativeElement.height = img.naturalHeight;
-    this.canvas.nativeElement.width = img.naturalWidth;
+    console.log('PP onResize got input', resizeRect);
+    const img = document.querySelector('img')  as HTMLImageElement;
+    if(this.imgSane(img) ){
+      console.log('onResize sees sane img so calling setCanvas (skipping)');
+      // this.setCanvas();
+    } else {
+      console.log('onResize skipping setCanvas call')
+    }
   }
 
-  initCanvas() {
-    const img = document.querySelector('twicimg img') as HTMLImageElement;
-    console.log("img is",img.naturalWidth, img.naturalHeight)
-    const twicPos = this.twic.wrapperElementRef.nativeElement.getBoundingClientRect();
-    console.log('PicturePage initCanvas sees twicPos gBRC', twicPos);
-    this.canvasEl.height = img.naturalHeight;
-    this.canvasEl.width = img.naturalWidth;
-    console.log('PicturePage initCanvas sets canvas', this.canvas.nativeElement);
 
+
+  // UTILITY
+  private imgSane(img: HTMLImageElement): boolean {
+    if (!img) {
+      console.warn('PicturePage no img in setCanvas() ')
+      return false;
+    }
+    if(!img.complete){
+      console.warn('PicturePage img not yet complete', img);
+      return false;
+    }
+    if(! (img.naturalWidth>0) ) {
+      console.warn('PicturePage img no naturalWidth yet', img.naturalWidth)
+      return false;
+    }
+    console.log('img is sane');
+    return true;
+  }
+
+  private logSizes(elname, el) {
+    console.log(`PP ${elname} NW NH | OW OH | O/N-Wscale O/N-Hscale`,
+    el.naturalWidth,
+    el.naturalHeight, '|',
+    el.offsetWidth,
+    el.offsetHeight, '|',
+
+    el.offsetWidth / el.naturalWidth,
+    el.offsetHeight / el.naturalHeight
+    )
+
+    if(el.offsetWidth != el.clientWidth || el.offsetHeight != el.clientHeight) {
+      console.log( `PP ${elname} different clientW clientH`, el.clientWidth,
+      el.clientHeight)
+    }
+  }
+  private logImg(prefix:string){
+    if(!this.twicImg){
+      console.log(`from ${prefix} no twicImg`);
+      return;
+    }
+    this.logSizes('twicimg', this.twicImg);
   }
 }

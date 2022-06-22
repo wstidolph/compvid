@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.sse.ruskinv.ionic;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -175,7 +175,7 @@ export class PicdocService {
   }
 
   /* --- PRIVATE UTILITY FUNCTIONS --- */
-  private denormGoesto(ppd) { // ignoring accordingTo, for now
+  private denormGoesto(ppd:any) { // ignoring accordingTo, for now
 
     ppd.numItemsseen = ppd.itemsseen ? ppd.itemsseen.length : 0;
     ppd.recipients = [];
@@ -185,15 +185,15 @@ export class PicdocService {
     //             accordingTo: string
     //   }]
     // }]
-    ppd.itemsseen?.forEach(its => {
+    ppd.itemsseen?.forEach((its:any) => {
       if(its.goesTo?.length>0) {
-        its.goesTo.forEach(gt => {
+        its.goesTo.forEach((gt:any) => {
           console.log('process goesto', gt);
           ppd.recipients.push(gt);
         })
       }
     })
-    ppd.recipients = ppd.recipients.filter((r, i) => i === ppd.recipients.indexOf(r));
+    ppd.recipients = ppd.recipients.filter((r:any, i:number) => i === ppd.recipients.indexOf(r));
     return ppd;
   }
 

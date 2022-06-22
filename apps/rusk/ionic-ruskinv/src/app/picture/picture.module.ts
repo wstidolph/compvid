@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { IonicModule } from '@ionic/angular';
@@ -14,6 +14,7 @@ import { PicturePageRoutingModule } from './picture-routing.module';
 
 import { PicturePage } from './picture.page';
 
+// 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas'
 // ionic-ruskinv
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { PicturePage } from './picture.page';
     RuskdataModule,
     PicturePageRoutingModule
   ],
+  schemas: [NO_ERRORS_SCHEMA],
   declarations: [PicturePage, DomchangeDirective, ResizeObserverDirective]
 })
 export class PicturePageModule {}

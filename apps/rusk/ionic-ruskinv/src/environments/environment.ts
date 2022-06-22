@@ -10,7 +10,6 @@ export const environment = {
   production: false,
   useEmulators: true,
   firebase: firebaseConfig,
-  imagekit: imagekit,
   twicpics: twicpics
 };
 

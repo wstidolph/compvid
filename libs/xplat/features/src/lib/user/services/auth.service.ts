@@ -9,6 +9,11 @@ import { Auth, User,
 
 import { map, Observable } from 'rxjs';
 
+export interface EmailPw {
+  email: string,
+  password: string
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -18,7 +23,7 @@ export class AuthService {
   constructor(private auth: Auth) {
   }
 
-  async register({email, password}) {
+  async register({email, password}: EmailPw) {
    try{
       const user = await createUserWithEmailAndPassword(this.auth, email, password);
       return user;
@@ -28,7 +33,8 @@ export class AuthService {
    }
   }
 
-  async login({email, password}) {
+
+  async login({email, password}: EmailPw) {
     try{
       const user = await signInWithEmailAndPassword(this.auth, email, password);
       return user;

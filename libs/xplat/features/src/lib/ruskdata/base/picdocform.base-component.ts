@@ -114,8 +114,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     this.itemsseenForms.removeAt(i);
   }
 
-
-  ngOnDestroy() {
+  override  ngOnDestroy() {
     this.subs.forEach((sub) => sub.unsubscribe()); // just in case boilerplate
   }
 
@@ -138,10 +137,6 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
     this.picdocService.updatePicDoc(changes).then(
       it => console.log('update got back',it)
     )
-  }
-
-  addMarkup(markup){
-    console.log('base got markup', markup)
   }
 
 }

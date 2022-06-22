@@ -58,7 +58,7 @@ export class UserService {
       if (user) {
         this._isLoggedIn$.next(true);
         const tokens = user.getIdTokenResult().
-            then((t) => console.log('roles',t.claims.role));
+            then((t) => console.log('roles',t.claims['role']));
         const profileRef = doc(firestore, `users/${user.uid}`);
         console.log(`UserService looking up user users/${user.uid}`)
         getDoc(profileRef).then(prof => {

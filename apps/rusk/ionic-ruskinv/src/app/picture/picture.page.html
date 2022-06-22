@@ -9,6 +9,10 @@
       <ion-button color="medium"  type="button" (click)="drawOn($event)">
         <ion-icon name="brush"></ion-icon>
        </ion-button>
+       <ion-button type="button" id="current_tool" #current_tool (click)="annoToggleTool()">
+        <ion-label>RECTANGLE</ion-label>
+      </ion-button>
+
     </ion-buttons>
 
     <ion-buttons slot="end">
@@ -28,20 +32,23 @@
 <ion-content>
   <!-- the primary picture -->
 
-  <div class="piccanvas">
+  <div class="piccanvas" id="piccanvas" #piccanvas>
 
-    <TwicImg id="thePhoto"
-      (domChange)="onDomChange($event)"
+    <img id="picimg" class="annotatable" #picimg
+         [attr.data-twic-src]="twicsrc"
+          >
+
+
+    <!-- can't use TWicImg with Annotories, their add-in templates clash -->
+    <!-- <TwicImg id="twici"
+      class="annotatable"
       (resized)="onResize($event)"
       [src]="picdoc?.img_basename"
       transition="fade+zoom"
       ratio="none"
       mode="contain">
-    </TwicImg>
+    </TwicImg> -->
 
-    <!-- canvas for overlay markup -->
-    <canvas #mycanvas></canvas>
   </div>
-
-  <compvid-picdocform [pd]="picdoc" (abandonEdits)="abandonEdits()"></compvid-picdocform>
+  <compvid-picdocform class="pdform" [pd]="picdoc" (abandonEdits)="abandonEdits()"></compvid-picdocform>
 </ion-content>
