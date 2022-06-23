@@ -6,6 +6,11 @@ import { Annotorious } from '@recogito/annotorious';
 import Toolbar from '@recogito/annotorious-toolbar'
 import SelectorPack from '@recogito/annotorious-selector-pack'
 
+export enum DRAWTOOLS {
+  FREEHAND='freehand', ELLIPSE='ellipse', CIRCLE='circle',
+  POINT='point', RECT='rect', POLYGON='polygon'
+}
+
 /* provides and supports use of the Annotorius image annotator library
 * @see https://github.com/recogito/annotorious
 */
@@ -108,8 +113,8 @@ export class AnnoService {
     this._isSetup = true;
   }
     setupToolbar(containerId: string, drawtoolsList: string[]=[]) {
-      console.log('Toolbar', Toolbar);
-      SelectorPack(this._anno); // add in tools
+
+      SelectorPack(this._anno, drawtoolsList.length >0? {tools: drawtoolsList}:  undefined); // add in tools
       console.log('draw tools now', this._anno.listDrawingTools())
       Toolbar(this._anno, document.getElementById('AnnotoriousToolbarcontainer'));
     }

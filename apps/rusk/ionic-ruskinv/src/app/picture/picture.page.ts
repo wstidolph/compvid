@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { AnnoService, PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
+import { AnnoService, DRAWTOOLS, PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
 import { IonLabel, IonText } from '@ionic/angular';
 import { IonBackButtonDelegateDirective } from '@ionic/angular/directives/navigation/ion-back-button';
 import { TwicImgComponent } from '@twicpics/components/angular13';
@@ -79,6 +79,7 @@ export class PicturePage implements OnInit, AfterViewInit {
     this.isFav = this.picdocService.isFavOf(this.picdoc);
   }
 
+  enum
   // hook up annotorius to this image
   annoInit( imageSel : string | HTMLImageElement) {
     //console.log('annoInit with', imageSel);
@@ -94,7 +95,10 @@ export class PicturePage implements OnInit, AfterViewInit {
           ]
     }
     this.anno.annoSetup(annoConfig);
-    this.anno.setupToolbar('AnnotoriousToolbarcontainer');
+    const drawToolsList = ['']
+    this.anno.setupToolbar('AnnotoriousToolbarcontainer',
+    [DRAWTOOLS.FREEHAND] // always get rect and square in default
+    );
   }
 
 
