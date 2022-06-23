@@ -32,10 +32,12 @@
 <ion-content>
   <!-- the primary picture -->
 
-  <div class="piccanvas" id="piccanvas" #piccanvas>
+  <div  id="piccanvas" #piccanvas class="piccanvas">
 
-    <img id="picimg" class="annotatable" #picimg
+    <img id="picimg" #picimg
          [attr.data-twic-src]="twicsrc"
+         [attr.data-twic-transform]="twic_transform"
+
           >
 
 

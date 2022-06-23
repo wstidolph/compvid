@@ -7,7 +7,7 @@ import { IonBackButtonDelegateDirective } from '@ionic/angular/directives/naviga
 import { TwicImgComponent } from '@twicpics/components/angular13';
 import { PicdocformComponent } from 'libs/xplat/ionic/features/src/lib/ruskdata/components';
 import { fromEvent, interval, Observable, pairwise, switchMap, takeUntil, take, tap } from 'rxjs';
-import { environment } from '../../../src/environments/environment';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'compvid-picpage',
@@ -18,13 +18,12 @@ export class PicturePage implements OnInit, AfterViewInit {
 
   @ViewChild(PicdocformComponent) picform: PicdocformComponent;
 
-  @ViewChild(TwicImgComponent) twic: TwicImgComponent;
 
   @ViewChild('piccanvas') piccanvas: ElementRef<HTMLDivElement> = {} as ElementRef;
   @ViewChild('mycanvas') canvas: ElementRef<HTMLCanvasElement> = {} as ElementRef;
 
   @ViewChild('wrapper') wrapper: ElementRef<HTMLDivElement> = {} as ElementRef;
-  twicImg: HTMLImageElement
+
   img_direct: HTMLImageElement
 
   @ViewChild('picimg') picimg: ElementRef<HTMLImageElement> = {} as ElementRef;
@@ -32,7 +31,13 @@ export class PicturePage implements OnInit, AfterViewInit {
 
   picdoc: PicDoc;
   extern_img_src;
-  twicsrc;
+
+  // TwicPics service control attributes
+  twicImg: HTMLImageElement
+  twicsrc; /// selects the image to be supplied
+  twic_transform; // identifies transforms
+
+  // end TwicPics
 
   isFav = false;
   constructor(public picdocService: PicdocService,
@@ -48,10 +53,10 @@ export class PicturePage implements OnInit, AfterViewInit {
   ionViewDidEnter() {
     console.log('***ionViewDidEnter***');
 
-    this.twicImg = document.querySelector('twicimg img')  as HTMLImageElement;
-
-    this.annoInit('picimg'); // choose our img source
+    this.annoInit('piccanvas'); // choose our img source
   }
+
+
 
   private onLoadImg() {
     console.log('*** loadend event ***');
@@ -61,6 +66,9 @@ export class PicturePage implements OnInit, AfterViewInit {
     console.log('***ngOnInit***');
     this.picdoc = this.route.snapshot.data['picdoc']
     this.twicsrc="image:"+this.picdoc.img_basename;
+
+    this.twic_transform='none'; // stop shrink inetarction with annotorius
+
     console.log('ngOnInit twicsrc', this.twicsrc);
 
     this.extern_img_src = `${environment.twicpics.paths[0]}${this.picdoc.img_basename}`
@@ -70,16 +78,18 @@ export class PicturePage implements OnInit, AfterViewInit {
     this.isFav = this.picdocService.isFavOf(this.picdoc);
   }
 
+  // hook up annotorius to this image
   annoInit( imageSel : string | HTMLImageElement) {
     //console.log('annoInit with', imageSel);
-
     const annoConfig = {
       image: imageSel,
       disableEditor: false,
       drawOnSingleClick: true,
           widgets: [
             { widget: 'COMMENT' },
-            { widget: 'TAG', vocabulary: [ 'Animal', 'Building', 'Waterbody'] }
+            { widget: 'TAG', vocabulary: [
+              'Art', 'Clothing','Cookware', 'Electronics','Furniture',
+              'Jewelry', 'Houseware', 'Tool','Trinket'] }
           ]
     }
     this.anno.annoSetup(annoConfig);
@@ -103,7 +113,7 @@ export class PicturePage implements OnInit, AfterViewInit {
     this.picform.addItemSeen(evt);
   }
   clickFav() {
-    console.log('drawing markup');
+    console.log('pd is', this.picdoc)
     this.isFav = !this.isFav;
     this.picdocService.setFavState(this.picdoc, this.isFav);
   }

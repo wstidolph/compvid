@@ -5,29 +5,18 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
   --color: #0f0
 }
 
-/* paints inside the piccanvas, is the  TxicImg component */
-twicimg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 3px solid rgb(251, 255, 0);
-}
-
 #picimg {
-  display: block;
-  width: 100%;
-  object-fit: contain;
-  border: 3px solid blue;
+ outline: 5px dotted green;
 }
 
-.piccanvas {
+#piccanvas {
   display: block;
   position: relative; // so contained canvas can be abs positioned
 
-  width: 100%;
   height: 50%; // will set by media query and drives everything
-  border: 1px solid rgb(118, 14, 14);
+  outline: 5px dotted cyan;
 }
+
 
 .pdform {
   vertical-align: top;
@@ -44,6 +33,7 @@ twicimg {
      display: inline-block;
      width: 50%;
      height: 100%;
+     border: solid 3px red;
    }
   .pdform {
     display: inline-block;
