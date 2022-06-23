@@ -9,6 +9,7 @@ import { PicdocformComponent } from 'libs/xplat/ionic/features/src/lib/ruskdata/
 import { fromEvent, interval, Observable, pairwise, switchMap, takeUntil, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment'
 
+
 @Component({
   selector: 'compvid-picpage',
   templateUrl: './picture.page.html',
@@ -53,7 +54,7 @@ export class PicturePage implements OnInit, AfterViewInit {
   ionViewDidEnter() {
     console.log('***ionViewDidEnter***');
 
-    this.annoInit('piccanvas'); // choose our img source
+    this.annoInit('picimg'); // choose our img source
   }
 
 
@@ -93,7 +94,9 @@ export class PicturePage implements OnInit, AfterViewInit {
           ]
     }
     this.anno.annoSetup(annoConfig);
+    this.anno.setupToolbar('AnnotoriousToolbarcontainer');
   }
+
 
   annoToggleTool() {
     console.log('current_tool', this.current_tool);

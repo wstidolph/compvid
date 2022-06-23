@@ -2,19 +2,8 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="piclist"></ion-back-button>
-      <ion-title size="small">{{picdoc.name ?? picdoc.img_basename}} </ion-title>
-      <ion-button color="medium" expand="outline" type="button" (click)="addItem($event)">
-       <ion-icon name="eye"></ion-icon> +Item
-      </ion-button>
-      <ion-button color="medium"  type="button" (click)="drawOn($event)">
-        <ion-icon name="brush"></ion-icon>
-       </ion-button>
-       <ion-button type="button" id="current_tool" #current_tool (click)="annoToggleTool()">
-        <ion-label>RECTANGLE</ion-label>
-      </ion-button>
-
     </ion-buttons>
-
+    <ion-item id="AnnotoriousToolbarcontainer"></ion-item>
     <ion-buttons slot="end">
       <ion-button  type="button" shape="round"
           color="secondary" (click)="clickFav()">
@@ -32,6 +21,7 @@
 <ion-content>
   <!-- the primary picture -->
 
+  <!-- wrapper div 'piccanvas' for when we want toolbars -->
   <div  id="piccanvas" #piccanvas class="piccanvas">
 
     <img id="picimg" #picimg

@@ -6,7 +6,7 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
 }
 
 #picimg {
- outline: 5px dotted green;
+ // outline: 5px dotted green;
 }
 
 #piccanvas {
@@ -14,7 +14,7 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
   position: relative; // so contained canvas can be abs positioned
 
   height: 50%; // will set by media query and drives everything
-  outline: 5px dotted cyan;
+  // outline: 5px dotted cyan;
 }
 
 
@@ -33,7 +33,7 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
      display: inline-block;
      width: 50%;
      height: 100%;
-     border: solid 3px red;
+     // border: solid 3px red;
    }
   .pdform {
     display: inline-block;

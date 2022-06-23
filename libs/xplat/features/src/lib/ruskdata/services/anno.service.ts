@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Annotorious } from '@recogito/annotorious';
 import { BehaviorSubject } from 'rxjs';
+
+// using dummy module decl in ./annotorious.d.ts
+import { Annotorious } from '@recogito/annotorious';
+import Toolbar from '@recogito/annotorious-toolbar'
+import SelectorPack from '@recogito/annotorious-selector-pack'
 
 /* provides and supports use of the Annotorius image annotator library
 * @see https://github.com/recogito/annotorious
@@ -42,7 +46,7 @@ export class AnnoService {
   // TODO set up an interface type for Annotorious config
   annoSetup(config: Record<string, unknown> = this.defaultConfig) {
 
-    // configure and instantiate
+      // configure and instantiate
     console.log('AnnoSvc inits with ', config);
 
     this._anno = new Annotorious(config);
@@ -103,6 +107,12 @@ export class AnnoService {
 
     this._isSetup = true;
   }
+    setupToolbar(containerId: string, drawtoolsList: string[]=[]) {
+      console.log('Toolbar', Toolbar);
+      SelectorPack(this._anno); // add in tools
+      console.log('draw tools now', this._anno.listDrawingTools())
+      Toolbar(this._anno, document.getElementById('AnnotoriousToolbarcontainer'));
+    }
 
     setAuthorInfo({id, displayName}
       = {id: 'http://www.example.com/auser', displayName: 'AUser'})
