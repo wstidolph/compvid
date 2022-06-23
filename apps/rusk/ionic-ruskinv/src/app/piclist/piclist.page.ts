@@ -1,7 +1,6 @@
 import { AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { PicDoc, PicdocService } from '@compvid/xplat/features';
-import { GalleryItem, ImageItem } from 'ng-gallery';
 import { environment } from '../../environments/environment'
 
 import { take, tap } from 'rxjs/operators';
