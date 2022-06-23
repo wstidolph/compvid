@@ -140,30 +140,6 @@
           "src/**/*.html"
         ]
       }
-    },
-    "ionic-cordova-build": {
-      "executor": "@ionic/angular-toolkit:cordova-build",
-      "options": {
-        "browserTarget": "ionic-ruskinv:build"
-      },
-      "configurations": {
-        "production": {
-          "browserTarget": "ionic-ruskinv:build:production"
-        }
-      }
-    },
-    "ionic-cordova-serve": {
-      "executor": "@ionic/angular-toolkit:cordova-serve",
-      "options": {
-        "cordovaBuildTarget": "ionic-ruskinv:ionic-cordova-build",
-        "devServerTarget": "ionic-ruskinv:serve"
-      },
-      "configurations": {
-        "production": {
-          "cordovaBuildTarget": "ionic-ruskinv:ionic-cordova-build:production",
-          "devServerTarget": "ionic-ruskinv:serve:production"
-        }
-      }
     }
   }
 }

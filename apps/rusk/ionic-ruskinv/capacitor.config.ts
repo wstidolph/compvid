@@ -1,11 +1,10 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ionicangular',
+  appId: 'com.sse.ruskdata.ionicinv',
+  appName: 'PhotItems',
   webDir: 'www',
   bundledWebRuntime: false
 };
 
 export default config;
-
