@@ -114,6 +114,7 @@
     "@nrwl/devkit": "14.3.6",
     "@nstudio/ionic-angular": "^13.4.3",
     "@recogito/annotorious": "^2.7.6",
+    "@recogito/annotorious-better-polygon": "^0.2.0",
     "@recogito/annotorious-selector-pack": "^0.5.3",
     "@recogito/annotorious-toolbar": "^1.1.0",
     "@recogito/firebase-storage": "^0.2.0",
