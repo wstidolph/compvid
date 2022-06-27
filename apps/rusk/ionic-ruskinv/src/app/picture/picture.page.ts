@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener, ViewEncapsulation } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { AnnoService, DRAWTOOLS, PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
@@ -14,8 +14,9 @@ import { environment } from '../../environments/environment'
   selector: 'compvid-picpage',
   templateUrl: './picture.page.html',
   styleUrls: ['./picture.page.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class PicturePage implements OnInit, AfterViewInit {
+export class PicturePage implements OnInit {
 
   @ViewChild(PicdocformComponent) picform: PicdocformComponent;
 
@@ -45,16 +46,12 @@ export class PicturePage implements OnInit, AfterViewInit {
     public route: ActivatedRoute,
     private anno: AnnoService) { }
 
-  ngAfterViewInit(): void {
-    console.log('***ngAfterViewInit***');
-    this.logImg('ngAfterViewInit');
-  }
 
   // seems like we need ionViewDidEnter for img to be loaded
   ionViewDidEnter() {
-    console.log('***ionViewDidEnter***');
+    console.log('***PicturePage ionViewDidEnter***');
 
-    this.annoInit('picimg'); // choose our img source
+    this.annoInit('piccanvas'); // choose annotatable img source
   }
 
 
@@ -64,22 +61,22 @@ export class PicturePage implements OnInit, AfterViewInit {
     this.logImg('onLoadImg')
   }
   ngOnInit() { // looking for picdoc
-    console.log('***ngOnInit***');
+    console.log('***PicturePage ngOnInit***');
     this.picdoc = this.route.snapshot.data['picdoc']
+    console.log('PP loading ', this.picdoc.id);
     this.twicsrc="image:"+this.picdoc.img_basename;
 
-    this.twic_transform='none'; // stop shrink inetarction with annotorius
+    this.twic_transform='none'; // stop shrink interaction with annotorius
 
     console.log('ngOnInit twicsrc', this.twicsrc);
 
     this.extern_img_src = `${environment.twicpics.paths[0]}${this.picdoc.img_basename}`
     console.log('ngOnInit picdoc', this.picdoc);
     console.log('ngOnInit extern_img_src', this.extern_img_src);
-;
+
     this.isFav = this.picdocService.isFavOf(this.picdoc);
   }
 
-  enum
   // hook up annotorius to this image
   annoInit( imageSel : string | HTMLImageElement) {
     //console.log('annoInit with', imageSel);
@@ -87,39 +84,41 @@ export class PicturePage implements OnInit, AfterViewInit {
       image: imageSel,
       disableEditor: false,
       drawOnSingleClick: true,
-          widgets: [
-            { widget: 'COMMENT' },
-            { widget: 'TAG', vocabulary: [
-              'Art', 'Clothing','Cookware', 'Electronics','Furniture',
-              'Jewelry', 'Houseware', 'Tool','Trinket'] }
-          ]
+      widgets: [
+        { widget: 'COMMENT' },
+        { widget: 'TAG', vocabulary: [
+           'Art', 'Clothing','Cookware', 'Electronics','Furniture',
+           'Jewelry', 'Houseware', 'Tool','Trinket'] }
+      ]
+      // TODO implement
+      // serverTime: Timestamp.
     }
     this.anno.annoSetup(annoConfig);
+
     const drawToolsList = ['']
     this.anno.setupToolbar('AnnotoriousToolbarcontainer',
     [DRAWTOOLS.FREEHAND] // always get rect and square in default
     );
-  }
+    this.anno.setDrawingTool(DRAWTOOLS.POLYGON);
 
-
-  annoToggleTool() {
-    console.log('current_tool', this.current_tool);
-    if (this.current_tool.nativeElement.innerHTML == 'RECTANGLE') {
-      this.current_tool.nativeElement.innerHTML = 'POLYGON';
-      this.anno.setDrawingTool('polygon');
-    } else {
-        this.current_tool.nativeElement.innerHTML = 'RECTANGLE';
-        this.anno.setDrawingTool('rect');
-    }
+    this.anno.setAnnotations(this.picdoc.annotations);
+    console.log('PP annoInit annotations are', this.anno.getAnnotations());
   }
 
   abandonEdits(){
     console.log('ABANDON SHIP');
   }
-  addItem(evt) {
+  addItem(evt) { // user clicked addItem button so bfring up blank new line in form
     this.picform.addItemSeen(evt);
   }
+
+
   clickFav() {
+   const tempAnno = this.anno.getAnnotations();
+   console.log('clickFav getAnno', tempAnno);
+    this.anno.setAnnotations(tempAnno);
+    console.log('PP clickFav annotations after set are', this.anno.getAnnotations());
+
     console.log('pd is', this.picdoc)
     this.isFav = !this.isFav;
     this.picdocService.setFavState(this.picdoc, this.isFav);
@@ -145,13 +144,15 @@ export class PicturePage implements OnInit, AfterViewInit {
     const img = document.querySelector('img')  as HTMLImageElement;
     if(this.imgSane(img) ){
       console.log('onResize sees sane img so calling setCanvas (skipping)');
-      // this.setCanvas();
-    } else {
+          } else {
       console.log('onResize skipping setCanvas call')
     }
   }
 
-
+  // send to the child component
+  setItemsSeenAccordionState(open: boolean) {
+    this.picform.showItemsAccordion(true);
+  }
 
   // UTILITY
   private imgSane(img: HTMLImageElement): boolean {

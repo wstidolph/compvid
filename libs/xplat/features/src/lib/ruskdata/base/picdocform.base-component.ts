@@ -2,16 +2,21 @@ import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 
 import { BaseComponent } from '@compvid/xplat/core';
-import { Observable, Subscription } from 'rxjs';
+
+import { Observable } from 'rxjs';
 import { PicDoc } from '../models';
-// import { Subscription } from 'rxjs';
-import { PicdocService, PlaceOptionsService } from '../services';
+import { AnnoService, PicdocService, PlaceOptionsService } from '../services';
 import { GoesToService, GoesToOption } from '../services/goesto.service';
 
+/**
+ * Does data management for the underlying PicDoc form; it's up to
+ * subclassed components to connect to data sources and to use the
+ * data to drive templates
+ */
 @Directive({
   selector: 'compvid-base-dummy'
 })
-export class PicdocformBaseComponent extends BaseComponent implements OnInit, OnDestroy  {
+export class PicdocformBaseComponent extends BaseComponent implements OnInit  {
   public text = 'Picdocform';
 
   @Input()
@@ -21,23 +26,25 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
 
   isFav = false;
 
-  subs: Subscription[] = [];
   gtoptions$!: Observable<GoesToOption[]>;
 
   constructor(public picdocService: PicdocService,
               public poService: PlaceOptionsService,
               public goesToService: GoesToService,
-              public fb: FormBuilder ) {
+              public fb: FormBuilder,
+              public annoService: AnnoService) {
       super();
+
   }
 
   ngOnInit(): void {
     this.gtoptions$ = this.goesToService.getGoesToAsOptions();
-
     this.setUpForm();
   }
 
+  // create the empty form data objects
   setUpForm() {
+    console.log('PDF Base setupForm');
     this.pdForm = this.fb.group(
           {
             name: [this.pd.name],
@@ -60,12 +67,19 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   //   return this.pdForm.get('favOf') as string[]
   // }
 
+  // if the annotation is about an item already in the PicDoc
+  // then return the matching itemseen entry
+
+  findMatchingItem(annotationid: string){
+
+  }
+
   putItemsseenToForm(its:any){
     const itemseen = this.fb.group({
       desc: [its.desc],
       addedOn: [its.addedOn],
       category: [its.category],
-      whereInPic: [its.whereInPic],
+      annotation: [its.annotation],
       goesTo: [],
     })
 
@@ -85,7 +99,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
       addedOn: [''],
       category: [''],
       goesTo: [],
-      whereInPic: [''],
+      annotation: [''],
     })
 
     // this.itemsseenForms.push(itemseen)
@@ -103,19 +117,15 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit, On
   }
 
   private pdFormReverted(): boolean {
-
     return false;
   }
+
   clearGoesTo(idx: number) {
     this.itemsseenForms.at(idx).patchValue({goesTo:''})
   }
 
   deleteItemSeen(i: number) {
     this.itemsseenForms.removeAt(i);
-  }
-
-  override  ngOnDestroy() {
-    this.subs.forEach((sub) => sub.unsubscribe()); // just in case boilerplate
   }
 
   closeForm() {

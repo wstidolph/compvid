@@ -23,6 +23,7 @@ export interface PicDoc {
   favOf?:string[]; // uid of those who have fav'ed this pic
   recipients: string[]; // copied from itemsseen.goesTo.to field
                         // for "what pics have something goe to Bob?"
+  annotations?:  string[]; // each string in W3C JSON-LD annotations format
   itemsseen?: [{
     // id: number,
     isDeleted: boolean, // clear this itemSeen
@@ -30,6 +31,7 @@ export interface PicDoc {
     addedOn: Timestamp,
     twicFocus?: string,
     category?: string,
+    annoID?: string, // ID into annotations
     goesTo?: [{to: string,
               accordingTo: string
     }]

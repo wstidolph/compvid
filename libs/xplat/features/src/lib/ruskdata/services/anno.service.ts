@@ -196,6 +196,20 @@ export class AnnoService {
       })
     }
 
+    setAnnotations(annotations: any) {
+      if(this._isSetup) {
+        console.log('AS setAnnotations', annotations);
+        this._anno.setAnnotations(annotations)
+      } else {
+        console.warn('AS setAnnotation not setUp so skip')
+      }
+    }
+    getAnnotations() {
+      const annos = this._anno.getAnnotations();
+
+      return annos;
+    }
+
     deleteAnnotation(annoId: string) {
       this._anno.removeAnnotation(annoId);
     }

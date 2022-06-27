@@ -1,10 +1,9 @@
-import { AfterContentChecked, Component, EventEmitter, Output, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { GoesToService, PicdocService, PlaceOptionsService } from '@compvid/xplat/features';
-import { PicdocformBaseComponent } from '@compvid/xplat/features';
+import { AfterContentChecked, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AnnoService, AEB, GoesToService, GoesToOption, PicdocService, PlaceOptionsService, PicDoc } from '@compvid/xplat/features';
 import { IonAccordionGroup, IonRouterOutlet, ModalController } from '@ionic/angular';
+import { Observable, Subscription, tap } from 'rxjs';
 import { PdclosemodalComponent } from '../pdclosemodal/pdclosemodal.component'
-
 
 // ionic
 @Component({
@@ -12,38 +11,180 @@ import { PdclosemodalComponent } from '../pdclosemodal/pdclosemodal.component'
   templateUrl: 'picdocform.component.html',
   styles: ['#ishheader::part(native) { color:red }']
 })
-export class PicdocformComponent extends PicdocformBaseComponent /* implements AfterContentChecked */ {
+export class PicdocformComponent implements OnInit, OnDestroy /* implements AfterContentChecked */ {
+
+  @Input()
+  pd!: PicDoc
 
   @ViewChild(IonAccordionGroup) accordionGroup!: IonAccordionGroup;
 
   @Output() abandonEdits = new EventEmitter();
-  dataReturned: any;
+  dataReturnedFromModal: any;
+  gtoptions$!: Observable<GoesToOption[]>;
+
+  pdForm!: FormGroup;
+
+  isFav = false;
 
   text = "ionic Picdocform";
+
+  anno$: Observable<any>;
+  subs: Subscription[] = [];
+
   constructor(
 
     public picDocService: PicdocService,
     public placeOptionsService: PlaceOptionsService,
     public goesToService: GoesToService,
+    public annoService: AnnoService,
     public fb: FormBuilder,
     public modalController: ModalController,
-    private routerOutlet: IonRouterOutlet) {
-    super(picDocService,
-       placeOptionsService,
-         goesToService,
-        fb);
+    private routerOutlet: IonRouterOutlet,
+    ) {
+    // super(picDocService,
+    //    placeOptionsService,
+    //      goesToService,
+    //     fb,
+    //     annoService);
+    this.anno$ = this.annoService._annoEvents$;
   }
 
-  addItemSeen(evt: { stopPropagation: () => void; }) {
-    evt.stopPropagation();
-    super.addItemSeen(evt); // add the form entry event
-                            // base doesn't care about the data
-    this.accordionGroup.value='itemsseen'; // keep form open for typing
+  ngOnInit() {
+
+    this.gtoptions$ = this.goesToService.getGoesToAsOptions();
+    this.setUpForm();
+
+    this.subs.push(
+      this.anno$.pipe(
+        tap(ae => this.logAE(ae))
+      ).subscribe(ae => this.aeHandler(ae))
+    ) // end of pushed Subscription
   }
 
-  removeItemSeen(idx: number) {
-    super.removeItemSeen(idx);
-    // reposition here?
+  ngOnDestroy() {
+    this.subs.forEach((sub) => sub.unsubscribe()); // just in case boilerplate
+  }
+
+  // create the empty form data objects
+  setUpForm() {
+    console.log('PDF Base setupForm');
+    this.pdForm = this.fb.group(
+          {
+            name: [this.pd.name],
+            desc: [this.pd.desc],
+            loc: [this.pd.loc],
+            favOf: [this.pd.favOf],
+            itemsseen: this.fb.array([])
+          }
+        )
+
+        //sort the array by addedOn TODO
+        this.pd.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
+  }
+
+  resetForm() {
+    this.setUpForm();
+  }
+
+  // get favOf(): string[] {
+  //   return this.pdForm.get('favOf') as string[]
+  // }
+
+  // if the annotation is about an item already in the PicDoc
+  // then return the matching itemseen entry
+
+  findMatchingItem(annotationid: string){
+
+  }
+
+  putItemsseenToForm(its:any){
+    const itemseen = this.fb.group({
+      desc: [its.desc],
+      addedOn: [its.addedOn],
+      category: [its.category],
+      annoID: [its.annoID],
+      goesTo: [],
+    })
+
+    this.itemsseenForms.insert(0,itemseen);
+  }
+
+
+  get itemsseenForms() {
+    return this.pdForm.get('itemsseen') as FormArray
+  }
+
+  // javascript event carried because children need it, and so base has to accept it
+  addItemSeen(evt:any) {
+    // console.log('enter addItemSeen, form:', this.pdForm)
+    const itemseen = this.fb.group({
+      desc: [''],
+      addedOn: [''],
+      category: [''],
+      goesTo: [],
+      annoID: [''],
+    })
+
+    // this.itemsseenForms.push(itemseen)
+    this.itemsseenForms.insert(0,itemseen);
+    this.itemsseenForms.markAsDirty();
+    this.showItemsAccordion(true); // keep form open for typing
+  }
+
+  removeItemSeen(idx:number) {
+    this.itemsseenForms.removeAt(idx);
+    this.itemsseenForms.markAsDirty();
+  }
+
+  deleteItemSeen(i: number) {
+    const annoId = this.annoIdFromItemsRow(i);
+    this.itemsseenForms.removeAt(i);
+  }
+
+  toggleFav() {
+    this.isFav = !this.isFav;
+  }
+
+  private pdFormReverted(): boolean {
+    return false;
+  }
+
+  clearGoesTo(idx: number) {
+    this.itemsseenForms.at(idx).patchValue({goesTo:''})
+  }
+
+
+
+  closeForm() {
+    // confirm closing if form is dirty
+  }
+
+  formSubmit() {
+    const val = this.pdForm.value;
+    const annoArray: string[] = [];
+    const annotations = this.annoService.getAnnotations();
+    console.log('PDForm submit annotations', annotations );
+
+    const changes = { // 1st attempt, but has prototypes and unchanged fields, too
+      id: this.pd.id,
+      annotations: annotations,
+      desc: val.desc,
+      loc: val.loc,
+      itemsseen: this.itemsseenForms.value
+
+    }
+    console.log('PDForm calculated change object', changes);
+    this.picDocService.updatePicDoc(changes).then(
+      it => console.log('PDForm update got back',it)
+    )
+  }
+
+  showItemsAccordion(shouldShow: boolean) {
+    if (shouldShow) {
+      this.accordionGroup.value='itemsseen'; // keep form open for typing
+    } else {
+      this.accordionGroup.value=''; // close form
+    }
   }
 
   async openModal() {
@@ -59,7 +200,7 @@ export class PicdocformComponent extends PicdocformBaseComponent /* implements A
 
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
-        this.dataReturned = dataReturned.data;
+        this.dataReturnedFromModal = dataReturned.data;
         console.log('Modal Sent Data :', dataReturned);
       }
       if(dataReturned.data == 'discard'){
@@ -68,6 +209,112 @@ export class PicdocformComponent extends PicdocformBaseComponent /* implements A
     });
 
     return await modal.present();
+  }
+
+
+
+  /*  Annotation event handling
+  */
+
+    // On Annotation Events (ae) we update the form to just to display and denormalize data.
+  // The Annotation itself is stored in the itemseen block so it reaches the backend
+  // and its in-picture representation/manipulation is done by the Annotorius library
+
+  aeHandler(ae: any){
+
+    switch (ae.type) {
+      case 'createAnnotation':
+        this.addItemFromAnnotationEvent(ae)
+      break;
+
+      case 'updateAnnotation':
+        this.updateAnnotation(ae);
+      break;
+
+      case 'selectAnnotation':
+        this.highlightItemSeenRow(ae.id, true);
+      break;
+
+      case 'cancelSelected':
+        this.highlightItemSeenRow(ae.id, false);
+      break;
+
+      case 'deleteAnnotation':
+        this.deleteAnnotationFromItemSeen(ae.id);
+      break;
+
+      case 'mouseEnterAnnotation':
+      case 'mouseLeaveAnnotation':
+      case 'clickAnnotation':
+        this.pulseItemSeen(ae.id);
+      break;
+
+      default:
+        console.warn('unknown annotation', ae);
+
+    }
+
+  }
+  logAE(ae: any){
+    console.log('PF Ionic gets ae', ae)
+  }
+
+  highlightItemSeenRow(annotationId: string, highlight: boolean){
+
+  }
+  // fires when select in text area or hit buttons
+  enterRow(idx: number) {
+    const id = this.annoIdFromItemsRow(idx);
+    console.log('enterRow ', idx, ' => id ', id)
+  }
+
+  annoIdFromItemsRow(idx: number) : string {
+    const itemseen = this.itemsseenForms.at(idx) as FormGroup;
+    const rowAnno = itemseen.controls['annoID']
+    console.log('annoIdFromItemsRow', rowAnno)
+    return rowAnno.value
+  }
+
+  // find the itemseen row who annotation is the given ID
+  // future - it might be that a row has *multiple* annotation?
+  rowIdxFromAnnodId(aeid: string): number {
+    const numRows = this.itemsseenForms.length;
+    for(let idx=0; idx<numRows; idx += 1) {
+      if(this.annoIdFromItemsRow(idx) === aeid){
+        return idx;
+      }
+    }
+    // if we get here, *no* row has the ID
+    console.warn('PDForm rowIdxFromAnnoId fail for aeid', aeid);
+    return -1;
+  }
+  pulseItemSeen(annotationId: string) {
+
+  }
+  // if you start from an annotation then there isn't an existing item
+  addItemFromAnnotationEvent(ae: any) {
+    const anno = ae.payload.annotation
+    // ae can have 1 or multiple body,
+    // depends on what user fills out
+    console.log('addItemFromAnnotationEvent anno', anno)
+    const {comments, tags} = this.annoService.extractCommentsAndTags(ae);
+    console.log('comments', comments, 'tags', tags)
+    const annoForForm = {
+      desc: comments.join(' // '),
+      category: tags.join(' // '),
+      annoID: anno['id']
+    };
+    this.putItemsseenToForm(annoForForm );
+    console.log('addItemFromAnnotationEvent sending', annoForForm);
+    this.itemsseenForms.markAsDirty();
+    this.showItemsAccordion(true);
+  }
+
+  updateAnnotation(ae) {
+
+  }
+  deleteAnnotationFromItemSeen(aeId: string) {
+
   }
 
 }

@@ -51,7 +51,9 @@
       </ion-item>
       <ion-list slot="content">
         <ion-grid>
-        <ion-row  *ngFor="let item of itemsseenForms.controls; let i=index" [formGroupName]="i">
+        <ion-row  *ngFor="let item of itemsseenForms.controls; let i=index"
+          [formGroupName]="i"
+          (mouseenter)="enterRow(i)">
           <ion-col size="2">
             <ion-button type="button"
               color="danger"
@@ -60,7 +62,7 @@
             </ion-button>
           </ion-col>
           <ion-col size="6">
-            <ion-textarea placeholder="describe item" formControlName="desc" class="ion-col"></ion-textarea></ion-col>
+            <ion-textarea placeholder="describe it" formControlName="desc" class="ion-col"></ion-textarea></ion-col>
           <ion-col size="4">
             <ion-select multiple formControlName="goesTo" cancelText="CLEAR" (ionCancel)="clearGoesTo(i)">
               <ion-select-option *ngFor="let opt of gtoptions$ | async"

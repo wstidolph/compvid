@@ -22,14 +22,18 @@
   <!-- the primary picture -->
 
   <!-- wrapper div 'piccanvas' for when we want toolbars -->
-  <div  id="piccanvas" #piccanvas class="piccanvas">
+  <div  id="piccanvas" #piccanvas>
 
     <img id="picimg" #picimg
          [attr.data-twic-src]="twicsrc"
          [attr.data-twic-transform]="twic_transform"
 
-          >
-
+    >
+    <!-- direct access to extern_img_src still has overflow
+          so the issue is annatorious -->
+    <!-- <img id="picimg" #picimg
+      [src]="extern_img_src"
+    > -->
 
     <!-- can't use TWicImg with Annotories, their add-in templates clash -->
     <!-- <TwicImg id="twici"

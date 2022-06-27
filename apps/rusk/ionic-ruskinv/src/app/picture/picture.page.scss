@@ -5,10 +5,6 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
   --color: #0f0
 }
 
-#picimg {
- // outline: 5px dotted green;
-}
-
 #piccanvas {
   display: block;
   position: relative; // so contained canvas can be abs positioned
@@ -16,7 +12,6 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
   height: 50%; // will set by media query and drives everything
   // outline: 5px dotted cyan;
 }
-
 
 .pdform {
   vertical-align: top;
