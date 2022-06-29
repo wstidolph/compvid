@@ -134,8 +134,8 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   removeItemSeen(idx:number) {
     const row =  this.itemsseenForms.at(idx);
     console.log('removeItemSeen idx row', idx, row)
-    if(row['annoID']){
-      this.annoService.deleteAnnotation(row['annoID']);
+    if(row.get('annoID')){
+      this.annoService.deleteAnnotation(row.get('annoID')?.value);
     }
     this.itemsseenForms.removeAt(idx);
     this.itemsseenForms.markAsDirty();
