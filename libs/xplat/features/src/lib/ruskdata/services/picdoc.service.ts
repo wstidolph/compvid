@@ -102,7 +102,9 @@ export class PicdocService {
             // tap(r => console.log('getPicDocByImgBasename ', r)),
             map(results => {
               // const picdocs = convertSnaps<PicDoc>(results);
-              // console.log('seeking basename', imgBasename, 'found', results)
+              if(results.length >1) {
+                console.warn(`PicDocService getPicDocByImgBasename multiple results for ${imgBasename}`, results);
+              }
               return results.length >0 ? results[0] : null
           })
         )
