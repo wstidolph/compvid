@@ -34,8 +34,9 @@ export class AnnoService {
       widgets: [
         { widget: 'COMMENT' },
         { widget: 'TAG', vocabulary: [
-          'Art', 'Clothing','Cookware', 'Electronics','Furniture',
-          'Jewelry', 'Houseware', 'Tool','Trinket'] }
+          'Art', 'Book', 'Clothing','Cookware', 'Craftware',
+          'Electronics','Furniture','Jewelry', 'Housewares',
+          'Person', 'Pet','Tool','Trinket'] }
       ]
   }
 
@@ -188,7 +189,9 @@ export class AnnoService {
 
     loadAnnotations(src = 'assets/annotations.w3c.json') {
       if(this._isSetup){
-        this._anno.loadAnnotations(src);
+        this._anno.loadAnnotations(src).then(annotations => {
+          console.log('AS loadAnnotations call returns', annotations)
+        });
       }
       this._annoEvents$.next({
         type: 'annotationsLoaded',
@@ -199,6 +202,7 @@ export class AnnoService {
     setAnnotations(annotations: any) {
       if(this._isSetup) {
         console.log('AS setAnnotations', annotations);
+        //const annoArr = annotations.map(a => new WebAnnotation(a))
         this._anno.setAnnotations(annotations)
       } else {
         console.warn('AS setAnnotation not setUp so skip')

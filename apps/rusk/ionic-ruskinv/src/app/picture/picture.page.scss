@@ -5,7 +5,7 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
   --color: #0f0
 }
 
-#piccanvas {
+.piccanvas {
   display: block;
   position: relative; // so contained canvas can be abs positioned
 
@@ -20,20 +20,21 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
   height: 50%;
 }
 
-@media (orientation: landscape) {
-  .piccanvas {
-      /* make this inline-block so we can set width, height but
-    still other elements (the form) on the same line, for
-    horizontal mode */
-     display: inline-block;
-     width: 50%;
-     height: 100%;
-     // border: solid 3px red;
-   }
-  .pdform {
-    display: inline-block;
-    vertical-align: top;
-    width: 50%;
-  }
+// @media screen and (orientation:landscape) {
+// @media screen and (max-aspect-ratio:1/1) {
+//   .piccanvas {
+//       /* make this inline-block so we can set width, height but
+//     still other elements (the form) on the same line, for
+//     horizontal mode */
+//      display: inline-block;
+//      width: 50%;
+//      height: 100%;
+//      outline: solid 3px red;
+//    }
+//   .pdform {
+//     display: inline-block;
+//     vertical-align: top;
+//     width: 50%;
+//   }
 
-}
+// }

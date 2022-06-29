@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener, ViewEncapsulation, Renderer2 } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { AnnoService, DRAWTOOLS, PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
@@ -44,6 +44,7 @@ export class PicturePage implements OnInit {
   isFav = false;
   constructor(public picdocService: PicdocService,
     public route: ActivatedRoute,
+    public renderer2: Renderer2,
     private anno: AnnoService) { }
 
 
@@ -51,7 +52,7 @@ export class PicturePage implements OnInit {
   ionViewDidEnter() {
     console.log('***PicturePage ionViewDidEnter***');
 
-    this.annoInit('piccanvas'); // choose annotatable img source
+    this.annoInit('picimg'); // choose annotatable img source
   }
 
 
@@ -62,6 +63,8 @@ export class PicturePage implements OnInit {
   }
   ngOnInit() { // looking for picdoc
     console.log('***PicturePage ngOnInit***');
+
+
     this.picdoc = this.route.snapshot.data['picdoc']
     console.log('PP loading ', this.picdoc.id);
     this.twicsrc="image:"+this.picdoc.img_basename;
@@ -77,8 +80,17 @@ export class PicturePage implements OnInit {
     this.isFav = this.picdocService.isFavOf(this.picdoc);
   }
 
+  logLoad() {
+    const picel = this.picimg.nativeElement
+    console.log('annoInit picel', picel);
+    this.renderer2.listen(picel,
+      "load",
+      () => console.log("load!")
+   );
+  }
   // hook up annotorius to this image
   annoInit( imageSel : string | HTMLImageElement) {
+
     //console.log('annoInit with', imageSel);
     const annoConfig = {
       image: imageSel,
@@ -112,14 +124,7 @@ export class PicturePage implements OnInit {
     this.picform.addItemSeen(evt);
   }
 
-
   clickFav() {
-   const tempAnno = this.anno.getAnnotations();
-   console.log('clickFav getAnno', tempAnno);
-    this.anno.setAnnotations(tempAnno);
-    console.log('PP clickFav annotations after set are', this.anno.getAnnotations());
-
-    console.log('pd is', this.picdoc)
     this.isFav = !this.isFav;
     this.picdocService.setFavState(this.picdoc, this.isFav);
   }
@@ -195,4 +200,5 @@ export class PicturePage implements OnInit {
     }
     this.logSizes('twicimg', this.twicImg);
   }
+
 }

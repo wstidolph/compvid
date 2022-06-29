@@ -70,16 +70,16 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     console.log('PDF Base setupForm');
     this.pdForm = this.fb.group(
           {
-            name: [this.pd.name],
-            desc: [this.pd.desc],
-            loc: [this.pd.loc],
-            favOf: [this.pd.favOf],
+            name: [this.pd?.name],
+            desc: [this.pd?.desc],
+            loc: [this.pd?.loc],
+            favOf: [this.pd?.favOf],
             itemsseen: this.fb.array([])
           }
         )
 
         //sort the array by addedOn TODO
-        this.pd.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
+        this.pd?.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
   }
 
   resetForm() {
@@ -132,13 +132,21 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   }
 
   removeItemSeen(idx:number) {
+    const row =  this.itemsseenForms.at(idx);
+    console.log('removeItemSeen idx row', idx, row)
+    if(row['annoID']){
+      this.annoService.deleteAnnotation(row['annoID']);
+    }
     this.itemsseenForms.removeAt(idx);
     this.itemsseenForms.markAsDirty();
   }
 
   deleteItemSeen(i: number) {
     const annoId = this.annoIdFromItemsRow(i);
+    console.log('deleteItemSeen annoId', annoId);
+    this.annoService.deleteAnnotation(annoId);
     this.itemsseenForms.removeAt(i);
+    this.itemsseenForms.markAsDirty();
   }
 
   toggleFav() {
@@ -211,8 +219,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     return await modal.present();
   }
 
-
-
   /*  Annotation event handling
   */
 
@@ -232,21 +238,25 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
       break;
 
       case 'selectAnnotation':
-        this.highlightItemSeenRow(ae.id, true);
+        this.highlightItemSeenRow(ae.payload.id, true);
       break;
 
       case 'cancelSelected':
-        this.highlightItemSeenRow(ae.id, false);
+        this.highlightItemSeenRow(ae.payload.id, false);
       break;
 
       case 'deleteAnnotation':
-        this.deleteAnnotationFromItemSeen(ae.id);
+        this.deleteAnnotationFromItemSeen(ae.payload.id);
       break;
 
       case 'mouseEnterAnnotation':
       case 'mouseLeaveAnnotation':
       case 'clickAnnotation':
         this.pulseItemSeen(ae.id);
+      break;
+
+      case 'annotationsLoaded':
+        console.log('annotations loaded from', ae.payload['src']);
       break;
 
       default:
@@ -275,9 +285,17 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     return rowAnno.value
   }
 
+  itemseenFromAnnoId() {
+
+  }
+
   // find the itemseen row who annotation is the given ID
   // future - it might be that a row has *multiple* annotation?
   rowIdxFromAnnodId(aeid: string): number {
+    if(!aeid){
+      console.warn('rowIdxFromAnnoId got empty param');
+      return -1;
+    }
     const numRows = this.itemsseenForms.length;
     for(let idx=0; idx<numRows; idx += 1) {
       if(this.annoIdFromItemsRow(idx) === aeid){
@@ -311,9 +329,20 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   }
 
   updateAnnotation(ae) {
+    this.itemsseenForms.markAsDirty();
 
   }
   deleteAnnotationFromItemSeen(aeId: string) {
+    if(!aeId){
+      console.warn('PDForm deleteAnnotationFromItemSeen got no param aeId');
+      return;
+    }
+    const rowIdx = this.rowIdxFromAnnodId(aeId);
+    if(rowIdx >=0){
+      const row = this.itemsseenForms.at(rowIdx);
+      row['annoID']='';
+    }
+    this.itemsseenForms.markAsDirty();
 
   }
 
