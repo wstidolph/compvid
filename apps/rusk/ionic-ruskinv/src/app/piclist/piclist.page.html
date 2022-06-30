@@ -6,13 +6,14 @@
 
 <ion-content>
 
+  <!-- twic-life-cycle puts the UL of images into a CSS grid -->
+  <!-- each li becomes a grid item -->
   <div class="twic-life-cycle">
-    <ul class="">
-    <ng-container *ngFor="let pd of pdArray; let i=index ">
-      <li  class="twic-item"  > <!-- was twoc-item, I don't think iot's used, anyway -->
+    <ul >
+    <ng-container  *ngFor="let pd of pdArray; let i=index ">
+      <li class="picgriditem">
         <a href="#"
         [routerLink]="['/pic', pd?.img_basename]" routerDirection="forward">
-
           <TwicImg
             [src]="pd?.img_basename"
             [focus]="pd?.twicFocus"
@@ -20,7 +21,12 @@
           ></TwicImg>
         </a>
 
-        <p>({{i}}) {{pd?.loc}}</p>
+        <div *ngIf="pd?.numItemsseen>0" class="picItemSeen">
+          <ion-icon  name="star"></ion-icon>
+          <span class="itemText">{{pd.numItemsseen}}</span>
+        </div>
+        <!-- <p class="locstring" *ngIf="pd?.loc">{{pd.loc}}</p> -->
+
       </li>
     </ng-container>
   </ul>

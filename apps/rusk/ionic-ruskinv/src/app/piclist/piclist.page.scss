@@ -10,7 +10,6 @@
       display: grid;
       gap: 1rem;
       list-style: none;
-      position: relative;
       width: 100%;
   }
 
@@ -44,4 +43,34 @@
   @media screen and (min-width: 1440px) {
       grid-template-columns: repeat(6, 1fr);
   }
+}
+
+.locstring {
+  hyphenate-character: ".";
+  overflow-wrap: break-word;
+}
+.picgriditem {
+  // relative position so we can
+  // absolute position the .picitemseen star
+  position: relative;
+  // outline: dotted green 3px;
+}
+
+.picItemSeen {
+  font-size:6rem;
+  position:absolute;
+  bottom:-0.5em;
+  left:0;
+  color: red;
+  opacity:60%;
+}
+.picItemSeen .itemText {
+  position: absolute;
+  font-size: 2rem;
+  top:1em;
+  left:1.25em;
+  font-style: bold;
+  opacity:100%;
+  color: white;
+
 }
