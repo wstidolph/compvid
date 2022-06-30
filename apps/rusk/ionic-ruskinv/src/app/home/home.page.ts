@@ -47,19 +47,21 @@ export class HomePage implements OnInit, OnDestroy {
       this.subs.forEach(sub => sub.unsubscribe);
   }
 
+  // to picture-adding page
+  addPic() {
+    console.warn('unimplemented addPic')
+  }
+
   openPic(picdoc: PicDoc){
       console.log('HomePage openPic', picdoc)
   }
 
-  addPic() {
-      this.picdocService.getPicDocById('test')
-        .subscribe(localPicDoc =>
-          this.picdocService.addPicDoc(localPicDoc)
-    );
+  toPicList(){
+    this.router.navigate(['/piclist']);
   }
 
-  initGT(){
-    this.goesToService.initTestGT();
+  toMigrate(){
+    this.router.navigate(['/migrate']);
   }
   openItemseen(itemseen) {
 
