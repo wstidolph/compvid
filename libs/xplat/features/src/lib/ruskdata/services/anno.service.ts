@@ -214,13 +214,16 @@ export class AnnoService {
       return annos;
     }
 
-    deleteAnnotation(annoId: string) {
+    removeAnnotation(annoId: string) {
       this._anno.removeAnnotation(annoId);
     }
 
     // highlight shape and open edit
     selectAnnotation(annoId: string) {
       this._anno.selectAnnotation(annoId);
+    }
+    cancelSelected() {
+      this._anno.cancelSelected();
     }
 
     setDrawingTool(toolname: string) {

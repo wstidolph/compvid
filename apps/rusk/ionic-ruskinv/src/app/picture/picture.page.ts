@@ -154,10 +154,6 @@ export class PicturePage implements OnInit {
     }
   }
 
-  // send to the child component
-  setItemsSeenAccordionState(open: boolean) {
-    this.picform.showItemsAccordion(true);
-  }
 
   // UTILITY
   private imgSane(img: HTMLImageElement): boolean {

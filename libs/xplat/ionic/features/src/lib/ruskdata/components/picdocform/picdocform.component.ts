@@ -9,7 +9,12 @@ import { PdclosemodalComponent } from '../pdclosemodal/pdclosemodal.component'
 @Component({
   selector: 'compvid-picdocform',
   templateUrl: 'picdocform.component.html',
-  styles: ['#ishheader::part(native) { color:red }']
+  styles: [`
+    #ishheader::part(native) {
+      padding-left: 0;
+      background-color:red;
+    }
+  `]
 })
 export class PicdocformComponent implements OnInit, OnDestroy /* implements AfterContentChecked */ {
 
@@ -41,11 +46,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     public modalController: ModalController,
     private routerOutlet: IonRouterOutlet,
     ) {
-    // super(picDocService,
-    //    placeOptionsService,
-    //      goesToService,
-    //     fb,
-    //     annoService);
     this.anno$ = this.annoService._annoEvents$;
   }
 
@@ -67,7 +67,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
 
   // create the empty form data objects
   setUpForm() {
-    console.log('PDF Base setupForm');
+    console.log('PDForm setupForm');
     this.pdForm = this.fb.group(
           {
             name: [this.pd?.name],
@@ -93,10 +93,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   // if the annotation is about an item already in the PicDoc
   // then return the matching itemseen entry
 
-  findMatchingItem(annotationid: string){
-
-  }
-
   putItemsseenToForm(its:any){
     const itemseen = this.fb.group({
       desc: [its.desc],
@@ -108,7 +104,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
 
     this.itemsseenForms.insert(0,itemseen);
   }
-
 
   get itemsseenForms() {
     return this.pdForm.get('itemsseen') as FormArray
@@ -128,14 +123,14 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     // this.itemsseenForms.push(itemseen)
     this.itemsseenForms.insert(0,itemseen);
     this.itemsseenForms.markAsDirty();
-    this.showItemsAccordion(true); // keep form open for typing
   }
 
   removeItemSeen(idx:number) {
     const row =  this.itemsseenForms.at(idx);
     console.log('removeItemSeen idx row', idx, row)
     if(row.get('annoID')){
-      this.annoService.deleteAnnotation(row.get('annoID')?.value);
+      this.annoService.cancelSelected();
+      this.annoService.removeAnnotation(row.get('annoID')?.value);
     }
     this.itemsseenForms.removeAt(idx);
     this.itemsseenForms.markAsDirty();
@@ -144,7 +139,8 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   deleteItemSeen(i: number) {
     const annoId = this.annoIdFromItemsRow(i);
     console.log('deleteItemSeen annoId', annoId);
-    this.annoService.deleteAnnotation(annoId);
+    this.annoService.cancelSelected();
+    this.annoService.removeAnnotation(annoId);
     this.itemsseenForms.removeAt(i);
     this.itemsseenForms.markAsDirty();
   }
@@ -187,14 +183,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     )
   }
 
-  showItemsAccordion(shouldShow: boolean) {
-    if (shouldShow) {
-      this.accordionGroup.value='itemsseen'; // keep form open for typing
-    } else {
-      this.accordionGroup.value=''; // close form
-    }
-  }
-
   async openModal() {
     const modal = await this.modalController.create({
       component: PdclosemodalComponent,
@@ -226,6 +214,9 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   // The Annotation itself is stored in the itemseen block so it reaches the backend
   // and its in-picture representation/manipulation is done by the Annotorius library
 
+  addAnnotationForRow(idx:number) {
+
+  }
   aeHandler(ae: any){
 
     switch (ae.type) {
@@ -276,6 +267,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   enterRow(idx: number) {
     const id = this.annoIdFromItemsRow(idx);
     console.log('enterRow ', idx, ' => id ', id)
+      this.annoService.selectAnnotation(id);
   }
 
   annoIdFromItemsRow(idx: number) : string {
@@ -325,7 +317,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     this.putItemsseenToForm(annoForForm );
     console.log('addItemFromAnnotationEvent sending', annoForForm);
     this.itemsseenForms.markAsDirty();
-    this.showItemsAccordion(true);
   }
 
   updateAnnotation(ae) {
