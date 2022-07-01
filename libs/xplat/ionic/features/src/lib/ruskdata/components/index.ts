@@ -9,3 +9,4 @@ export const PICDOCFORM_COMPONENTS = [
 
 export * from './picdocform/picdocform.component';
 export * from './pdclosemodal/pdclosemodal.component';
+export * from './can-deactivate.guard'

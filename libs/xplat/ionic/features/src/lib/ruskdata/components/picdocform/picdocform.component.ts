@@ -80,6 +80,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
 
         //sort the array by addedOn TODO
         this.pd?.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
+    this.pdForm.markAsPristine();
   }
 
   resetForm() {

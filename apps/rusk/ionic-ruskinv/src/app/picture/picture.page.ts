@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener, ViewEncapsulation, Renderer2 } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { AnnoService, DRAWTOOLS, PicDoc, PicdocService, UserService } from '@compvid/xplat/features';
-import { IonLabel, IonText } from '@ionic/angular';
+import { AnnoService, DRAWTOOLS, PicDoc, PicdocService, IDeactivatableComponent, UserService } from '@compvid/xplat/features';
+import { IonLabel, IonRouterOutlet, IonText, ModalController } from '@ionic/angular';
 import { IonBackButtonDelegateDirective } from '@ionic/angular/directives/navigation/ion-back-button';
 import { TwicImgComponent } from '@twicpics/components/angular13';
-import { PicdocformComponent } from 'libs/xplat/ionic/features/src/lib/ruskdata/components';
+import { PicdocformComponent, PdclosemodalComponent } from 'libs/xplat/ionic/features/src/lib/ruskdata/components';
 import { fromEvent, interval, Observable, pairwise, switchMap, takeUntil, take, tap } from 'rxjs';
 import { environment } from '../../environments/environment'
 
@@ -16,7 +16,7 @@ import { environment } from '../../environments/environment'
   styleUrls: ['./picture.page.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PicturePage implements OnInit {
+export class PicturePage implements OnInit, IDeactivatableComponent {
 
   @ViewChild(PicdocformComponent) picform: PicdocformComponent;
 
@@ -24,7 +24,7 @@ export class PicturePage implements OnInit {
   @ViewChild('piccanvas') piccanvas: ElementRef<HTMLDivElement> = {} as ElementRef;
   @ViewChild('mycanvas') canvas: ElementRef<HTMLCanvasElement> = {} as ElementRef;
 
-  @ViewChild('wrapper') wrapper: ElementRef<HTMLDivElement> = {} as ElementRef;
+  // @ViewChild('wrapper') wrapper: ElementRef<HTMLDivElement> = {} as ElementRef;
 
   img_direct: HTMLImageElement
 
@@ -39,12 +39,17 @@ export class PicturePage implements OnInit {
   twicsrc; /// selects the image to be supplied
   twic_transform; // identifies transforms
 
+  @Output() abandoningEdits = new EventEmitter();
+  dataReturnedFromModal: any;
+
   // end TwicPics
 
   isFav = false;
   constructor(public picdocService: PicdocService,
     public route: ActivatedRoute,
     public renderer2: Renderer2,
+    public modalController: ModalController,
+    private routerOutlet: IonRouterOutlet,
     private anno: AnnoService) { }
 
 
@@ -152,6 +157,44 @@ export class PicturePage implements OnInit {
           } else {
       console.log('onResize skipping setCanvas call')
     }
+  }
+
+  // close page safety
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    // ask child form if there are unsaved changes (isDirty)
+    const areUnsavedChanges = true;
+
+    let canDeactivate = true;
+
+    if (areUnsavedChanges) {
+      canDeactivate = window.confirm('Are you sure you want to leave this page?');
+    }
+
+    return canDeactivate;
+  }
+
+  async openModal() {
+    const modal = await this.modalController.create({
+      component: PdclosemodalComponent,
+      presentingElement: this.routerOutlet.nativeEl,
+      cssClass: 'pdclose-modal',
+      componentProps: {
+        "paramID": 123,
+        "paramTitle": "Really abandon changes?"
+      }
+    });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+        this.dataReturnedFromModal = dataReturned.data;
+        console.log('Modal Sent Data :', dataReturned);
+      }
+      if(dataReturned.data == 'discard'){
+        this.abandoningEdits.emit();
+      }
+    });
+
+    return await modal.present();
   }
 
 
