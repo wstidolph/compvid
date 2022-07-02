@@ -1,6 +1,9 @@
 import { AfterContentChecked, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Timestamp } from '@angular/fire/firestore';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { AnnoService, AEB, GoesToService, GoesToOption, PicdocService, PlaceOptionsService, PicDoc } from '@compvid/xplat/features';
+import { AnnoService, AEB, GoesToService, GoesToOption,
+  PicdocService, PlaceOptionsService, UserService,
+  PicDoc, ItemSeen, ControlsOf } from '@compvid/xplat/features';
 import { IonAccordionGroup, IonRouterOutlet, ModalController } from '@ionic/angular';
 import { Observable, Subscription, tap } from 'rxjs';
 import { PdclosemodalComponent } from '../pdclosemodal/pdclosemodal.component'
@@ -27,14 +30,27 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   dataReturnedFromModal: any;
   gtoptions$!: Observable<GoesToOption[]>;
 
-  pdForm!: FormGroup;
-
   isFav = false;
 
   text = "ionic Picdocform";
 
   anno$: Observable<any>;
   subs: Subscription[] = [];
+  pdForm = this.fb.group(
+    {
+      name: [''],
+      desc: [''],
+      loc: [''],
+      itemsseen: this.fb.array([
+        this.fb.group({
+          desc: [''],
+          category: [['']], // tags from annotations
+          annoID: [''],
+          goesTo: {to: '', accordingTo: ''},
+        })
+      ])
+    }
+  )
 
   constructor(
 
@@ -42,6 +58,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     public placeOptionsService: PlaceOptionsService,
     public goesToService: GoesToService,
     public annoService: AnnoService,
+    public userService: UserService,
     public fb: FormBuilder,
     public modalController: ModalController,
     private routerOutlet: IonRouterOutlet,
@@ -59,6 +76,8 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
         tap(ae => this.logAE(ae))
       ).subscribe(ae => this.aeHandler(ae))
     ) // end of pushed Subscription
+
+
   }
 
   ngOnDestroy() {
@@ -68,23 +87,37 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   // create the empty form data objects
   setUpForm() {
     console.log('PDForm setupForm');
-    this.pdForm = this.fb.group(
-          {
-            name: [this.pd?.name],
-            desc: [this.pd?.desc],
-            loc: [this.pd?.loc],
-            favOf: [this.pd?.favOf],
-            itemsseen: this.fb.array([])
-          }
-        )
+    this.putPDtoForm(this.pd);
+    // this.pdForm = this.fb.group(
+    //       {
+    //         name: [this.pd?.name],
+    //         desc: [this.pd?.desc],
+    //         loc: [this.pd?.loc],
+    //         favOf: [this.pd?.favOf],
+    //         itemsseen: this.fb.array([])
+    //       }
+    //     )
 
         //sort the array by addedOn TODO
-        this.pd?.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
-    this.pdForm.markAsPristine();
-  }
+        // this.pd?.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
+     }
 
   resetForm() {
-    this.setUpForm();
+    this.pdForm.reset();
+  }
+  putPDtoForm(pd:PicDoc){
+    if(pd.name) this.pdForm.controls.name.setValue(pd.name);
+    if(pd.desc) this.pdForm.controls.desc.setValue(pd.desc);
+    if(pd.loc) this.pdForm.controls.loc.setValue(pd.loc);
+    pd.itemsseen?.forEach(pdis => {
+      const itemseen = this.fb.group({
+        desc: pdis.desc ?? '',
+        category: [pdis.category ?? []],
+        annoID: [pdis.annoID ?? ''], // might not be an anno
+        goesTo: pdis.goesTo ?? null,
+      })
+      this.pdForm.controls.itemsseen.push(itemseen)
+    })
   }
 
   // get favOf(): string[] {
@@ -123,7 +156,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
 
     // this.itemsseenForms.push(itemseen)
     this.itemsseenForms.insert(0,itemseen);
-    this.itemsseenForms.markAsDirty();
   }
 
   removeItemSeen(idx:number) {
@@ -134,20 +166,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
       this.annoService.removeAnnotation(row.get('annoID')?.value);
     }
     this.itemsseenForms.removeAt(idx);
-    this.itemsseenForms.markAsDirty();
-  }
-
-  deleteItemSeen(i: number) {
-    const annoId = this.annoIdFromItemsRow(i);
-    console.log('deleteItemSeen annoId', annoId);
-    this.annoService.cancelSelected();
-    this.annoService.removeAnnotation(annoId);
-    this.itemsseenForms.removeAt(i);
-    this.itemsseenForms.markAsDirty();
-  }
-
-  toggleFav() {
-    this.isFav = !this.isFav;
   }
 
   private pdFormReverted(): boolean {
@@ -157,8 +175,6 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   clearGoesTo(idx: number) {
     this.itemsseenForms.at(idx).patchValue({goesTo:''})
   }
-
-
 
   closeForm() {
     // confirm closing if form is dirty

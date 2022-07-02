@@ -1,9 +1,17 @@
 // describe the things in the picture
+
+import { Timestamp } from "@angular/fire/firestore"
+
 export interface ItemSeen {
-  id: string;
-  inpicdoc: string; // item is seen in (join key)
-  desc: string;     // description of the Item
-  goesTo: string;   // disposition target
-  note:string;      // commentary/justification
-  author: string;   // of the description
+  id?: string,
+  isDeleted: boolean, // clear this itemSeen
+  desc?: string,
+  addedOn: Timestamp, // will be a Timestamp
+  addedBy: string, // user id
+  twicFocus?: string,
+  category?: string[],
+  annoID?: string, // ID into annotations
+  goesTo?: {to: string,
+            accordingTo: string
+  }
 }

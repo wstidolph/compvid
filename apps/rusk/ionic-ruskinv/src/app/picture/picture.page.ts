@@ -129,7 +129,7 @@ export class PicturePage implements OnInit, IDeactivatableComponent {
     this.picform.addItemSeen(evt);
   }
 
-  clickFav() {
+  clickFav() { // send now to back end; result is that this won't need to be in the update-tracking clone
     this.isFav = !this.isFav;
     this.picdocService.setFavState(this.picdoc, this.isFav);
   }

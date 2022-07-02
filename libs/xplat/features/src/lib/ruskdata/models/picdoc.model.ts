@@ -1,5 +1,6 @@
 import { Timestamp } from "@angular/fire/firestore/firebase";
-import { Place } from "./place.model";
+import { ItemSeen} from './itemseen.model'
+
 
 export interface PicDoc {
   isDeleted: boolean; // clear this PicDoc but leave as "archive"
@@ -24,16 +25,5 @@ export interface PicDoc {
   recipients: string[]; // copied from itemsseen.goesTo.to field
                         // for "what pics have something goe to Bob?"
   annotations?:  string[]; // each string in W3C JSON-LD annotations format
-  itemsseen?: [{
-    // id: number,
-    isDeleted: boolean, // clear this itemSeen
-    desc: string,
-    addedOn: Timestamp,
-    twicFocus?: string,
-    category?: string,
-    annoID?: string, // ID into annotations
-    goesTo?: [{to: string,
-              accordingTo: string
-    }]
-  }]
+  itemsseen?: ItemSeen[]
 }

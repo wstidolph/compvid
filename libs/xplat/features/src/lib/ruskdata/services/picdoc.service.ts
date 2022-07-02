@@ -27,7 +27,7 @@ import { Observable, BehaviorSubject, of, map, tap } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 import { UserService } from '../../user';
 import { PicDoc } from '../models';
-import {convertSnaps, ensureStrInOnce, esnsureStrInNone} from './db-utils';
+import {convertSnaps, ensureStrInOnce, ensureStrInNone} from './data-utils';
 
 // test/dev support
 const TEST_PICDOC: PicDoc = {
@@ -46,14 +46,15 @@ const TEST_PICDOC: PicDoc = {
   favOf:[],
   recipients: [],
   itemsseen: [
-    { desc: 'sample item seen',
+    { isDeleted: false,
+      desc: 'sample item seen',
       addedOn: Timestamp.fromDate(new Date()),
-      isDeleted: false,
+      addedBy: '#11111111111',
       twicFocus: "200x200",
-      goesTo: [{
+      goesTo: {
         to: 'DS',
         accordingTo: 'WS'
-      }],
+      },
     }
   ]
 }
@@ -155,7 +156,7 @@ export class PicdocService {
       const [needsUpdate, newArray] =
       isFav ?
           ensureStrInOnce(dd.favOf, uid)
-        : esnsureStrInNone(dd.favOf, uid);
+        : ensureStrInNone(dd.favOf, uid);
       // console.log('picDocService setFavState: needsUpdate, newArray', needsUpdate, newArray)
       if(needsUpdate) {
         // update just the favs on doc in DB
