@@ -74,7 +74,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   ngOnInit() {
 
     this.gtoptions$ = this.goesToService.getGoesToAsOptions();
-    this.addIdsToItemsseen();
+   //  this.addIdsToItemsseen();
     this.setUpForm();
 
 
@@ -102,20 +102,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   setUpForm() {
     console.log('PDForm setupForm');
     this.putPDtoForm(this.pd);
-
-    // this.pdForm = this.fb.group(
-    //       {
-    //         name: [this.pd?.name],
-    //         desc: [this.pd?.desc],
-    //         loc: [this.pd?.loc],
-    //         favOf: [this.pd?.favOf],
-    //         itemsseen: this.fb.array([])
-    //       }
-    //     )
-
-        //sort the array by addedOn TODO
-        // this.pd?.itemsseen?.forEach((its => this.putItemsseenToForm(its)))
-     }
+  }
 
   resetForm() {
     this.pdForm.reset();
@@ -124,7 +111,9 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     if(pd.name) this.pdForm.controls.name.setValue(pd.name);
     if(pd.desc) this.pdForm.controls.desc.setValue(pd.desc);
     if(pd.loc) this.pdForm.controls.loc.setValue(pd.loc);
+    console.log('putPDtoForm pd is', pd);
     pd.itemsseen?.forEach(pdis => {
+      // console.log('PDF putPDtoForm pushing',pdis);
       const itemseen = this.fb.group({
         id: pdis.id ?? '',
         isDeleted: false,
@@ -152,7 +141,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   }
   // javascript event carried because children need it, and so base has to accept it
   addItemSeen(evt:any) {
-    // console.log('enter addItemSeen, form:', this.pdForm)
+    //console.log('enter addItemSeen, form:', this.pdForm)
 
     const itemseen = this.fb.group({
       desc: [''],
@@ -260,8 +249,64 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   // The Annotation itself is stored in the itemseen block so it reaches the backend
   // and its in-picture representation/manipulation is done by the Annotorius library
 
-  addAnnotationForRow(idx:number) {
+  makeRectTarget() {
+    return {
+      selector: {
+        conformsTo: "http://www.w3.org/TR/media-frags/",
+        type: "FragmentSelector",
+        value: "xywh=pixel:900,1600,975,650"
+      }
+    }
+  }
+  makePolyTarget() {
+    return {
+      selector: {
+        type: "SvgSelector",
+        value: "<svg><polygon points=\"495,830 500,2280 2500,2300 1900,300 1311,1029\" /></svg>"
+      }
+    }
+  }
+  makeFreehandTarget() {
+    return {
 
+    }
+  }
+
+  addAnnotationForRow(idx:number, tool:string) {
+    // bring up the Annotation Editor, centered on the pic, ready for drawing
+    console.log('PDF addAnnotation idx, tool', idx, tool);
+    // on close, find the annotation and attach to ITS row #idx
+    this.annoService.setDrawingTool(tool);
+    const generatedId = "#11111"
+    const anno = {
+      "@context": "http://www.w3.org/ns/anno.jsonld",
+       id: generatedId,
+       body: [{
+          purpose: "commenting",
+          type: "TextualBody",
+          value: "describe it"
+        }],
+        target: {},
+        type: "Annotation"
+    }
+
+    switch (tool) {
+      case 'polygon':
+        anno['target'] = this.makePolyTarget();
+        break;
+      case 'freehand':
+        break;
+      default:
+        anno['target'] = this.makeRectTarget();
+        break;
+    }
+    console.log('dummy anno', anno);
+    this.annoService.addAnnotation(anno, false);
+
+    // add to row - NOT WORKING! HERE ON BRING UP THE ANNO
+    this.itemsseenForms.at(idx).get('annodID')?.setValue(generatedId);
+    this.annoService.selectAnnotation(generatedId);
+    console.log('addAnnotationForRow');
   }
   aeHandler(ae: any){
 

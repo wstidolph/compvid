@@ -187,6 +187,10 @@ export class AnnoService {
       })
     }
 
+    addAnnotation(anno: any, readOnly = false) {
+      this._anno.addAnnotation(anno, readOnly)
+    }
+
     loadAnnotations(src = 'assets/annotations.w3c.json') {
       if(this._isSetup){
         this._anno.loadAnnotations(src).then(annotations => {
@@ -218,12 +222,14 @@ export class AnnoService {
       this._anno.removeAnnotation(annoId);
     }
 
-    // highlight shape and open edit
-    selectAnnotation(annoId: string) {
-      this._anno.selectAnnotation(annoId);
-    }
     cancelSelected() {
       this._anno.cancelSelected();
+    }
+
+    // highlight shape and open edit
+    selectAnnotation(annoId =''): any {
+      const resultanno = this._anno.selectAnnotation(annoId);
+      return resultanno;
     }
 
     setDrawingTool(toolname: string) {
