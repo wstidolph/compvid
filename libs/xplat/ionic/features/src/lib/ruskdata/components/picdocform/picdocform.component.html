@@ -66,7 +66,10 @@
             <ion-item>
               <ion-textarea placeholder="describe it" formControlName="desc" class="ion-col"></ion-textarea>
               <ion-select multiple
-                formControlName="goesTo" cancelText="CLEAR" (ionCancel)="clearGoesTo(i)">
+                formControlName="goesTo" cancelText="CLEAR"
+                (ionCancel)="clearGoesTo(i)"
+                (ionChange)="goesToChanged($event, i)"
+                >
                 <ion-select-option *ngFor="let opt of gtoptions$ | async"
                   value="{{opt.id}}"
                   >{{opt.label}}</ion-select-option>

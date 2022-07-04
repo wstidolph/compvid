@@ -144,7 +144,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit  {
 
     }
     console.log('calculated change object', changes);
-    this.picdocService.updatePicDoc(changes).then(
+    this.picdocService.updatePicDoc(this.pd, changes).then(
       it => console.log('update got back',it)
     )
   }

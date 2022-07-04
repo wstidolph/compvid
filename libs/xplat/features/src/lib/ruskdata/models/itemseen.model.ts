@@ -6,7 +6,7 @@ export interface ItemSeen {
   id?: string,
   isDeleted: boolean, // clear this itemSeen
   desc?: string,
-  addedOn: Timestamp, // will be a Timestamp
+  addedOn: Date, //
   addedBy: string, // user id
   twicFocus?: string,
   category?: string[],

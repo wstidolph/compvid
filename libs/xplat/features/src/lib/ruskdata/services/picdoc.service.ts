@@ -26,7 +26,7 @@ import {
 import { Observable, BehaviorSubject, of, map, tap } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 import { UserService } from '../../user';
-import { PicDoc } from '../models';
+import { ItemSeen, PicDoc } from '../models';
 import {convertSnaps, ensureStrInOnce, ensureStrInNone} from './data-utils';
 
 // test/dev support
@@ -48,7 +48,7 @@ const TEST_PICDOC: PicDoc = {
   itemsseen: [
     { isDeleted: false,
       desc: 'sample item seen',
-      addedOn: Timestamp.fromDate(new Date()),
+      addedOn: new Date(),
       addedBy: '#11111111111',
       twicFocus: "200x200",
       goesTo: {
@@ -124,9 +124,10 @@ export class PicdocService {
 
   addPicDoc(picdoc: PicDoc) {
     console.log('picdocService addPicDoc', picdoc);
-    const pd = this.denormGoesto(picdoc);
+    const recip = this.makeRecipients(picdoc);
+    picdoc.recipients = recip;
     const picDocsCollection = collection(this.firestore,  COLLECTION);
-    return addDoc(picDocsCollection, pd);
+    return addDoc(picDocsCollection, picdoc);
   }
 
   deletePicDoc(picdocid: string) {
@@ -134,14 +135,24 @@ export class PicdocService {
     return deleteDoc(picDocRef);
   }
 
-  updatePicDoc(picdocChgs: Partial<PicDoc>) {
+  updatePicDoc(PD: PicDoc, picdocChgs: Partial<PicDoc>) {
     // TODO if updating itemsseen, make sure to denormalize
+    // console.log('PD Svc update gets changes', picdocChgs);
+
+    // console.log('PD Svc PD is', PD)
     const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdocChgs.id}`);
-    const changes = this.denormGoesto(picdocChgs);
-    console.log('changes', changes);
-    return updateDoc(picDocRef, changes);
+    const recip = this.makeRecipients(picdocChgs);
+    if(recip?.length > 0) picdocChgs.recipients = recip;
+    picdocChgs.numItemsseen = picdocChgs.itemsseen? picdocChgs.itemsseen.length : 0;
+
+    // console.log('PD Svc update computes changes', picdocChgs);
+    return updateDoc(picDocRef, picdocChgs);
   }
 
+  // ItemSeen is should be kept
+  mergeItemSeenEntries() {
+
+  }
   async setFavState(pd: PicDoc, isFav: boolean) { // todo just pass in ID
     if(!pd) return;
 
@@ -179,26 +190,18 @@ export class PicdocService {
   }
 
   /* --- PRIVATE UTILITY FUNCTIONS --- */
-  private denormGoesto(ppd:any) { // ignoring accordingTo, for now
+  private makeRecipients(pdc:Partial<PicDoc>) : string[] { // ignoring accordingTo, for now
+    console.log('PD Svc makeRecipients gets ', pdc )
+    const recipients: string[] = [];
 
-    ppd.numItemsseen = ppd.itemsseen ? ppd.itemsseen.length : 0;
-    ppd.recipients = [];
-    // itemsseen?: [{
-    // ...
-    //   goesTo?: [{to: string,
-    //             accordingTo: string
-    //   }]
-    // }]
-    ppd.itemsseen?.forEach((its:any) => {
-      if(its.goesTo?.length>0) {
-        its.goesTo.forEach((gt:any) => {
-          console.log('process goesto', gt);
-          ppd.recipients.push(gt);
-        })
+    pdc.itemsseen?.forEach((its:ItemSeen) => {
+      if(its.goesTo && its.goesTo.to) { // max of one single recipient, for now
+        ensureStrInOnce(recipients, its.goesTo.to)
       }
     })
-    ppd.recipients = ppd.recipients.filter((r:any, i:number) => i === ppd.recipients.indexOf(r));
-    return ppd;
+
+    console.log('PD Svc makeRecipients returning ', recipients )
+    return recipients;
   }
 
   // async uploadImageForPicDoc(img: Blob, picdoc: PicDoc){
