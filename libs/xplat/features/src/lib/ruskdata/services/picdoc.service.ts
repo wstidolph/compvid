@@ -15,6 +15,7 @@ import {
   query,
   Timestamp,
   getDoc,
+  QueryConstraint,
 } from '@angular/fire/firestore';
 
 import {
@@ -41,10 +42,11 @@ const TEST_PICDOC: PicDoc = {
   storageId: 'rusk_'+ new Date().getTime() / 1000,
   editDate: Timestamp.fromDate(new Date()),
   isDeleted: false,
-  numItemsseen: 0,
   twicFocus: "250x250",
   favOf:[],
+  numRecipients: 0,
   recipients: [],
+  numItemsseen: 0,
   itemsseen: [
     { isDeleted: false,
       desc: 'sample item seen',
@@ -91,6 +93,56 @@ export class PicdocService {
     }
     const picDocRef = doc(this.firestore,`${COLLECTION}/${id}`);
     return docData(picDocRef, { idField: 'id'}) as Observable<PicDoc>;
+  }
+  getPicDocByIsFav(){
+    const pdCollection =
+      collection(this.firestore, COLLECTION, ) as  CollectionReference<PicDoc>;
+      return collectionData<PicDoc>(
+        query(pdCollection, where('favOf','array-contains',this.userService.uid)),
+          {idField: 'id'}
+        )
+        // .pipe(
+        //     map(results => {
+        //       return results.length >0 ? results[0] : null
+        //   })
+        // )
+  }
+
+  // query for AND of
+  // * favorites status (DC, T),
+  // * number of recipients (don't-care, 0, 1, many), and
+  // * number of items seen (don't-care, 0, 1, many)
+  getFilteredPicDoc(favFilter: string, numRecip: number, numITS: number) {
+    console.log(`PD Svc getFilteredPicDoc args favFilter ${favFilter}, numRecipt ${numRecip}, numITS ${numITS}`);
+
+    const qc:QueryConstraint[] = []
+    
+    if(favFilter == 'T') {
+      qc.push(where('favOf','array-contains',this.userService.uid))
+    }
+
+    if(numRecip == 0 || numRecip == 1) {
+      qc.push(where('numRecipients','==', numRecip))
+    }
+
+    if(numRecip > 1) {
+      qc.push(where('numRecipients', '>=', 1))
+    }
+
+    if(numITS == 0 || numITS == 1) {
+      qc.push(where('numItemsseen','==', numITS))
+    }
+    
+    if(numRecip > 1) {
+      qc.push(where('numItemsseen', '>=', 1))
+    }
+
+    console.log('query terms', qc.length);
+    const pdCollection =
+      collection(this.firestore, COLLECTION ) as  CollectionReference<PicDoc>;
+    const refq = query(pdCollection, ...qc);
+    console.log('PD Svc getFilteredPicDoc refq', refq)
+    return collectionData<PicDoc>(refq, {idField: 'id'})
   }
 
   getPicDocByImgBasename(imgBasename: string | null): Observable<PicDoc | null> {
@@ -142,6 +194,7 @@ export class PicdocService {
     // console.log('PD Svc PD is', PD)
     const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdocChgs.id}`);
     const recip = this.makeRecipients(picdocChgs);
+    picdocChgs.numRecipients = recip? recip.length : 0;
     if(recip?.length > 0) picdocChgs.recipients = recip;
     picdocChgs.numItemsseen = picdocChgs.itemsseen? picdocChgs.itemsseen.length : 0;
 
@@ -165,9 +218,9 @@ export class PicdocService {
     if(docSnap.exists()) {
       const dd = docSnap.data() as PicDoc;
       const [needsUpdate, newArray] =
-      isFav ?
-          ensureStrInOnce(dd.favOf, uid)
-        : ensureStrInNone(dd.favOf, uid);
+          isFav ?
+              ensureStrInOnce(dd.favOf, uid)
+            : ensureStrInNone(dd.favOf, uid);
       // console.log('picDocService setFavState: needsUpdate, newArray', needsUpdate, newArray)
       if(needsUpdate) {
         // update just the favs on doc in DB

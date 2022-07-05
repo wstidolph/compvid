@@ -9,7 +9,7 @@
     "cap.add.android": "npx ionic cap add android",
     "cap.ios": "npx ionic cap open ios",
     "cap.android": "npx ionic cap open android",
-    "cap.sync": "npx ionic cap sync"
+    "cap.sync": "npx ionic cap sync --verbose"
   },
   "dependencies": {
     "@capacitor/android": "3.5.1",

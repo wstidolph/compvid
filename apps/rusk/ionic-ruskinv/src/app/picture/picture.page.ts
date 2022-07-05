@@ -114,7 +114,7 @@ export class PicturePage implements OnInit, IDeactivatableComponent {
 
     const drawToolsList = ['']
     this.anno.setupToolbar('AnnotoriousToolbarcontainer',
-    [DRAWTOOLS.FREEHAND] // always get rect and square in default
+    [DRAWTOOLS.FREEHAND, DRAWTOOLS.MULTIPLOY] // always get rect and square in default
     );
     this.anno.setDrawingTool(DRAWTOOLS.POLYGON);
 

@@ -19,11 +19,14 @@ export interface PicDoc {
 
   twicFocus?: string; // defaults to middle, but can be set as last
                       // step in transfor chain e.g., 20x10 coordinates
-  numItemsseen: number;
+
   uploadedBy?: string; // user ID
   favOf?:string[]; // uid of those who have fav'ed this pic
+  numRecipients: number; // count of recipients identified
   recipients: string[]; // copied from itemsseen.goesTo.to field
                         // for "what pics have something goe to Bob?"
-  annotations?:  string[]; // each string in W3C JSON-LD annotations format
+  numItemsseen: number;
   itemsseen?: ItemSeen[]
+  annotations?:  string[]; // each string in W3C JSON-LD annotations format
+
 }

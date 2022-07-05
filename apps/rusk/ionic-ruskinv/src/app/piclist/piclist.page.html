@@ -1,6 +1,31 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Picture List {{pdArray[0]?.name}}</ion-title>
+    <ion-buttons>
+    <ion-label>Goes To </ion-label>
+    <ion-radio-group #numGTO name="numGTO" allowEmptySelection="true" (ionChange)="gtNumChanged($event.detail.value)">
+      <ion-row>
+      <ion-item><ion-radio slot="start" value="1"></ion-radio><ion-icon name="person-outline"></ion-icon></ion-item>
+      <ion-item><ion-radio slot="start" value="2"></ion-radio><ion-icon name="people-outline"></ion-icon></ion-item>
+    </ion-row>
+    </ion-radio-group>
+    
+
+      <ion-select #gtselect multiple
+        placeholder="no filter"
+        cancelText="CLEAR"
+        (ionCancel)="clearGoesTo()"
+        (ionChange)="goesToChanged($event)"
+      >
+      <ion-select-option *ngFor="let opt of gtoptions$ | async"
+        value="{{opt.id}}"
+        >{{opt.label}}</ion-select-option>
+      </ion-select>
+      <ion-button  type="button" shape="round" slot="end"
+      color="secondary" (click)="clickFav()">
+    <ion-icon name="{{filterFavOnly? 'heart-outline' : 'heart-dislike-outline'}}"></ion-icon>
+    My Fav
+    </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

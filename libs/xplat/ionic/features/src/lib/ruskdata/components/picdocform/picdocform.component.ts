@@ -168,6 +168,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     this.pdForm.get('itemsseen')?.markAsDirty();
   }
 
+
   private pdFormReverted(): boolean {
     return false;
   }
@@ -249,65 +250,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   // The Annotation itself is stored in the itemseen block so it reaches the backend
   // and its in-picture representation/manipulation is done by the Annotorius library
 
-  makeRectTarget() {
-    return {
-      selector: {
-        conformsTo: "http://www.w3.org/TR/media-frags/",
-        type: "FragmentSelector",
-        value: "xywh=pixel:900,1600,975,650"
-      }
-    }
-  }
-  makePolyTarget() {
-    return {
-      selector: {
-        type: "SvgSelector",
-        value: "<svg><polygon points=\"495,830 500,2280 2500,2300 1900,300 1311,1029\" /></svg>"
-      }
-    }
-  }
-  makeFreehandTarget() {
-    return {
 
-    }
-  }
-
-  addAnnotationForRow(idx:number, tool:string) {
-    // bring up the Annotation Editor, centered on the pic, ready for drawing
-    console.log('PDF addAnnotation idx, tool', idx, tool);
-    // on close, find the annotation and attach to ITS row #idx
-    this.annoService.setDrawingTool(tool);
-    const generatedId = "#11111"
-    const anno = {
-      "@context": "http://www.w3.org/ns/anno.jsonld",
-       id: generatedId,
-       body: [{
-          purpose: "commenting",
-          type: "TextualBody",
-          value: "describe it"
-        }],
-        target: {},
-        type: "Annotation"
-    }
-
-    switch (tool) {
-      case 'polygon':
-        anno['target'] = this.makePolyTarget();
-        break;
-      case 'freehand':
-        break;
-      default:
-        anno['target'] = this.makeRectTarget();
-        break;
-    }
-    console.log('dummy anno', anno);
-    this.annoService.addAnnotation(anno, false);
-
-    // add to row - NOT WORKING! HERE ON BRING UP THE ANNO
-    this.itemsseenForms.at(idx).get('annodID')?.setValue(generatedId);
-    this.annoService.selectAnnotation(generatedId);
-    console.log('addAnnotationForRow');
-  }
   aeHandler(ae: any){
 
     switch (ae.type) {
@@ -402,6 +345,23 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   pulseItemSeen(annotationId: string) {
 
   }
+
+  addAnnotationForRow(idx:number, tool = 'rect') {
+    const ctl =  this.itemsseenForms.at(idx).get('annoID')
+    let ID = ctl?.value
+    // if we already have an annotation, just select it - user can delete/edit
+    // but if we don't have an annotation then make new one
+    if(ctl && !ID ) {
+
+      ID = this.annoService.addAnnotationForRow(idx, tool);
+      ctl.setValue(ID);
+      console.log('addAnnotationForRow setting ID')
+    }
+
+    this.annoService.selectAnnotation(ID);
+    console.log('addAnnotationForRow idx, ID', idx, ID);
+}
+
   // if you start from an annotation then there isn't an existing item
   addItemFromAnnotationEvent(ae: any) {
     const anno = ae.payload.annotation
@@ -448,17 +408,18 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
   }
 
   deleteAnnotationFromItemSeen(aeId: string) {
+    console.log('PDF deleteAnnotationFromItemSeen', aeId)
     if(!aeId){
       console.warn('PDForm deleteAnnotationFromItemSeen got no param aeId');
       return;
     }
     const rowIdx = this.rowIdxFromAnnodId(aeId);
+    console.log('PDForm deleteAnnotationFromItemSeen rowIdx', rowIdx)
     if(rowIdx >=0){
       const row = this.itemsseenForms.at(rowIdx);
       row['annoID']='';
     }
     this.itemsseenForms.markAsDirty();
-
   }
 
 }

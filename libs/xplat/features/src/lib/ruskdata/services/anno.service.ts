@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid'
 
 // using dummy module decl in ./annotorious.d.ts
 import { Annotorious } from '@recogito/annotorious';
@@ -9,7 +10,7 @@ import BetterPolygon from '@recogito/annotorious-better-polygon'
 
 export enum DRAWTOOLS {
   FREEHAND='freehand', ELLIPSE='ellipse', CIRCLE='circle',
-  POINT='point', RECT='rect', POLYGON='polygon'
+  POINT='point', RECT='rect', POLYGON='polygon', MULTIPLOY='multiploygon'
 }
 
 // annotation entry body structure
@@ -187,8 +188,68 @@ export class AnnoService {
       })
     }
 
+    static generateAnnoId(): string {
+      return `#${uuidv4()}`
+    }
     addAnnotation(anno: any, readOnly = false) {
       this._anno.addAnnotation(anno, readOnly)
+    }
+
+    private makeRectTarget() {
+      return {
+        selector: {
+          conformsTo: "http://www.w3.org/TR/media-frags/",
+          type: "FragmentSelector",
+          value: "xywh=pixel:900,1600,975,650"
+        }
+      }
+    }
+    private makePolyTarget() {
+      return {
+        selector: {
+          type: "SvgSelector",
+          value: "<svg><polygon points=\"495,830 500,2280 2500,2300 1900,300 1311,1029\" /></svg>"
+        }
+      }
+    }
+    private makeFreehandTarget() {
+      return {
+
+      }
+    }
+
+    addAnnotationForRow(idx:number, tool:string): string {
+      // bring up the Annotation Editor, centered on the pic, ready for drawing
+      console.log('PD Svc addAnnotation idx, tool', idx, tool);
+      // on close, find the annotation and attach to ITS row #idx
+      this.setDrawingTool(tool);
+      const generatedId = AnnoService.generateAnnoId()
+      const anno = {
+        "@context": "http://www.w3.org/ns/anno.jsonld",
+         id: generatedId,
+         body: [{
+            purpose: "commenting",
+            type: "TextualBody",
+            value: "describe it"
+          }],
+          target: {},
+          type: "Annotation"
+      }
+
+      switch (tool) {
+        case 'polygon':
+          anno['target'] = this.makePolyTarget();
+          break;
+        case 'freehand':
+          break;
+        default:
+          anno['target'] = this.makeRectTarget();
+          break;
+      }
+      console.log('dummy anno', anno);
+      this.addAnnotation(anno, false);
+      return generatedId;
+
     }
 
     loadAnnotations(src = 'assets/annotations.w3c.json') {

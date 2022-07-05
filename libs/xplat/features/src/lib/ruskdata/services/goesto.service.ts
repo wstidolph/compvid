@@ -15,7 +15,7 @@ import {
   Timestamp,
 } from '@angular/fire/firestore';
 
-import { Observable, BehaviorSubject, map } from 'rxjs';
+import { Observable, BehaviorSubject, map, tap } from 'rxjs';
 import { GoesTo } from '../models';
 
 export interface GoesToOption {
