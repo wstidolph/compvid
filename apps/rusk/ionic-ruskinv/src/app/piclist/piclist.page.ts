@@ -1,6 +1,6 @@
 import { AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
-import { GoesToOption, GoesToService, PicDoc, PicdocService } from '@compvid/xplat/features';
+import { GoesToOption, GoesToOptionService, GoesToService, PicDoc, PicdocService } from '@compvid/xplat/features';
 import { environment } from '../../environments/environment'
 
 import { take, tap } from 'rxjs/operators';
@@ -31,10 +31,11 @@ export class PiclistPage implements OnInit, AfterViewInit, OnDestroy {
   subs: Subscription[] = [];
 
   constructor(public picdocService: PicdocService,
-    public goesToService: GoesToService,) { }
+    public goesToService: GoesToService,
+    public goesToOptionService: GoesToOptionService) { }
 
   ngOnInit() {
-    this.gtoptions$ = this.goesToService.getGoesToAsOptions()
+    this.gtoptions$ = this.goesToOptionService.getGoesToOptions()
     // .pipe(
     //   tap(arr => arr.push({label:'someone', value: 'someone', id: 'someone'}))
     // );
@@ -108,10 +109,10 @@ export class PiclistPage implements OnInit, AfterViewInit, OnDestroy {
     this.gtselect.value=''
     this.doSubscribe();
   }
-  
+
   goesToChanged(evt){
     console.log('goesToChanged target list to', evt.detail.value)
-    if(evt) { // then numeric is selected, not the list 
+    if(evt) { // then numeric is selected, not the list
       this.clearGtNumChanged();
     // filter on picdoc recipients array contains any of the target list of ID
     }

@@ -77,9 +77,9 @@
                 (ionCancel)="clearGoesTo(i)"
                 (ionChange)="goesToChanged($event, i)"
                 >
-                <ion-select-option *ngFor="let opt of gtoptions$ | async"
-                  value="{{opt.id}}"
-                  >{{opt.label}}</ion-select-option>
+                <ion-select-option *ngFor="let gto of gtoptions$ | async"
+                  [value]="gto"
+                  >{{gtoOptionLabel(gto)}}</ion-select-option>
                 </ion-select>
             </ion-item>
 

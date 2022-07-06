@@ -1,6 +1,7 @@
 // describe the things in the picture
 
-import { Timestamp } from "@angular/fire/firestore"
+// import { Timestamp } from "@angular/fire/firestore"
+import { GoesTo } from './goesTo.model'
 
 export interface ItemSeen {
   id?: string,
@@ -11,7 +12,5 @@ export interface ItemSeen {
   twicFocus?: string,
   category?: string[],
   annoID?: string, // ID into annotations
-  goesTo?: {to: string,
-            accordingTo: string
-  }
+  goesTo?: GoesTo
 }

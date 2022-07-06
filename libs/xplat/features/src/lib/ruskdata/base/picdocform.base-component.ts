@@ -4,9 +4,9 @@ import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent } from '@compvid/xplat/core';
 
 import { Observable } from 'rxjs';
-import { PicDoc } from '../models';
-import { AnnoService, PicdocService, PlaceOptionsService } from '../services';
-import { GoesToService, GoesToOption } from '../services/goesto.service';
+import { PicDoc, GoesToOption } from '../models';
+import { AnnoService, GoesToService, GoesToOptionService, PicdocService, PlaceOptionsService } from '../services';
+
 
 /**
  * Does data management for the underlying PicDoc form; it's up to
@@ -31,6 +31,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit  {
   constructor(public picdocService: PicdocService,
               public poService: PlaceOptionsService,
               public goesToService: GoesToService,
+              public goesToOptionsService: GoesToOptionService,
               public fb: FormBuilder,
               public annoService: AnnoService) {
       super();
@@ -38,7 +39,7 @@ export class PicdocformBaseComponent extends BaseComponent implements OnInit  {
   }
 
   ngOnInit(): void {
-    this.gtoptions$ = this.goesToService.getGoesToAsOptions();
+    this.gtoptions$ = this.goesToOptionsService.getGoesToOptions();
     this.setUpForm();
   }
 

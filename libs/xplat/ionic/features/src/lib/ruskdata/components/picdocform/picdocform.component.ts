@@ -1,9 +1,9 @@
 import { AfterContentChecked, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { AnnoService, AEB, GoesToService, GoesToOption,
+import { AnnoService, AEB, GoesTo, GoesToService, GoesToOption,
   PicdocService, PlaceOptionsService, UserService,
-  PicDoc, ItemSeen, ControlsOf } from '@compvid/xplat/features';
+  PicDoc, ItemSeen, GoesToOptionService } from '@compvid/xplat/features';
 import { IonAccordionGroup, IonRouterOutlet, ModalController } from '@ionic/angular';
 import { Observable, Subscription, tap } from 'rxjs';
 import { PdclosemodalComponent } from '../pdclosemodal/pdclosemodal.component'
@@ -62,6 +62,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     public picDocService: PicdocService,
     public placeOptionsService: PlaceOptionsService,
     public goesToService: GoesToService,
+    public goesToOptionsService: GoesToOptionService,
     public annoService: AnnoService,
     public userService: UserService,
     public fb: FormBuilder,
@@ -73,7 +74,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
 
   ngOnInit() {
 
-    this.gtoptions$ = this.goesToService.getGoesToAsOptions();
+    this.gtoptions$ = this.goesToOptionsService.getGoesToOptions();
    //  this.addIdsToItemsseen();
     this.setUpForm();
 
@@ -123,12 +124,22 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
         desc: pdis.desc ?? '',
         category: [pdis.category ?? []],
         annoID: [pdis.annoID ?? ''], // might not be an anno
-        goesTo: [pdis.goesTo?.to ?? null],
+        goesTo: [pdis.goesTo?.toFullname ?? pdis.goesTo?.to] // [pdis.goesTo ?? null],
       })
       this.pdForm.controls.itemsseen.push(itemseen)
     })
   }
 
+  gtoOptionLabel(gto: GoesToOption): string {
+    if(gto.shortName) {
+      return gto.shortName
+    } else {
+      if(gto.fullName) {
+        return gto.fullName
+      }
+    }
+    return 'OTHER';
+  }
 
   get itemsseenForms() {
     return this.pdForm.get('itemsseen') as FormArray
@@ -136,8 +147,9 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
 
   goesToChanged(e: any, idx: number){
     console.log('goesToChanged',e)
-    const toId = e.detail.value
-    console.log('idx, toId', idx, toId)
+    const value = e.detail.value
+    console.log(`idx ${idx}, value `, value, ' form value ',this.itemsseenForms.at(idx).value)
+    this.itemsseenForms.at(idx).markAsDirty();
   }
   // javascript event carried because children need it, and so base has to accept it
   addItemSeen(evt:any) {

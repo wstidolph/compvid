@@ -23,11 +23,12 @@ import {
   ref,
   Storage, uploadBytes, UploadMetadata
 } from '@angular/fire/storage'
+import { AnyRecord } from 'dns';
 
 import { Observable, BehaviorSubject, of, map, tap } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 import { UserService } from '../../user';
-import { ItemSeen, PicDoc } from '../models';
+import { GoesTo, GoesToOption, ItemSeen, PicDoc } from '../models';
 import {convertSnaps, ensureStrInOnce, ensureStrInNone} from './data-utils';
 
 // test/dev support
@@ -54,8 +55,11 @@ const TEST_PICDOC: PicDoc = {
       addedBy: '#11111111111',
       twicFocus: "200x200",
       goesTo: {
-        to: 'DS',
-        accordingTo: 'WS'
+        to: 'Ferd',
+        toId: 'edclcdC6Z6wS0y5UMW8iNg94JVtA',
+        toFullname: 'Ferdinand',
+        accordingTo: 'WS', // become user ID
+        accordingToId: 'kf9XmORCHlb0re97joOc'
       },
     }
   ]
@@ -116,7 +120,7 @@ export class PicdocService {
     console.log(`PD Svc getFilteredPicDoc args favFilter ${favFilter}, numRecipt ${numRecip}, numITS ${numITS}`);
 
     const qc:QueryConstraint[] = []
-    
+
     if(favFilter == 'T') {
       qc.push(where('favOf','array-contains',this.userService.uid))
     }
@@ -132,7 +136,7 @@ export class PicdocService {
     if(numITS == 0 || numITS == 1) {
       qc.push(where('numItemsseen','==', numITS))
     }
-    
+
     if(numRecip > 1) {
       qc.push(where('numItemsseen', '>=', 1))
     }
@@ -187,24 +191,45 @@ export class PicdocService {
     return deleteDoc(picDocRef);
   }
 
+  private mapGtoToGT(gtoIn: any): GoesTo {
+
+    const gto = gtoIn[0];
+    console.log('mapGtoToGT gets', gtoIn, 'extracts', gto)
+    const GT:GoesTo = {
+      to: gto.shortName,
+      toId: gto.uid,
+      toFullname: gto.fullName,
+      accordingTo: this.userService.profileNow?.nickname ?? 'ME',
+      accordingToId: this.userService.uid?? 'OTHER',
+    }
+    return GT
+  }
+
   updatePicDoc(PD: PicDoc, picdocChgs: Partial<PicDoc>) {
     // TODO if updating itemsseen, make sure to denormalize
-    // console.log('PD Svc update gets changes', picdocChgs);
+    console.log('PD Svc update gets changes', picdocChgs);
 
     // console.log('PD Svc PD is', PD)
-    const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdocChgs.id}`);
+    picdocChgs.itemsseen?.forEach ( (its) => {
+        if(its.goesTo ) {
+          its.goesTo = this.mapGtoToGT(its.goesTo ); // not clear why the goesTo field is an Array ...
+        }
+      }
+    )
     const recip = this.makeRecipients(picdocChgs);
     picdocChgs.numRecipients = recip? recip.length : 0;
     if(recip?.length > 0) picdocChgs.recipients = recip;
     picdocChgs.numItemsseen = picdocChgs.itemsseen? picdocChgs.itemsseen.length : 0;
 
+    console.log('PD Svc update picdocChgs final', picdocChgs);
+    const picDocRef = doc(this.firestore,  `${COLLECTION}/${picdocChgs.id}`);
     // console.log('PD Svc update computes changes', picdocChgs);
     return updateDoc(picDocRef, picdocChgs);
   }
 
   // ItemSeen is should be kept
   mergeItemSeenEntries() {
-
+    console.log('PD Svc mergeItemSeenEntries called, empty method')
   }
   async setFavState(pd: PicDoc, isFav: boolean) { // todo just pass in ID
     if(!pd) return;

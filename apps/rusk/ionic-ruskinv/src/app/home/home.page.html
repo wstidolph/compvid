@@ -13,6 +13,7 @@
 <ion-content>
   <ion-button (click)="toMigrate()">Import</ion-button>
   <ion-button (click)="toPicList()">Pic List</ion-button>
+  <ion-button (click)="initGTO()">init GTO</ion-button>
   <p>PROFILE: {{(userProfile$ | async) | json}}</p>
   <p>USER: {{(user$ | async) | json}}</p>
 

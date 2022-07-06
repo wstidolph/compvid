@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { User, UserInfo } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { RuskdataService, PicDoc, PicdocService, UserService, GoesToService,
+import { RuskdataService, PicDoc, PicdocService, UserService, GoesToService, GoesToOptionService
         //ItemseenService, ItemSeen
         } from '@compvid/xplat/features';
 
@@ -22,7 +22,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(private dataService: RuskdataService,
     private picdocService: PicdocService,
-    private goesToService: GoesToService,
+    private goesToOptionService: GoesToOptionService,
     // private itemseenService: ItemseenService,
     private cd: ChangeDetectorRef,
     private router: Router,
@@ -70,5 +70,9 @@ export class HomePage implements OnInit, OnDestroy {
   async logout() {
     await this.userService.logout();
     this.router.navigateByUrl('/');
+  }
+
+  initGTO() {
+    this.goesToOptionService.initTestGT();
   }
 }
