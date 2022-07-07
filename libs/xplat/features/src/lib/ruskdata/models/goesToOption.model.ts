@@ -6,5 +6,5 @@ export interface GoesToOption {
   shortName: string,
   fullName?: string,
   uid?: string, // user ID in case the target is a user in the system
-  categories: string[] // items this GTO is eleignle for
+  categories: string[] // future - items this GTO is eligible for
 }

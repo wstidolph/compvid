@@ -72,14 +72,16 @@
 
             <ion-item>
               <ion-textarea placeholder="describe it" formControlName="desc" class="ion-col"></ion-textarea>
-              <ion-select multiple
+              <!-- 'multiple' on the ion-select to get back an *array* -->
+              <ion-select
                 formControlName="goesTo" cancelText="CLEAR"
+                [compareWith]="gtoCompareWith"
                 (ionCancel)="clearGoesTo(i)"
                 (ionChange)="goesToChanged($event, i)"
                 >
                 <ion-select-option *ngFor="let gto of gtoptions$ | async"
                   [value]="gto"
-                  >{{gtoOptionLabel(gto)}}</ion-select-option>
+                  >{{gto.shortName}}</ion-select-option>
                 </ion-select>
             </ion-item>
 

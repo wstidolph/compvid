@@ -114,7 +114,13 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     if(pd.loc) this.pdForm.controls.loc.setValue(pd.loc);
     console.log('putPDtoForm pd is', pd);
     pd.itemsseen?.forEach(pdis => {
-      // console.log('PDF putPDtoForm pushing',pdis);
+
+      console.log('PDF putPDtoForm pushing',pdis);
+      const gto: GoesToOption = { shortName: '', categories: []}
+      if(pdis.goesTo) {
+        gto.shortName = pdis.goesTo.shortName,
+        gto.fullName = pdis.goesTo.toFullname
+      }
       const itemseen = this.fb.group({
         id: pdis.id ?? '',
         isDeleted: false,
@@ -124,21 +130,29 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
         desc: pdis.desc ?? '',
         category: [pdis.category ?? []],
         annoID: [pdis.annoID ?? ''], // might not be an anno
-        goesTo: [pdis.goesTo?.toFullname ?? pdis.goesTo?.to] // [pdis.goesTo ?? null],
+        // the form needs the 'GoesTo' if it was done
+        goesTo: [''] // [pdis.goesTo ?? null],
       })
+      console.log('calculated itemseen', itemseen)
       this.pdForm.controls.itemsseen.push(itemseen)
     })
   }
 
   gtoOptionLabel(gto: GoesToOption): string {
+    let name = 'OTHER'
     if(gto.shortName) {
-      return gto.shortName
+      name = gto.shortName
     } else {
       if(gto.fullName) {
-        return gto.fullName
+        name = gto.fullName
       }
     }
-    return 'OTHER';
+    return name;
+  }
+
+  gtoCompareWith(gto1, gto2){
+    // console.log('compareWith', gto1, gto2)
+    return gto1 && gto2 ? gto1.id === gto2.id : gto1 === gto2
   }
 
   get itemsseenForms() {
@@ -151,7 +165,7 @@ export class PicdocformComponent implements OnInit, OnDestroy /* implements Afte
     console.log(`idx ${idx}, value `, value, ' form value ',this.itemsseenForms.at(idx).value)
     this.itemsseenForms.at(idx).markAsDirty();
   }
-  // javascript event carried because children need it, and so base has to accept it
+
   addItemSeen(evt:any) {
     //console.log('enter addItemSeen, form:', this.pdForm)
 

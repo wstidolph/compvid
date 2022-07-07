@@ -55,7 +55,7 @@ const TEST_PICDOC: PicDoc = {
       addedBy: '#11111111111',
       twicFocus: "200x200",
       goesTo: {
-        to: 'Ferd',
+        shortName: 'Ferd',
         toId: 'edclcdC6Z6wS0y5UMW8iNg94JVtA',
         toFullname: 'Ferdinand',
         accordingTo: 'WS', // become user ID
@@ -191,17 +191,16 @@ export class PicdocService {
     return deleteDoc(picDocRef);
   }
 
-  private mapGtoToGT(gtoIn: any): GoesTo {
-
-    const gto = gtoIn[0];
-    console.log('mapGtoToGT gets', gtoIn, 'extracts', gto)
+  private mapGtoToGT(gto: any): GoesTo {
     const GT:GoesTo = {
-      to: gto.shortName,
-      toId: gto.uid,
-      toFullname: gto.fullName,
+      shortName:'unknown',
       accordingTo: this.userService.profileNow?.nickname ?? 'ME',
       accordingToId: this.userService.uid?? 'OTHER',
     }
+    if(gto.shortName) {GT.shortName = gto.shortName;}
+    if(gto.toId) {GT.toId = gto.uid;}
+    if(gto.fullName) {GT.toFullname= gto.fullName;}
+    if(gto.id) {GT.gtoId = gto.id;}
     return GT
   }
 
@@ -211,14 +210,17 @@ export class PicdocService {
 
     // console.log('PD Svc PD is', PD)
     picdocChgs.itemsseen?.forEach ( (its) => {
+        // its goesTo is an array if the Select control has the 'multiple' option
+        // TODO decide if goesTo should be an Array - semantics are unclear
         if(its.goesTo ) {
-          its.goesTo = this.mapGtoToGT(its.goesTo ); // not clear why the goesTo field is an Array ...
+          its.goesTo = this.mapGtoToGT(its.goesTo );
         }
       }
     )
     const recip = this.makeRecipients(picdocChgs);
     picdocChgs.numRecipients = recip? recip.length : 0;
-    if(recip?.length > 0) picdocChgs.recipients = recip;
+    // if(recip?.length > 0)
+    picdocChgs.recipients = recip;
     picdocChgs.numItemsseen = picdocChgs.itemsseen? picdocChgs.itemsseen.length : 0;
 
     console.log('PD Svc update picdocChgs final', picdocChgs);
@@ -273,8 +275,8 @@ export class PicdocService {
     const recipients: string[] = [];
 
     pdc.itemsseen?.forEach((its:ItemSeen) => {
-      if(its.goesTo && its.goesTo.to) { // max of one single recipient, for now
-        ensureStrInOnce(recipients, its.goesTo.to)
+      if(its.goesTo && its.goesTo.shortName) { // max of one single recipient, for now
+        ensureStrInOnce(recipients, its.goesTo.shortName)
       }
     })
 
